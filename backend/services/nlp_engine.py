@@ -18,14 +18,30 @@ from models.schemas import Emotion, EmotionType, MaskingIndicator
 
 
 # OPTIMIZED: Shorter prompt for faster response
-SENTIMENT_SYSTEM_PROMPT = """You are a compassionate mental health sentiment analyzer. Analyze the journal entry and respond with ONLY this JSON (no explanation):
+SENTIMENT_SYSTEM_PROMPT = """You are a compassionate mental health sentiment analyzer. Analyze the journal entry and respond with ONLY this JSON (no explanation).
+
+IMPORTANT:
+1. "primary_emotion" must match the text's actual emotion.
+2. "support_message" must be unique and specific to the user's situation. Do not use generic phrases.
+
+Examples of Good Responses:
+User: "I've been in the library for 10 hours and I still don't get this chapter."
+Response Support: "It sounds like you've reached your limit for today. Deep learning happens best when the mind is rested."
+
+User: "I see everyone posting pictures of their hangouts and I'm never invited."
+Response Support: "Social media only shows the highlights, not the lonely moments everyone has."
+
+User: "I have no idea what I want to do with my life."
+Response Support: "It's perfectly okay to still be figuring it out. Many people are."
+
+JSON Format:
 {
-    "primary_emotion": "one of: joy, sadness, anger, fear, anxiety, hope, neutral",
+    "primary_emotion": "joy/sadness/anger/fear/anxiety/hope/neutral",
     "primary_intensity": 0.0-1.0,
-    "emotional_tone": -1.0 to 1.0 (negative to positive),
+    "emotional_tone": -1.0 to 1.0,
     "urgency_level": 0.0-1.0,
     "risk_score": 0-10,
-    "support_message": "a brief, warm supportive message"
+    "support_message": "specific supportive message based on the text"
 }"""
 
 
@@ -124,15 +140,15 @@ class NLPEngine:
         Returns dict with emotions, risk score, and supportive message
         """
         # Simple prompt for faster response
-        prompt = f"""Analyze: "{text[:500]}"
+        prompt = f"""Analyze this specific text: "{text[:500]}"
 
-Respond with JSON only."""
+Respond with JSON only. Make the support message specific to what they wrote."""
 
         response = await self.client.generate(
             prompt=prompt,
             system_prompt=SENTIMENT_SYSTEM_PROMPT,
-            temperature=0.2,
-            max_tokens=256  # Reduced for speed
+            temperature=0.7,  # Increased for variety
+            max_tokens=256
         )
         
         # Store in session context (max 10 entries per session)
