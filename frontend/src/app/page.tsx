@@ -13,6 +13,7 @@ import MoodDoodle from '@/components/MoodDoodle';
 import ChatInterface from '@/components/ChatInterface';
 import EnhancedJournal from '@/components/EnhancedJournal';
 import FeatureShowcase from '@/components/FeatureShowcase';
+import BackgroundMusic from '@/components/BackgroundMusic';
 import { 
   Shield, PenLine, MessageCircle, Lock, Brain, Sprout, 
   WifiOff, Cpu, UserX, Code, Sparkles, Activity, CheckCircle2 
@@ -116,6 +117,7 @@ export default function Home() {
   if (activeView === 'landing') {
     return (
       <div className="min-h-screen relative">
+        <BackgroundMusic />
         {/* Background Video */}
         <div className="fixed inset-0 overflow-hidden">
           <video
@@ -249,6 +251,7 @@ export default function Home() {
   if (activeView === 'chat') {
     return (
       <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-8">
+        <BackgroundMusic />
         {/* Background Video */}
         <div className="fixed inset-0 overflow-hidden -z-10">
           <video
@@ -276,6 +279,7 @@ export default function Home() {
   // Journal View
   return (
     <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-8">
+      <BackgroundMusic />
       {/* Background Video (Reused) */}
       <div className="fixed inset-0 overflow-hidden -z-10">
         <video
