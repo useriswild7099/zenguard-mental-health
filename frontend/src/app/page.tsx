@@ -185,28 +185,28 @@ export default function Home() {
 
           {/* Feature Cards */}
           <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto w-full">
-            <div className="glass rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300 shadow-xl">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
                 <span className="text-2xl">🔒</span>
               </div>
-              <h3 className="font-semibold text-gray-700 mb-2">Private by Design</h3>
-              <p className="text-sm text-gray-500">Your words are scrubbed of personal info before processing. Nothing is ever stored.</p>
+              <h3 className="font-semibold text-white mb-2">Private by Design</h3>
+              <p className="text-sm text-zinc-200">Your words are scrubbed of personal info before processing. Nothing is ever stored.</p>
             </div>
 
-            <div className="glass rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300 shadow-xl">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
                 <span className="text-2xl">🧠</span>
               </div>
-              <h3 className="font-semibold text-gray-700 mb-2">AI That Listens</h3>
-              <p className="text-sm text-gray-500">Powered by local AI. Understands your emotions without judgment or data collection.</p>
+              <h3 className="font-semibold text-white mb-2">AI That Listens</h3>
+              <p className="text-sm text-zinc-200">Powered by local AI. Understands your emotions without judgment or data collection.</p>
             </div>
 
-            <div className="glass rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300">
-              <div className="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300 shadow-xl">
+              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
                 <span className="text-2xl">🌱</span>
               </div>
-              <h3 className="font-semibold text-gray-700 mb-2">Gentle Guidance</h3>
-              <p className="text-sm text-gray-500">Breathing exercises, grounding techniques, and self-care suggestions when you need them.</p>
+              <h3 className="font-semibold text-white mb-2">Gentle Guidance</h3>
+              <p className="text-sm text-zinc-200">Breathing exercises, grounding techniques, and self-care suggestions when you need them.</p>
             </div>
           </div>
 

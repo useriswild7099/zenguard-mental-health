@@ -24,9 +24,13 @@
   --gradient-calm: linear-gradient(135deg, #E8D5F2 0%, #D5E8F2 50%, #D5F2E8 100%);
   --gradient-breathing: linear-gradient(135deg, #D5F2E8 0%, #D5E8F2 100%);
   
-  /* Typography */
-  --font-heading: var(--font-nunito), 'Nunito', system-ui, sans-serif;
-  --font-body: var(--font-inter), 'Inter', system-ui, sans-serif;
+  /* Typography - Apple-style System Fonts */
+  --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+  /* Text optimization */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   
   /* Spacing */
   --space-xs: 0.25rem;
