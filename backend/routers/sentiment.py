@@ -79,6 +79,13 @@ async def analyze_sentiment(request: AnalysisRequest):
             masking_detected=masking.detected,
             ai_message=sentiment_result.get("support_message")
         )
+
+        # NEW: Get situational breathing exercise
+        selected_breathing = intervention_engine.get_breathing_exercise(
+            text=request.text,
+            primary_emotion=sentiment_result["primary_emotion"],
+            risk_score=sentiment_result.get("risk_score", 3)
+        )
         
         return AnalysisResponse(
             wellness_score=wellness_result["wellness_score"],
@@ -95,6 +102,7 @@ async def analyze_sentiment(request: AnalysisRequest):
             supportive_message=supportive_message,
             therapeutic_insight=sentiment_result.get("therapeutic_insight"),
             key_patterns=sentiment_result.get("key_patterns", []),
+            selected_breathing=selected_breathing,
             data_stored=False  # Privacy guarantee
         )
         
@@ -105,13 +113,28 @@ async def analyze_sentiment(request: AnalysisRequest):
 @router.post("/release-affirmation")
 async def get_release_affirmation(request: QuickCheckRequest):
     """
-    Get a quick, context-aware affirmation for the release ritual.
+    Get a quick, context-aware affirmation and breathing exercise for the release ritual.
     """
     try:
         affirmation = await nlp_engine.generate_release_affirmation(request.text)
-        return {"affirmation": affirmation}
+        
+        # Also select a breathing exercise for the follow-up
+        sentiment_result = await nlp_engine.analyze_sentiment(request.text[:500]) # Quick context
+        breathing = intervention_engine.get_breathing_exercise(
+            text=request.text,
+            primary_emotion=sentiment_result["primary_emotion"],
+            risk_score=sentiment_result.get("risk_score", 3)
+        )
+        
+        return {
+            "affirmation": affirmation,
+            "breathing": breathing
+        }
     except Exception:
-        return {"affirmation": "You have expressed yourself honestly. Let it go."}
+        return {
+            "affirmation": "You have expressed yourself honestly. Let it go.",
+            "breathing": None
+        }
 
 
 @router.post("/quick-check", response_model=QuickCheckResponse)

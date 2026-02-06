@@ -18,33 +18,31 @@ from models.schemas import Emotion, EmotionType, MaskingIndicator
 
 
 # OPTIMIZED: Shorter prompt for faster response
-SENTIMENT_SYSTEM_PROMPT = """You are a compassionate mental health sentiment analyzer. Analyze the journal entry and respond with ONLY this JSON (no explanation).
+SENTIMENT_SYSTEM_PROMPT = """You are a compassionate mental health sentiment analyzer and therapeutic guide. 
 
-IMPORTANT:
-1. "primary_emotion" must match the text's actual emotion.
-2. "support_message" must be unique and specific to the user's situation. Do not use generic phrases.
+CRITICAL: Use <think> tags to reason deeply about the user's emotional state, underlying themes, and psychological patterns before responding with JSON.
 
-Examples of Good Responses:
-User: "I've been in the library for 10 hours and I still don't get this chapter."
-Response Support: "It sounds like you've reached your limit for today. Deep learning happens best when the mind is rested."
+In your <think> reasoning, consider:
+1. What is the core struggle or success described?
+2. Are there underlying emotions not explicitly stated?
+3. What psychological patterns or cognitive biases are present?
+4. How can I provide a truly unique, context-aware insight?
 
-User: "I see everyone posting pictures of their hangouts and I'm never invited."
-Response Support: "Social media only shows the highlights, not the lonely moments everyone has."
-
-User: "I have no idea what I want to do with my life."
-Response Support: "It's perfectly okay to still be figuring it out. Many people are."
-
-JSON Format:
+After reasoning, respond with ONLY this JSON:
 {
     "primary_emotion": "joy/sadness/anger/fear/anxiety/hope/neutral",
     "primary_intensity": 0.0-1.0,
     "emotional_tone": -1.0 to 1.0,
     "urgency_level": 0.0-1.0,
     "risk_score": 0-10,
-    "support_message": "specific supportive message based on the text",
-    "therapeutic_insight": "a deeper psychological insight about what they wrote",
-    "key_patterns": ["pattern 1", "pattern 2"]
-}"""
+    "support_message": "a highly specific, warm supportive message reflecting the content",
+    "therapeutic_insight": "a deep analytical observation about their emotional processing or situation (e.g., 'You seem to be equating your productivity with your self-worth')",
+    "key_patterns": ["List 2-3 specific behavioral or emotional patterns identified"]
+}
+
+IMPORTANT:
+1. No generic phrases.
+2. The insight must be profound, not just a restatement."""
 
 
 SESSION_TREND_PROMPT = """You are analyzing a student's FULL journaling session to detect emotional TRENDS and patterns.
@@ -145,13 +143,13 @@ class NLPEngine:
         Returns dict with emotions, risk score, and supportive message
         """
         # Enhanced prompt for better variety and specificity
-        prompt = f"""Analyze this specific text: "{text[:500]}"
+        prompt = f"""Analyze this journal entry: "{text[:800]}"
 
-Respond with JSON only.
-CRITICAL: The 'support_message' MUST be unique to this specific situation.
-- Do NOT use generic phrases like "It's important to remember" or "I understand."
-- Reflect the specific content they wrote about.
-- If they mentioned a specific event, mention it in your support."""
+Respond with JSON only. Use <think> tags.
+CRITICAL:
+1. Provide a profound 'therapeutic_insight' that looks beyond the surface words.
+2. List 2-3 'key_patterns' you detect in their thinking.
+3. The 'support_message' must mention specific details from their text."""
 
         response = await self.client.generate(
             prompt=prompt,
@@ -284,14 +282,10 @@ Use <think> tags to reason about the visual cues you observe before providing yo
         Generate a short, context-aware release affirmation.
         Optimized for speed.
         """
-        prompt = f"""Based on this journal entry, generate a single, short (max 15 words) compassionate affirmation to help the user let go.
-Entry: "{text[:300]}"
+        prompt = f"""Create a powerful, context-aware release affirmation (max 12 words) for this journal entry:
+"{text[:400]}"
 
-Examples:
-- "Letting go of this anger is a brave step."
-- "You are not defined by this mistake."
-- "Release this worry; it does not serve you."
-
+The affirmation should help them feel a sense of completion or 'letting go' of whatever they specifically wrote about.
 Output ONLY the affirmation sentence."""
 
         try:
