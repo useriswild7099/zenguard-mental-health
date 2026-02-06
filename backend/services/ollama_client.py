@@ -66,7 +66,10 @@ class OllamaClient:
             "stream": False,
             "options": {
                 "temperature": temperature,
-                "num_predict": max_tokens
+                "num_predict": max_tokens,
+                "repeat_penalty": 1.2,   # STRICT non-repetition
+                "top_p": 0.9,            # Diverse vocabulary
+                "top_k": 40              # Standard sampling
             }
         }
         

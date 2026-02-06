@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { QuickCheckResponse } from '@/lib/api';
+import VoiceInput from './VoiceInput';
 
 interface JournalInputProps {
   value: string;
@@ -89,26 +90,33 @@ export default function JournalInput({
           )}
         </div>
 
-        {/* Right: Submit button */}
-        <button
-          onClick={onSubmit}
-          disabled={value.trim().length < 10 || isAnalyzing}
-          className="btn-zen btn-zen-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-        >
-          {isAnalyzing ? (
-            <>
-              <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              Reflecting...
-            </>
-          ) : (
-            <>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 19V5M5 12l7-7 7 7"/>
-              </svg>
-              Share with ZenGuard
-            </>
-          )}
-        </button>
+        {/* Right: Voice input + Submit button */}
+        <div className="flex items-center gap-2">
+          <VoiceInput 
+            onTranscript={(text) => onChange(value + (value ? ' ' : '') + text)}
+            onInterimTranscript={(liveText) => onChange(liveText)}
+            disabled={isAnalyzing}
+          />
+          <button
+            onClick={onSubmit}
+            disabled={value.trim().length < 10 || isAnalyzing}
+            className="btn-zen btn-zen-primary disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {isAnalyzing ? (
+              <>
+                <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                Reflecting...
+              </>
+            ) : (
+              <>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+                Share with ZenGuard
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Hint */}

@@ -110,12 +110,113 @@ class QuickCheckResponse(BaseModel):
     suggestion: Optional[str] = None
 
 
+class PersonalityCategory(str, Enum):
+    """Categories for AI personalities"""
+    GENERAL = "general"
+    FAMILY = "family"
+    EDUCATION = "education"
+    FRIEND = "friend"
+    DATING = "dating"
+    SPIRITUAL = "spiritual"
+    PSYCHOLOGY = "psychology"
+    ENTREPRENEUR = "entrepreneur"
+    FAMOUS = "famous"
+    INDIAN_STARS = "indian_stars"
+    PHILOSOPHERS = "philosophers"
+    SCIENTISTS = "scientists"
+    TOUGH_LOVE = "tough_love"
+    CREATIVE = "creative"
+    ARCHETYPES = "archetypes"
+
+
 class ChatMode(str, Enum):
     """AI chat persona modes"""
+    # General (existing)
     COMPASSIONATE_FRIEND = "compassionate_friend"
     ACADEMIC_COACH = "academic_coach"
     MINDFULNESS_GUIDE = "mindfulness_guide"
     MOTIVATIONAL_COACH = "motivational_coach"
+    
+    # Family
+    MOTHER = "mother"
+    FATHER = "father"
+    SISTER = "sister"
+    BROTHER = "brother"
+    COOL_PARENT = "cool_parent"
+    COOL_UNCLE_AUNT = "cool_uncle_aunt"
+    GRANDMOTHER = "grandmother"
+    GRANDFATHER = "grandfather"
+    YOUNGER_SIBLING = "younger_sibling"
+    THE_PET = "the_pet"
+
+    # Education
+    SCHOOL_TEACHER = "school_teacher"
+    UNIVERSITY_PROFESSOR = "university_professor"
+
+    # Friend
+    BEST_FRIEND = "best_friend"
+    STUDY_PARTNER = "study_partner"
+    
+    # Dating
+    LOVER = "lover"
+
+    # Spiritual
+    DALAI_LAMA = "dalai_lama"
+    SADGURU = "sadguru"
+
+    # Psychology
+    CARL_ROGERS = "carl_rogers"
+    SIGMUND_FREUD = "sigmund_freud"
+    OPRAH_MENTOR = "oprah_mentor"
+
+    # Entrepreneur
+    LOGICAL_MENTOR = "logical_mentor"
+    MUKESH_AMBANI = "mukesh_ambani"
+    ELON_MENTOR = "elon_mentor"
+
+    # Famous
+    BRITTANY_BROSKI = "brittany_broski"
+    DELANEY_ROWE = "delaney_rowe"
+    ROB_ANDERSON = "rob_anderson"
+
+    # Indian Stars
+    ASHISH_CHANCHLANI = "ashish_chanchlani"
+    BHUVAN_BAM = "bhuvan_bam"
+    SAMEY_RAINA = "samey_raina"
+    SHAH_RUKH_KHAN = "shah_rukh_khan"
+    ZAKIR_KHAN = "zakir_khan"
+    RANVEER_ALLAHBADIA = "ranveer_allahbadia"
+    ANKUR_WARIKOO = "ankur_warikoo"
+
+    # Philosophers
+    MARCUS_AURELIUS = "marcus_aurelius"
+    SOCRATES = "socrates"
+    ALAN_WATTS = "alan_watts"
+    RUMI = "rumi"
+
+    # Scientists
+    ALBERT_EINSTEIN = "albert_einstein"
+    APJ_ABDUL_KALAM = "apj_abdul_kalam"
+    MARIE_CURIE = "marie_curie"
+    STEVE_JOBS = "steve_jobs"
+
+    # Tough Love
+    DAVID_GOGGINS = "david_goggins"
+    JORDAN_PETERSON = "jordan_peterson"
+    STRICT_COACH = "strict_coach"
+    GORDON_RAMSAY = "gordon_ramsay"
+
+    # Creative
+    THE_POET = "the_poet"
+    THE_ARTIST = "the_artist"
+    THE_MUSICIAN = "the_musician"
+    BOB_ROSS = "bob_ross"
+
+    # Archetypes
+    THE_LIBRARIAN = "the_librarian"
+    THE_GARDENER = "the_gardener"
+    THE_TIME_TRAVELER = "the_time_traveler"
+    THE_UNIVERSE = "the_universe"
 
 
 class ChatMessage(BaseModel):

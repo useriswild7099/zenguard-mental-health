@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { chatClient, ChatMode, ChatMessage } from '@/lib/api';
 import { prepareText } from '@/lib/privacy';
+import VoiceInput from './VoiceInput';
 
 interface ChatInterfaceProps {
   onBack: () => void;
@@ -12,6 +13,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   // State
   const [modes, setModes] = useState<ChatMode[]>([]);
   const [selectedMode, setSelectedMode] = useState<ChatMode | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>('all');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +32,16 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
     };
     loadModes();
   }, []);
+
+  // Filter modes based on active category
+  const filteredModes = modes.filter(mode => {
+    if (activeCategory === 'all') return true;
+    if (activeCategory === 'general') return !mode.category || mode.category === 'general';
+    return mode.category === activeCategory;
+  });
+
+  // Get unique categories
+  const categories = ['all', ...Array.from(new Set(modes.map(m => m.category || 'general')))];
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {
@@ -104,10 +116,10 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   // Mode selection screen
   if (!selectedMode) {
     return (
-      <div className="w-full max-w-2xl mx-auto">
+      <div className="w-full max-w-4xl mx-auto">
         <div className="glass-card p-6 md:p-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-8">
             <button
               onClick={onBack}
               className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
@@ -117,10 +129,27 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               </svg>
               Back
             </button>
-            <h2 className="text-xl font-semibold text-white tracking-wide" style={{ fontFamily: 'var(--font-heading)' }}>
+            <h2 className="text-2xl font-semibold text-white tracking-wide" style={{ fontFamily: 'var(--font-heading)' }}>
               Choose a Companion
             </h2>
             <div className="w-16"></div>
+          </div>
+
+          {/* Category Tabs */}
+          <div className="flex flex-wrap gap-2 mb-8 justify-center">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 rounded-full text-sm capitalize transition-all ${
+                  activeCategory === cat
+                    ? 'bg-purple-500/80 text-white shadow-lg shadow-purple-500/20'
+                    : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                {cat === 'all' ? 'All Companions' : cat}
+              </button>
+            ))}
           </div>
 
           {/* Mode Cards */}
@@ -129,25 +158,31 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               <div className="w-8 h-8 border-3 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {modes.map((mode) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {filteredModes.map((mode) => (
                 <button
                   key={mode.id}
                   onClick={() => handleModeSelect(mode)}
-                  className="glass-card text-left p-5 hover:bg-white/20 transition-all duration-300 group shadow-lg"
+                  className={`glass-card text-left p-5 hover:bg-white/20 transition-all duration-300 group shadow-lg relative overflow-hidden`}
                 >
+                  <div className={`absolute top-0 left-0 w-1 h-full bg-${mode.color || 'purple'}-500/50`}></div>
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-3xl group-hover:scale-110 transition-transform">{mode.emoji}</span>
                     <h3 className="font-semibold text-white">{mode.name}</h3>
                   </div>
-                  <p className="text-sm text-zinc-300">{mode.description}</p>
+                  <p className="text-sm text-zinc-300 line-clamp-2">{mode.description}</p>
+                  {mode.category && (
+                    <span className="inline-block mt-3 text-[10px] uppercase tracking-wider text-zinc-500 bg-white/5 px-2 py-1 rounded">
+                      {mode.category}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
           )}
 
           {/* Privacy notice */}
-          <p className="text-xs text-gray-400 text-center mt-6">
+          <p className="text-xs text-gray-400 text-center mt-8">
             🔒 Your conversations are never stored. Privacy first, always.
           </p>
         </div>
@@ -158,9 +193,12 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   // Chat screen
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="glass-card flex flex-col h-[600px]">
+      <div className="glass-card flex flex-col h-[600px] overflow-hidden relative">
+        {/* Background Accent */}
+        <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-${selectedMode.color || 'purple'}-500 via-${selectedMode.color || 'purple'}-400 to-${selectedMode.color || 'purple'}-600`}></div>
+
         {/* Chat Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+        <div className="flex items-center justify-between p-4 border-b border-white/10 bg-black/20">
           <button
             onClick={handleNewChat}
             className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
@@ -170,9 +208,9 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
             </svg>
             Change Mode
           </button>
-          <div className="flex items-center gap-2">
-            <span className="text-xl">{selectedMode.emoji}</span>
-            <span className="font-medium text-white">{selectedMode.name}</span>
+          <div className="flex flex-col items-center">
+            <span className="text-2xl mb-1">{selectedMode.emoji}</span>
+            <span className="font-medium text-white text-sm">{selectedMode.name}</span>
           </div>
           <button
             onClick={onBack}
@@ -185,9 +223,10 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 && (
-            <div className="text-center text-zinc-400 py-8">
-              <span className="text-4xl mb-2 block">{selectedMode.emoji}</span>
-              <p>Start a conversation with your {selectedMode.name}</p>
+            <div className="text-center text-zinc-400 py-12">
+              <span className="text-5xl mb-4 block opacity-50">{selectedMode.emoji}</span>
+              <p className="text-lg text-white mb-2">Speak with {selectedMode.name}</p>
+              <p className="text-sm max-w-xs mx-auto opacity-70">{selectedMode.description}</p>
             </div>
           )}
           
@@ -197,24 +236,24 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                className={`max-w-[85%] rounded-2xl px-5 py-3 shadow-sm ${
                   msg.role === 'user'
-                    ? 'bg-purple-500 text-white rounded-br-md'
-                    : 'bg-white/10 backdrop-blur-sm text-zinc-100 rounded-bl-md border border-white/10'
+                    ? `bg-${selectedMode.color || 'purple'}-600 text-white rounded-br-none`
+                    : 'bg-white/10 backdrop-blur-md text-zinc-100 rounded-bl-none border border-white/5'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
               </div>
             </div>
           ))}
           
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl rounded-bl-md px-4 py-3 border border-white/10">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl rounded-bl-none px-4 py-3 border border-white/5">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div className={`w-2 h-2 bg-${selectedMode.color || 'purple'}-400 rounded-full animate-bounce`} style={{ animationDelay: '0ms' }}></div>
+                  <div className={`w-2 h-2 bg-${selectedMode.color || 'purple'}-400 rounded-full animate-bounce`} style={{ animationDelay: '150ms' }}></div>
+                  <div className={`w-2 h-2 bg-${selectedMode.color || 'purple'}-400 rounded-full animate-bounce`} style={{ animationDelay: '300ms' }}></div>
                 </div>
               </div>
             </div>
@@ -224,30 +263,35 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-white/10 bg-black/20">
           <div className="flex items-end gap-3">
             <textarea
               ref={inputRef}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type your message..."
-              className="flex-1 resize-none rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-3 text-sm text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition-all"
+              placeholder={`Message ${selectedMode.name}...`}
+              className="flex-1 resize-none rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm px-4 py-3 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent transition-all"
               rows={1}
+              disabled={isLoading}
+            />
+            <VoiceInput 
+              onTranscript={(text) => setInputText(prev => prev + (prev ? ' ' : '') + text)}
+              onInterimTranscript={(liveText) => setInputText(liveText)}
               disabled={isLoading}
             />
             <button
               onClick={handleSendMessage}
               disabled={!inputText.trim() || isLoading}
-              className="btn-zen btn-zen-primary disabled:opacity-50 disabled:cursor-not-allowed h-11 w-11 flex items-center justify-center rounded-full"
+              className={`btn-zen bg-${selectedMode.color || 'purple'}-600 hover:bg-${selectedMode.color || 'purple'}-500 disabled:opacity-50 disabled:cursor-not-allowed h-11 w-11 flex items-center justify-center rounded-xl transition-all shadow-lg shadow-${selectedMode.color || 'purple'}-500/20`}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
               </svg>
             </button>
           </div>
-          <p className="text-xs text-zinc-400 text-center mt-2">
-            Press Enter to send • Shift+Enter for new line
+          <p className="text-[10px] text-zinc-500 text-center mt-3 font-medium tracking-wide uppercase">
+            Start a new conversation to switch context
           </p>
         </div>
       </div>

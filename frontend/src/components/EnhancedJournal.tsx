@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { Flame, Download, Clock, Zap, Moon, Volume2, VolumeX } from 'lucide-react';
 import EmotionPicker, { Emotion, EMOTION_PROMPTS, getTimeBasedPrompt } from './EmotionPicker';
 import { BurnAnimation, ExportOptions, EphemeralBadge, EndOfSessionRitual, TimerDisplay } from './JournalFeatures';
+import VoiceInput from './VoiceInput';
 
 // Journal mode types
 type JournalMode = 'free' | 'timed' | 'void';
@@ -227,6 +228,13 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
             </span>
             
             <div className="flex items-center gap-2">
+              {/* Voice Input */}
+              <VoiceInput 
+                onTranscript={(newText) => setText(prev => prev + (prev ? ' ' : '') + newText)}
+                onInterimTranscript={(liveText) => setText(liveText)}
+                disabled={isAnalyzing}
+              />
+              
               {/* Ambient Sound Toggle */}
               <button
                 onClick={() => toggleAmbientSound('rain')}

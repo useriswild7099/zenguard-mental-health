@@ -183,6 +183,8 @@ export interface ChatMode {
   name: string;
   emoji: string;
   description: string;
+  category?: string;
+  color?: string;
 }
 
 export interface ChatMessage {

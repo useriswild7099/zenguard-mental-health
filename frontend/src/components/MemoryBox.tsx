@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import VoiceInput from './VoiceInput';
 
 interface MemoryBoxProps {
   onClose: () => void;
@@ -131,7 +132,13 @@ export default function MemoryBox({ onClose }: MemoryBoxProps) {
                 transform: 'rotateY(180deg)',
               }}
             >
-              <p className="text-sm text-zinc-300 mb-2">✨ {currentPrompt.title}</p>
+              <div className="flex items-center gap-2 mb-2">
+                <VoiceInput 
+                  onTranscript={(text) => setMemory(prev => prev + (prev ? ' ' : '') + text)}
+                  onInterimTranscript={(liveText) => setMemory(liveText)}
+                />
+                <p className="text-sm text-zinc-300">✨ {currentPrompt.title}</p>
+              </div>
               <textarea
                 value={memory}
                 onChange={(e) => setMemory(e.target.value)}

@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, Courier_Prime } from "next/font/google";
 import "./globals.css";
+import { DYNAMIC_CLASSES } from '@/lib/safelist';
+
+// Ensure Tailwind sees these classes
+const _safelist = DYNAMIC_CLASSES;
 
 const inter = Inter({
   subsets: ["latin"],
