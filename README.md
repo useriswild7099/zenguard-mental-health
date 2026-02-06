@@ -1,98 +1,87 @@
-# 🧘 ZenGuard AI
+# ZenGuard AI
 
-**Privacy-first mental health sentiment monitoring for students**
+A mental health journaling app for students. Uses Gemma 3:4B locally through Ollama to analyze mood from journal entries. Everything runs on your machine - nothing gets sent to the cloud.
 
-A hackathon project that uses **Gemma 3:4B** running locally via Ollama to analyze emotional tone in journal entries - with zero data storage.
+## What it does
 
-![ZenGuard AI](https://img.shields.io/badge/Privacy-First-green) ![Gemma 3:4B](https://img.shields.io/badge/AI-Gemma%203%3A4B-blue) ![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688) ![Next.js](https://img.shields.io/badge/Frontend-Next.js%2016-black)
+- Analyzes emotional tone from journal entries using a local LLM
+- Scrubs personal info (names, emails, etc.) before processing
+- Shows your mood trends with a plant that grows as you journal
+- Includes grounding exercises (breathing, 5-4-3-2-1, memory box)
+- Lets you doodle your emotions and get feedback
 
-## ✨ Features
+No accounts, no databases, no tracking. Just a local tool for self-reflection.
 
-- 🔒 **Privacy-Locked** - Client-side PII scrubbing, no data storage, anonymous sessions
-- 🧠 **Silent Sentinel NLP** - Emotional analysis without invasive monitoring
-- 🌱 **Mood Visualization** - Plant growth metaphor for wellness scores
-- 🫁 **Interventions** - 4-7-8 breathing, 5-4-3-2-1 grounding, Memory Box
-- 🎨 **Mood Doodles** - Visual emotion expression and analysis
+## Setup
 
-## 🚀 Quick Start
-
-### Prerequisites
-- [Ollama](https://ollama.ai) with `gemma3:4b` model
+You'll need:
+- [Ollama](https://ollama.com) installed
 - Node.js 18+
 - Python 3.10+
 
-### 1. Pull Gemma Model
+### Get the AI model
+
 ```bash
 ollama pull gemma3:4b
 ```
 
-### 2. Start Backend
+Keep Ollama running in the background while using the app.
+
+### Backend
+
 ```bash
 cd backend
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
-### 3. Start Frontend
+### Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### 4. Open App
-Navigate to http://localhost:3000
+Then open http://localhost:3000
 
-## 🏗️ Architecture
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│   Next.js UI    │────▶│   FastAPI       │────▶│   Ollama        │
-│   (Port 3000)   │     │   (Port 8000)   │     │   Gemma 3:4B    │
-│                 │     │                 │     │                 │
-│ • PII Scrubbing │     │ • Sentiment API │     │ • Local LLM     │
-│ • Mood Visuals  │     │ • Risk Scoring  │     │ • Zero Cloud    │
-│ • Interventions │     │ • No Storage    │     │                 │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-```
-
-## 🔐 Privacy Guarantees
-
-1. **Client-side PII removal** before any data leaves the browser
-2. **Zero database** - No persistence layer
-3. **No logging** - Access logging disabled
-4. **Anonymous sessions** - Crypto-random IDs, no accounts
-5. **Ephemeral analysis** - Data discarded after response
-
-## 📁 Project Structure
+## How it works
 
 ```
-├── backend/
-│   ├── main.py              # FastAPI entry point
-│   ├── routers/sentiment.py # API endpoints
-│   ├── services/
-│   │   ├── nlp_engine.py    # Gemma integration
-│   │   ├── risk_scorer.py   # Wellness scoring
-│   │   └── intervention_engine.py
-│   └── privacy/             # Text obfuscation
-│
-└── frontend/
-    ├── src/app/             # Next.js pages
-    ├── src/components/      # React components
-    └── src/lib/             # API client, privacy
+Browser (Next.js)  →  API (FastAPI)  →  Ollama (Gemma 3:4B)
+     ↓                     ↓                    ↓
+ scrubs PII          analyzes mood         runs locally
+ shows UI            scores risk           no internet needed
 ```
 
-## 🛠️ Tech Stack
+## Privacy
 
-- **AI**: Gemma 3:4B (local, via Ollama)
-- **Backend**: FastAPI, Python 3.10+
-- **Frontend**: Next.js 16, React, Tailwind CSS
-- **Privacy**: Client-side regex PII scrubbing
+- PII gets stripped on the client before anything leaves the browser
+- No database - nothing persists after you close the tab
+- Session IDs are random, no login required
+- Server logs are disabled
 
-## 📄 License
+## Project layout
 
-MIT License - Use freely, help students.
+```
+backend/
+  main.py                 - FastAPI app
+  routers/                - API routes (sentiment, chat)
+  services/               - Gemma client, risk scoring, interventions
+  privacy/                - Text scrubbing
 
----
+frontend/
+  src/app/                - Next.js pages
+  src/components/         - UI components
+  src/lib/                - API client, privacy utils
+```
 
-*Built with 💚 for student mental wellness*
+## Stack
+
+- Gemma 3:4B via Ollama (runs locally, free)
+- FastAPI + Python
+- Next.js + React + Tailwind
+
+## License
+
+MIT
