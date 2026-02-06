@@ -15,7 +15,7 @@ class OllamaClient:
     def __init__(self):
         self.base_url = settings.OLLAMA_BASE_URL
         self.model = settings.OLLAMA_MODEL
-        self.timeout = httpx.Timeout(120.0, connect=10.0)  # 2 min for slow hardware
+        self.timeout = httpx.Timeout(300.0, connect=10.0)  # 5 min for slow hardware/large tasks
         self.fast_timeout = httpx.Timeout(60.0, connect=5.0)  # 1 min for quick checks
     
     async def health_check(self) -> bool:
