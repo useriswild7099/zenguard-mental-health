@@ -175,26 +175,28 @@ body {
   width: 100%;
   min-height: 200px;
   padding: var(--space-lg);
-  border: 2px solid transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   font-family: var(--font-body);
   font-size: 1.1rem;
   line-height: 1.8;
-  color: #2D3748;
+  color: white;
   resize: vertical;
   transition: all 0.3s var(--ease-gentle);
 }
 
 .journal-input:focus {
   outline: none;
-  border-color: var(--mood-blooming);
-  box-shadow: var(--shadow-glow);
-  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(168, 139, 250, 0.6);
+  box-shadow: 0 0 20px rgba(168, 139, 250, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .journal-input::placeholder {
-  color: #A0AEC0;
+  color: rgba(255, 255, 255, 0.5);
   font-style: italic;
 }
 

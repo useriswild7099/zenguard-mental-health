@@ -354,7 +354,7 @@ export default function Home() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="glass rounded-2xl p-6 md:p-8 shadow-lg text-center">
+            <div className="glass-card p-6 md:p-8 text-center">
               <MoodSeed
                 stage={analysisResult.mood_seed_stage}
                 color={analysisResult.mood_color}
@@ -362,20 +362,20 @@ export default function Home() {
                 confidence={analysisResult.confidence}
               />
               
-              <p className="mt-6 text-lg text-gray-600 italic">
+              <p className="mt-6 text-lg text-zinc-200 italic">
                 "{analysisResult.supportive_message}"
               </p>
               
               {analysisResult.masking.detected && (
-                <div className="mt-4 p-4 bg-purple-50 rounded-lg text-sm text-purple-700">
+                <div className="mt-4 p-4 bg-purple-500/20 rounded-lg text-sm text-purple-200 border border-purple-400/30">
                   <p>💜 It's okay to not be okay. You don't have to hide how you truly feel.</p>
                 </div>
               )}
             </div>
 
             {analysisResult.recommended_interventions.length > 0 && (
-              <div className="glass rounded-2xl p-6 shadow-lg">
-                <h3 className="text-lg font-semibold text-gray-700 mb-4">
+              <div className="glass-card p-6">
+                <h3 className="text-lg font-semibold text-white mb-4">
                   Suggested self-care
                 </h3>
                 <InterventionCards
@@ -409,7 +409,7 @@ export default function Home() {
       )}
 
       {/* Privacy Footer */}
-      <div className="mt-8 text-center text-sm text-gray-400">
+      <div className="mt-8 text-center text-sm text-zinc-400">
         <p>🔒 Your words stay with you. Analysis happens, nothing is stored.</p>
       </div>
     </div>

@@ -163,7 +163,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <button
             onClick={handleNewChat}
-            className="text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-2"
+            className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -185,7 +185,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 && (
-            <div className="text-center text-gray-400 py-8">
+            <div className="text-center text-zinc-400 py-8">
               <span className="text-4xl mb-2 block">{selectedMode.emoji}</span>
               <p>Start a conversation with your {selectedMode.name}</p>
             </div>
@@ -200,7 +200,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
                 className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                   msg.role === 'user'
                     ? 'bg-purple-500 text-white rounded-br-md'
-                    : 'bg-gray-100 text-gray-700 rounded-bl-md'
+                    : 'bg-white/10 backdrop-blur-sm text-zinc-100 rounded-bl-md border border-white/10'
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -210,7 +210,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
           
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-gray-100 rounded-2xl rounded-bl-md px-4 py-3">
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl rounded-bl-md px-4 py-3 border border-white/10">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                   <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
@@ -224,7 +224,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 border-t border-gray-100">
+        <div className="p-4 border-t border-white/10">
           <div className="flex items-end gap-3">
             <textarea
               ref={inputRef}
@@ -232,7 +232,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type your message..."
-              className="flex-1 resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300 focus:border-transparent transition-all"
+              className="flex-1 resize-none rounded-xl border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-3 text-sm text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition-all"
               rows={1}
               disabled={isLoading}
             />
@@ -246,7 +246,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               </svg>
             </button>
           </div>
-          <p className="text-xs text-gray-400 text-center mt-2">
+          <p className="text-xs text-zinc-400 text-center mt-2">
             Press Enter to send • Shift+Enter for new line
           </p>
         </div>

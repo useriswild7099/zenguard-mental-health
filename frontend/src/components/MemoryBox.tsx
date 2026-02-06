@@ -66,21 +66,21 @@ export default function MemoryBox({ onClose }: MemoryBoxProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="glass rounded-2xl p-8 max-w-md w-full mx-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="glass-card p-8 max-w-md w-full mx-4 relative">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
+          className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl"
         >
           ×
         </button>
 
         {/* Header */}
-        <h2 className="text-2xl font-semibold text-gray-700 mb-2 text-center" style={{ fontFamily: 'var(--font-heading)' }}>
+        <h2 className="text-2xl font-semibold text-white mb-2 text-center" style={{ fontFamily: 'var(--font-heading)' }}>
           📦 Memory Box
         </h2>
-        <p className="text-gray-500 mb-6 text-center">
+        <p className="text-zinc-300 mb-6 text-center">
           Recall happy moments to lift your spirits
         </p>
 
@@ -102,18 +102,20 @@ export default function MemoryBox({ onClose }: MemoryBoxProps) {
             <div 
               className="absolute inset-0 rounded-xl p-6 flex flex-col items-center justify-center text-center backface-hidden"
               style={{
-                background: 'linear-gradient(135deg, var(--zen-sand) 0%, var(--zen-lavender) 100%)',
+                background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(168, 139, 250, 0.2) 100%)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
                 backfaceVisibility: 'hidden',
               }}
             >
               <span className="text-5xl mb-4">{currentPrompt.emoji}</span>
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">
+              <h3 className="text-xl font-semibold text-white mb-2">
                 {currentPrompt.title}
               </h3>
-              <p className="text-gray-600 text-sm">
+              <p className="text-zinc-300 text-sm">
                 {currentPrompt.prompt}
               </p>
-              <p className="text-xs text-gray-400 mt-4">
+              <p className="text-xs text-zinc-400 mt-4">
                 Tap to reflect
               </p>
             </div>
@@ -122,17 +124,19 @@ export default function MemoryBox({ onClose }: MemoryBoxProps) {
             <div 
               className="absolute inset-0 rounded-xl p-6 flex flex-col backface-hidden"
               style={{
-                background: 'white',
+                background: 'rgba(30, 30, 40, 0.9)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
                 backfaceVisibility: 'hidden',
                 transform: 'rotateY(180deg)',
               }}
             >
-              <p className="text-sm text-gray-500 mb-2">✨ {currentPrompt.title}</p>
+              <p className="text-sm text-zinc-300 mb-2">✨ {currentPrompt.title}</p>
               <textarea
                 value={memory}
                 onChange={(e) => setMemory(e.target.value)}
                 placeholder="Write your memory here... (not saved anywhere)"
-                className="flex-1 p-3 border border-gray-200 rounded-lg resize-none focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none"
+                className="flex-1 p-3 border border-white/20 bg-white/10 rounded-lg resize-none text-white placeholder:text-zinc-500 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30 outline-none"
                 onClick={(e) => e.stopPropagation()}
               />
               <div className="flex gap-2 mt-3">
@@ -178,7 +182,7 @@ export default function MemoryBox({ onClose }: MemoryBoxProps) {
         </div>
 
         {/* Privacy notice */}
-        <p className="text-xs text-gray-400 text-center mt-4">
+        <p className="text-xs text-zinc-400 text-center mt-4">
           🔒 Your memories stay in your heart, not on our servers
         </p>
       </div>

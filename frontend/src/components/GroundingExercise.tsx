@@ -57,13 +57,13 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
 
   if (isComplete) {
     return (
-      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-        <div className="glass rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="glass-card p-8 max-w-md w-full mx-4 text-center relative">
           <div className="text-6xl mb-4 animate-seed-grow">🌈</div>
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
+          <h2 className="text-2xl font-semibold text-white mb-4" style={{ fontFamily: 'var(--font-heading)' }}>
             You did it!
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-zinc-300 mb-6">
             You've grounded yourself in the present moment. 
             Take a deep breath and notice how you feel now.
           </p>
@@ -76,26 +76,26 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="glass rounded-2xl p-8 max-w-md w-full mx-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="glass-card p-8 max-w-md w-full mx-4 relative">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
+          className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl"
         >
           ×
         </button>
 
         {/* Header */}
-        <h2 className="text-2xl font-semibold text-gray-700 mb-2 text-center" style={{ fontFamily: 'var(--font-heading)' }}>
+        <h2 className="text-2xl font-semibold text-white mb-2 text-center" style={{ fontFamily: 'var(--font-heading)' }}>
           5-4-3-2-1 Grounding
         </h2>
-        <p className="text-gray-500 mb-6 text-center">
+        <p className="text-zinc-300 mb-6 text-center">
           Reconnect with the present moment
         </p>
 
         {/* Progress bar */}
-        <div className="h-2 bg-gray-200 rounded-full mb-6 overflow-hidden">
+        <div className="h-2 bg-white/20 rounded-full mb-6 overflow-hidden">
           <div
             className="h-full bg-purple-400 transition-all duration-300"
             style={{ width: `${progress}%` }}
@@ -105,10 +105,10 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
         {/* Current step */}
         <div className="text-center mb-6">
           <span className="text-4xl mb-2 block">{step.emoji}</span>
-          <h3 className="text-xl font-semibold text-gray-700">
+          <h3 className="text-xl font-semibold text-white">
             {step.count} things you can {step.sense}
           </h3>
-          <p className="text-gray-500 text-sm mt-1">{step.prompt}</p>
+          <p className="text-zinc-400 text-sm mt-1">{step.prompt}</p>
         </div>
 
         {/* Input fields */}
@@ -120,7 +120,7 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
               value={inputs[currentStep][index]}
               onChange={(e) => handleInputChange(index, e.target.value)}
               placeholder={`${index + 1}.`}
-              className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none transition-all"
+              className="w-full px-4 py-3 rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-zinc-500 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/30 outline-none transition-all"
             />
           ))}
         </div>

@@ -86,20 +86,20 @@ export default function BreathingExercise({ onClose }: BreathingExerciseProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="glass rounded-2xl p-8 max-w-md w-full mx-4 text-center">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="glass-card p-8 max-w-md w-full mx-4 text-center relative">
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
+          className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl"
         >
           ×
         </button>
 
-        <h2 className="text-2xl font-semibold text-gray-700 mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
+        <h2 className="text-2xl font-semibold text-white mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
           4-7-8 Breathing
         </h2>
-        <p className="text-gray-500 mb-8">
+        <p className="text-zinc-300 mb-8">
           A calming technique to reduce anxiety
         </p>
 
@@ -136,16 +136,16 @@ export default function BreathingExercise({ onClose }: BreathingExerciseProps) {
 
         {/* Cycle counter */}
         {isActive && (
-          <p className="text-gray-500 mb-4">
+          <p className="text-zinc-300 mb-4">
             Cycle {cycleCount + 1}
           </p>
         )}
 
         {/* Instructions */}
         {!isActive && (
-          <div className="mb-6 text-sm text-gray-600">
+          <div className="mb-6 text-sm text-zinc-300">
             <p className="mb-2">This technique helps calm your nervous system:</p>
-            <ul className="space-y-1">
+            <ul className="space-y-1 text-zinc-400">
               <li>🌬️ Inhale for 4 seconds</li>
               <li>⏸️ Hold for 7 seconds</li>
               <li>💨 Exhale for 8 seconds</li>
@@ -171,7 +171,7 @@ export default function BreathingExercise({ onClose }: BreathingExerciseProps) {
 
         {/* Encouragement */}
         {cycleCount >= 3 && (
-          <p className="mt-6 text-sm text-green-600 animate-gentle-pulse">
+          <p className="mt-6 text-sm text-green-400 animate-gentle-pulse">
             ✨ You're doing great! {cycleCount} cycles completed.
           </p>
         )}

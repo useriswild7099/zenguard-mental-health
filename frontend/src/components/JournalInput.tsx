@@ -78,12 +78,12 @@ export default function JournalInput({
       <div className="flex items-center justify-between mt-3 text-sm">
         {/* Left: Word count & quick check */}
         <div className="flex items-center gap-4">
-          <span className="text-gray-400">
+          <span className="text-zinc-400">
             {wordCount} {wordCount === 1 ? 'word' : 'words'}
           </span>
           
           {quickCheck?.suggestion && (
-            <span className="text-purple-500 animate-gentle-pulse">
+            <span className="text-purple-300 animate-gentle-pulse">
               💜 {quickCheck.suggestion}
             </span>
           )}
@@ -112,7 +112,7 @@ export default function JournalInput({
       </div>
 
       {/* Hint */}
-      <p className="text-xs text-gray-400 mt-2 text-center">
+      <p className="text-xs text-zinc-400 mt-2 text-center">
         Press Ctrl+Enter to submit • Your words are never stored
       </p>
 
