@@ -93,6 +93,8 @@ class AnalysisResponse(BaseModel):
     # Interventions
     recommended_interventions: List[Intervention] = []
     supportive_message: str
+    therapeutic_insight: Optional[str] = None
+    key_patterns: List[str] = []
     
     # Privacy Confirmation
     data_stored: bool = False  # Always False

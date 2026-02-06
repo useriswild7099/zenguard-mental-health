@@ -41,7 +41,9 @@ JSON Format:
     "emotional_tone": -1.0 to 1.0,
     "urgency_level": 0.0-1.0,
     "risk_score": 0-10,
-    "support_message": "specific supportive message based on the text"
+    "support_message": "specific supportive message based on the text",
+    "therapeutic_insight": "a deeper psychological insight about what they wrote",
+    "key_patterns": ["pattern 1", "pattern 2"]
 }"""
 
 
@@ -188,7 +190,9 @@ CRITICAL: The 'support_message' MUST be unique to this specific situation.
                 "risk_score": self._clamp(result.get("risk_score", 3), 0, 10),
                 "reasoning_summary": result.get("reasoning_summary", ""),
                 "key_phrases": result.get("key_phrases", []),
-                "support_message": result.get("support_message", "You're doing great by expressing yourself.")
+                "support_message": result.get("support_message", "You're doing great by expressing yourself."),
+                "therapeutic_insight": result.get("therapeutic_insight", ""),
+                "key_patterns": result.get("key_patterns", [])
             }
         except Exception:
             return self._default_sentiment_result()
@@ -275,6 +279,32 @@ Use <think> tags to reason about the visual cues you observe before providing yo
             "interpretation": result.get("interpretation", "")
         }
     
+    async def generate_release_affirmation(self, text: str) -> str:
+        """
+        Generate a short, context-aware release affirmation.
+        Optimized for speed.
+        """
+        prompt = f"""Based on this journal entry, generate a single, short (max 15 words) compassionate affirmation to help the user let go.
+Entry: "{text[:300]}"
+
+Examples:
+- "Letting go of this anger is a brave step."
+- "You are not defined by this mistake."
+- "Release this worry; it does not serve you."
+
+Output ONLY the affirmation sentence."""
+
+        try:
+            response = await self.client.generate(
+                prompt=prompt,
+                system_prompt="You are a wise, compassionate guide helping someone release negative thoughts.",
+                temperature=0.7,
+                max_tokens=50
+            )
+            return response.strip().replace('"', '')
+        except Exception:
+            return "You have expressed yourself honestly. Let it go."
+
     def analyze_repetition(self, text: str) -> Tuple[bool, List[str]]:
         """Detect repetitive words/phrases indicating rumination"""
         words = text.lower().split()
@@ -402,7 +432,9 @@ Use <think> tags to reason about the visual cues you observe before providing yo
             "risk_score": 3,
             "reasoning_summary": "",
             "key_phrases": [],
-            "support_message": "Thank you for sharing. Your feelings are valid."
+            "support_message": "Thank you for sharing. Your feelings are valid.",
+            "therapeutic_insight": "",
+            "key_patterns": []
         }
     
     def _parse_emotion_type(self, emotion_str: str) -> EmotionType:

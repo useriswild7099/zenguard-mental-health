@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { chatClient, ChatMode, ChatMessage } from '@/lib/api';
 import { prepareText } from '@/lib/privacy';
+import { getPersonaImage } from '@/lib/personaMapping';
 import VoiceInput from './VoiceInput';
 
 interface ChatInterfaceProps {
@@ -18,7 +19,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingModes, setIsLoadingModes] = useState(true);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -70,31 +71,31 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
 
     const userMessage = inputText.trim();
     setInputText('');
-    
+
     // Privacy: Scrub PII before sending
     const { scrubbed } = prepareText(userMessage);
-    
+
     // Add user message to chat
     const newUserMessage: ChatMessage = { role: 'user', content: userMessage };
     setMessages(prev => [...prev, newUserMessage]);
-    
+
     setIsLoading(true);
-    
+
     try {
       const response = await chatClient.sendMessage(
         scrubbed,
         selectedMode.id,
         messages
       );
-      
+
       // Add AI response to chat
       const aiMessage: ChatMessage = { role: 'assistant', content: response.response };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
       console.error('Chat error:', error);
-      const errorMessage: ChatMessage = { 
-        role: 'assistant', 
-        content: "I'm having trouble connecting right now. Please make sure Ollama is running with the gemma3:4b model." 
+      const errorMessage: ChatMessage = {
+        role: 'assistant',
+        content: "I'm having trouble connecting right now. Please make sure Ollama is running with the gemma3:4b model."
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -128,7 +129,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                <path d="M19 12H5M12 19l-7-7 7-7" />
               </svg>
               Back
             </button>
@@ -144,11 +145,10 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-full text-sm capitalize transition-all ${
-                  activeCategory === cat
-                    ? 'bg-purple-500/80 text-white shadow-lg shadow-purple-500/20'
-                    : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
-                }`}
+                className={`px-4 py-2 rounded-full text-sm capitalize transition-all ${activeCategory === cat
+                  ? 'bg-purple-500/80 text-white shadow-lg shadow-purple-500/20'
+                  : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
+                  }`}
               >
                 {cat === 'all' ? 'All Companions' : cat}
               </button>
@@ -170,7 +170,32 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
                 >
                   <div className={`absolute top-0 left-0 w-1 h-full bg-${mode.color || 'purple'}-500/50`}></div>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-3xl group-hover:scale-110 transition-transform">{mode.emoji}</span>
+                    {/* Persona Image Resolution */}
+                    {/* Persona Image Resolution */}
+                    <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 shrink-0 bg-black/20 flex items-center justify-center relative">
+                      {getPersonaImage(mode.name) ? (
+                        <img
+                          src={getPersonaImage(mode.name)!}
+                          alt={mode.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            // Show fallback sibling
+                            const fallback = e.currentTarget.parentElement?.querySelector('.fallback-emoji') as HTMLElement;
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                      ) : (
+                        <span className="text-3xl flex items-center justify-center">{mode.emoji}</span>
+                      )}
+
+                      {/* Hidden fallback for onError to toggle */}
+                      {getPersonaImage(mode.name) && (
+                        <span className="fallback-emoji text-3xl hidden absolute inset-0 items-center justify-center bg-zinc-900/50 backdrop-blur-sm">
+                          {mode.emoji}
+                        </span>
+                      )}
+                    </div>
                     <h3 className="font-semibold text-white">{mode.name}</h3>
                   </div>
                   <p className="text-sm text-zinc-300">{mode.description}</p>
@@ -207,13 +232,34 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
             className="absolute left-4 text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M19 12H5M12 19l-7-7 7-7"/>
+              <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
             Change Mode
           </button>
-          
+
           <div className="flex flex-col items-center">
-            <span className="text-2xl mb-1">{selectedMode.emoji}</span>
+            <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white/10 mb-2 shadow-lg bg-black/20 flex items-center justify-center relative">
+              {getPersonaImage(selectedMode.name) ? (
+                <img
+                  src={getPersonaImage(selectedMode.name)!}
+                  alt={selectedMode.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    const fallback = e.currentTarget.parentElement?.querySelector('.fallback-emoji') as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
+                  }}
+                />
+              ) : (
+                <span className="text-5xl flex items-center justify-center h-full pb-1">{selectedMode.emoji}</span>
+              )}
+
+              {getPersonaImage(selectedMode.name) && (
+                <span className="fallback-emoji text-5xl hidden absolute inset-0 items-center justify-center bg-zinc-900/50 backdrop-blur-sm pb-1">
+                  {selectedMode.emoji}
+                </span>
+              )}
+            </div>
             <span className="font-medium text-white text-sm">{selectedMode.name}</span>
           </div>
 
@@ -234,24 +280,23 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               <p className="text-sm max-w-xs mx-auto opacity-70">{selectedMode.description}</p>
             </div>
           )}
-          
+
           {messages.map((msg, index) => (
             <div
               key={index}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl px-5 py-3 shadow-sm ${
-                  msg.role === 'user'
-                    ? `bg-${selectedMode.color || 'purple'}-600 text-white rounded-br-none`
-                    : 'bg-white/10 backdrop-blur-md text-zinc-100 rounded-bl-none border border-white/5'
-                }`}
+                className={`max-w-[85%] rounded-2xl px-5 py-3 shadow-sm ${msg.role === 'user'
+                  ? `bg-${selectedMode.color || 'purple'}-600 text-white rounded-br-none`
+                  : 'bg-white/10 backdrop-blur-md text-zinc-100 rounded-bl-none border border-white/5'
+                  }`}
               >
                 <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
               </div>
             </div>
           ))}
-          
+
           {isLoading && (
             <div className="flex justify-start">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl rounded-bl-none px-4 py-3 border border-white/5">
@@ -263,7 +308,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               </div>
             </div>
           )}
-          
+
           <div ref={messagesEndRef} />
         </div>
 
@@ -280,7 +325,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               rows={1}
               disabled={isLoading}
             />
-            <VoiceInput 
+            <VoiceInput
               onTranscript={(text) => setInputText(prev => prev + (prev ? ' ' : '') + text)}
               onInterimTranscript={(liveText) => setInputText(liveText)}
               disabled={isLoading}
@@ -291,7 +336,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               className={`btn-zen bg-${selectedMode.color || 'purple'}-600 hover:bg-${selectedMode.color || 'purple'}-500 disabled:opacity-50 disabled:cursor-not-allowed h-11 w-11 flex items-center justify-center rounded-xl transition-all shadow-lg shadow-${selectedMode.color || 'purple'}-500/20`}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
               </svg>
             </button>
           </div>

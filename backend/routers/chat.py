@@ -87,11 +87,16 @@ async def chat(request: ChatRequest):
         # Add current message
         conversation += f"User: {obfuscated_message}\n\nAssistant:"
         
+        # 6. Final Instruction Injection (Additive Helpfulness Mandate)
+        # This reinforces the PROACTIVE_HELPFULNESS_PROTOCOL without removing core traits.
+        final_mandate = "\n\n[MANDATORY]: Provide a CONCRETE solution or a specific ACTION (like a breathing technique, a small task, or a clear plan) and end by asking if the user wants to continue this topic or switch."
+        full_prompt = conversation + final_mandate
+        
         # Generate response
         response = await ollama_client.generate(
-            prompt=conversation,
+            prompt=full_prompt,
             system_prompt=system_prompt,
-            temperature=0.8,  # Increased for more natural variation
+            temperature=0.7,  # Slightly tighter for better mandate following
             max_tokens=256
         )
         

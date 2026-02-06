@@ -1,24 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { 
-  Users, Sparkles, Shield, Brain, Zap, 
-  MessageCircle, Heart, Star, BookOpen, Coffee 
+import {
+  Users, Sparkles, Shield, Brain, Zap,
+  MessageCircle, Heart, Star, BookOpen, Coffee
 } from 'lucide-react';
 
 const PERSONALITIES = [
-  { name: "Socrates", emoji: "🏛️", desc: "Deep philosophical questioning" },
-  { name: "Steve Jobs", emoji: "📱", desc: "Design-focused minimalist" },
-  { name: "Grandmother", emoji: "👵", desc: "Warm comfort & food" },
-  { name: "Rumi", emoji: "📜", desc: "Poetic soul connections" },
-  { name: "David Goggins", emoji: "💪", desc: "Therapeutic toughness" },
-  { name: "The Universe", emoji: "🌌", desc: "Cosmic perspective" },
-  { name: "Best Friend", emoji: "🫂", desc: "Unconditional support" },
-  { name: "School Teacher", emoji: "🍎", desc: "Patient guidance" },
-  { name: "Marcus Aurelius", emoji: "👑", desc: "Stoic resilience" },
-  { name: "Cool Aunt", emoji: "🍷", desc: "Fun & honest advice" },
-  { name: "Sherlock", emoji: "🎻", desc: "Analytical breakdown" },
-  { name: "Nature Guide", emoji: "🌿", desc: "Grounding in reality" },
+  { name: "Socrates", emoji: "🏛️", image: "/assets/personality/philosophers/Socrates.png", desc: "Deep philosophical questioning" },
+  { name: "Steve Jobs", emoji: "📱", image: "/assets/personality/scientist/Steve Jobs.png", desc: "Design-focused minimalist" },
+  { name: "Grandmother", emoji: "👵", image: "/assets/personality/family/grand mother.png", desc: "Warm comfort & food" },
+  { name: "Rumi", emoji: "📜", image: "/assets/personality/philosophers/rumi.png", desc: "Poetic soul connections" },
+  { name: "David Goggins", emoji: "💪", image: "/assets/personality/tough love/David Goggins.png", desc: "Therapeutic toughness" },
+  { name: "The Universe", emoji: "🌌", image: "/assets/personality/arch types/the universe.png", desc: "Cosmic perspective" },
+  { name: "Best Friend", emoji: "🫂", image: "/assets/personality/friend/best friend.png", desc: "Unconditional support" },
+  { name: "School Teacher", emoji: "🍎", image: "/assets/personality/education/school teacher.png", desc: "Patient guidance" },
+  { name: "Marcus Aurelius", emoji: "👑", image: "/assets/personality/philosophers/marcus aurelius.png", desc: "Stoic resilience" },
+  { name: "Cool Uncle", emoji: "✨", image: "/assets/personality/family/cool uncle.png", desc: "Fun & honest advice" },
+  { name: "Sherlock", emoji: "🎻", image: "/assets/personality/famous internet/Rob Anderson.png", desc: "Analytical breakdown" },
+  { name: "Nature Guide", emoji: "🌿", image: "/assets/personality/general/mindfullness guide.png", desc: "Grounding in reality" },
 ];
 
 export default function FeatureShowcase() {
@@ -26,7 +26,7 @@ export default function FeatureShowcase() {
 
   return (
     <section className="py-24 relative z-10 w-full max-w-7xl mx-auto px-6">
-      
+
       {/* Section Header */}
       <div className="text-center mb-16 space-y-4">
         <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>
@@ -47,11 +47,10 @@ export default function FeatureShowcase() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
-            className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${
-              activeTab === tab.id
-                ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)]'
-                : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
-            }`}
+            className={`flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all ${activeTab === tab.id
+              ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)]'
+              : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
+              }`}
           >
             <tab.icon className="w-4 h-4" />
             {tab.label}
@@ -64,11 +63,22 @@ export default function FeatureShowcase() {
         <div className="animate-fade-in">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
             {PERSONALITIES.map((persona, i) => (
-              <div 
+              <div
                 key={persona.name}
-                className="glass-card p-4 hover:bg-white/10 transition-colors flex items-start gap-4"
+                className="glass-card p-4 hover:bg-white/10 transition-colors flex items-center gap-4"
               >
-                <span className="text-4xl">{persona.emoji}</span>
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-white/10 shrink-0">
+                  <img
+                    src={persona.image}
+                    alt={persona.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback to emoji if image fails
+                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.parentElement!.innerText = persona.emoji;
+                    }}
+                  />
+                </div>
                 <div>
                   <h3 className="font-bold text-white text-lg">{persona.name}</h3>
                   <p className="text-xs text-zinc-400 mt-1">{persona.desc}</p>
@@ -108,7 +118,7 @@ export default function FeatureShowcase() {
                 ))}
               </ul>
             </div>
-            
+
             {/* Visual Abstract Representation */}
             <div className="relative h-64 bg-black/40 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10"></div>
