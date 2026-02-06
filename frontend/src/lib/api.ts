@@ -175,3 +175,85 @@ class SentimentClient {
 
 // Export singleton instance
 export const sentimentClient = new SentimentClient();
+
+// ============ CHAT API ============
+
+export interface ChatMode {
+  id: string;
+  name: string;
+  emoji: string;
+  description: string;
+}
+
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface ChatResponse {
+  response: string;
+  mode: string;
+  data_stored: boolean;
+}
+
+class ChatClient {
+  private baseUrl: string;
+
+  constructor() {
+    this.baseUrl = API_BASE_URL;
+  }
+
+  /**
+   * Get available chat modes
+   */
+  async getModes(): Promise<ChatMode[]> {
+    try {
+      const response = await fetch(`${this.baseUrl}/api/modes`);
+      if (!response.ok) return [];
+      const data = await response.json();
+      return data.modes || [];
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Send a chat message
+   */
+  async sendMessage(
+    message: string,
+    mode: string,
+    history: ChatMessage[]
+  ): Promise<ChatResponse> {
+    const response = await fetch(`${this.baseUrl}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message,
+        mode,
+        history,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Chat failed: ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  /**
+   * Clear chat (client-side confirmation)
+   */
+  async clearChat(): Promise<void> {
+    await fetch(`${this.baseUrl}/api/chat/clear`, {
+      method: 'DELETE',
+    });
+  }
+}
+
+// Export singleton instance
+export const chatClient = new ChatClient();
+

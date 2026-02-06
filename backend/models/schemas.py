@@ -108,3 +108,33 @@ class QuickCheckResponse(BaseModel):
     emotional_tone: str  # "positive", "neutral", "concerning"
     intensity: float = Field(ge=0, le=1)
     suggestion: Optional[str] = None
+
+
+class ChatMode(str, Enum):
+    """AI chat persona modes"""
+    COMPASSIONATE_FRIEND = "compassionate_friend"
+    ACADEMIC_COACH = "academic_coach"
+    MINDFULNESS_GUIDE = "mindfulness_guide"
+    MOTIVATIONAL_COACH = "motivational_coach"
+
+
+class ChatMessage(BaseModel):
+    """Single chat message"""
+    role: str = Field(description="'user' or 'assistant'")
+    content: str
+
+
+class ChatRequest(BaseModel):
+    """Request for chat endpoint"""
+    message: str = Field(min_length=1, max_length=5000)
+    mode: ChatMode = ChatMode.COMPASSIONATE_FRIEND
+    session_id: Optional[str] = None
+    history: List[ChatMessage] = []
+
+
+class ChatResponse(BaseModel):
+    """Response from chat endpoint"""
+    response: str
+    mode: ChatMode
+    data_stored: bool = False
+

@@ -14,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
 
-from routers import sentiment
+from routers import sentiment, chat
 from config import settings
 
 # Disable request logging for privacy
@@ -23,15 +23,18 @@ logging.getLogger("uvicorn.access").disabled = True
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan - warm up Ollama connection"""
-    # Startup: Verify Ollama connection
+    """Application lifespan - check Ollama model availability"""
+    # Startup: Check Ollama connection
     from services.ollama_client import OllamaClient
-    client = OllamaClient()
-    is_ready = await client.health_check()
-    if is_ready:
-        print("✓ Ollama connection verified - Gemma 3:4B ready")
-    else:
-        print("⚠ Warning: Ollama not responding. Make sure it's running.")
+    try:
+        client = OllamaClient()
+        is_ready = await client.health_check()
+        if is_ready:
+            print(f"✓ Ollama connected - Model: {client.model}")
+        else:
+            print(f"⚠ Ollama not available. Please start Ollama with 'ollama run {client.model}'")
+    except Exception as e:
+        print(f"❌ Failed to connect to Ollama: {str(e)}")
     yield
     # Shutdown: Cleanup
     print("ZenGuard AI shutting down...")
@@ -58,6 +61,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(sentiment.router, prefix="/api", tags=["Sentiment Analysis"])
+app.include_router(chat.router, prefix="/api", tags=["AI Chat"])
 
 
 @app.get("/health")

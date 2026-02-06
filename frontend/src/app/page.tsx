@@ -10,6 +10,7 @@ import BreathingExercise from '@/components/BreathingExercise';
 import GroundingExercise from '@/components/GroundingExercise';
 import MemoryBox from '@/components/MemoryBox';
 import MoodDoodle from '@/components/MoodDoodle';
+import ChatInterface from '@/components/ChatInterface';
 
 // Supportive prompts that rotate
 const JOURNAL_PROMPTS = [
@@ -37,9 +38,10 @@ export default function Home() {
   const [activeIntervention, setActiveIntervention] = useState<string | null>(null);
   const [showDoodle, setShowDoodle] = useState(false);
   const [apiConnected, setApiConnected] = useState(false);
+  const [activeView, setActiveView] = useState<'journal' | 'chat'>('journal');
   
   // Debounce timer for quick check
-  const quickCheckTimer = useRef<NodeJS.Timeout>();
+  const quickCheckTimer = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Rotate prompts
   useEffect(() => {
@@ -140,11 +142,37 @@ export default function Home() {
             {apiConnected ? 'AI Ready' : 'Connecting...'}
           </span>
         </div>
+
+        {/* View Toggle Tabs */}
+        <div className="mt-6 flex justify-center gap-2">
+          <button
+            onClick={() => setActiveView('journal')}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+              activeView === 'journal'
+                ? 'bg-purple-500 text-white shadow-md'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            ✍️ Journal
+          </button>
+          <button
+            onClick={() => setActiveView('chat')}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-all ${
+              activeView === 'chat'
+                ? 'bg-purple-500 text-white shadow-md'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            💬 AI Chat
+          </button>
+        </div>
       </header>
 
       {/* Main Content Area */}
       <div className="w-full max-w-2xl">
-        {!analysisResult ? (
+        {activeView === 'chat' ? (
+          <ChatInterface onBack={() => setActiveView('journal')} />
+        ) : !analysisResult ? (
           /* Journal Input Mode */
           <div className="glass rounded-2xl p-6 md:p-8 shadow-lg">
             <JournalInput
