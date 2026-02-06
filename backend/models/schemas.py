@@ -95,6 +95,7 @@ class AnalysisResponse(BaseModel):
     supportive_message: str
     therapeutic_insight: Optional[str] = None
     key_patterns: List[str] = []
+    selected_breathing: Optional[Dict] = None
     
     # Privacy Confirmation
     data_stored: bool = False  # Always False
