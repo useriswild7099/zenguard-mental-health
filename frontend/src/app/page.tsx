@@ -145,28 +145,31 @@ export default function Home() {
         <main className="relative z-10 flex flex-col items-center justify-center px-6 pt-12 pb-20 md:pt-20">
           <div className="text-center max-w-3xl mx-auto">
             {/* Breathing indicator */}
-            <div className="mb-8 flex justify-center">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-300/20 to-blue-300/20 flex items-center justify-center animate-breathe backdrop-blur-sm border border-white/10">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400/40 to-blue-400/40 flex items-center justify-center">
+            <div className="mb-8 flex justify-center animate-fade-scale">
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-300/20 to-blue-300/20 flex items-center justify-center animate-gentle-float backdrop-blur-sm border border-white/10">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400/40 to-blue-400/40 flex items-center justify-center animate-soft-glow">
                   <Sparkles className="w-6 h-6 text-white/80" />
                 </div>
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-xl" style={{ fontFamily: 'var(--font-heading)' }}>
+            <h1 
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] drop-shadow-xl tracking-tight animate-fade-up stagger-2" 
+              style={{ fontFamily: 'var(--font-heading)' }}
+            >
               A quiet space for <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-blue-200">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-200 to-blue-300 animate-gradient-x">
                 your thoughts
               </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-zinc-100 mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-md font-light">
+            <p className="text-lg md:text-xl text-zinc-100 mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-md font-light animate-fade-up stagger-3">
               Express how you're feeling. Get gentle insights. 
               <span className="block mt-2 text-zinc-300 font-medium">Everything stays with you — nothing is stored.</span>
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up stagger-4">
               <button
                 onClick={() => setActiveView('journal')}
                 className="group px-8 py-4 bg-white text-gray-900 rounded-2xl font-semibold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
@@ -187,7 +190,7 @@ export default function Home() {
 
           {/* Feature Cards */}
           <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full px-4">
-            <div className="glass-card p-8 text-center group">
+            <div className="glass-card p-8 text-center group animate-fade-up stagger-5">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
                 <Lock className="w-7 h-7 text-white" />
               </div>
@@ -195,7 +198,7 @@ export default function Home() {
               <p className="text-zinc-300 leading-relaxed">Your words are scrubbed of personal info before processing. Nothing is ever stored.</p>
             </div>
 
-            <div className="glass-card p-8 text-center group">
+            <div className="glass-card p-8 text-center group animate-fade-up stagger-6">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
                 <Brain className="w-7 h-7 text-white" />
               </div>
@@ -203,7 +206,7 @@ export default function Home() {
               <p className="text-zinc-300 leading-relaxed">Powered by local AI. Understands your emotions without judgment or data collection.</p>
             </div>
 
-            <div className="glass-card p-8 text-center group">
+            <div className="glass-card p-8 text-center group animate-fade-up stagger-7">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
                 <Sprout className="w-7 h-7 text-white" />
               </div>
@@ -213,7 +216,7 @@ export default function Home() {
           </div>
 
           {/* Trust Indicators */}
-          <div className="mt-20 flex flex-wrap justify-center gap-8 md:gap-12">
+          <div className="mt-20 flex flex-wrap justify-center gap-8 md:gap-12 animate-fade-up stagger-8">
             <div className="flex flex-col items-center gap-3 group">
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
                 <WifiOff className="w-6 h-6 text-green-400" />
