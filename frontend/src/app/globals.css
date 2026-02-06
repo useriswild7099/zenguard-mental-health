@@ -383,3 +383,26 @@ body {
   color: var(--mood-withered);
   background-color: var(--mood-withered);
 }
+
+/* Apple-style Glass Cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Override existing card styles for glass mode */
+.intervention-card.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+

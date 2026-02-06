@@ -34,10 +34,9 @@ export default function InterventionCards({ interventions, onSelect }: Intervent
         <button
           key={intervention.type}
           onClick={() => onSelect(intervention.type)}
-          className="intervention-card text-left group"
+          className="glass-card text-left group p-5 hover:bg-white/20"
           style={{
             animationDelay: `${index * 0.1}s`,
-            background: `linear-gradient(135deg, white 0%, ${INTERVENTION_COLORS[intervention.type] || '#F5F5F5'} 100%)`,
           }}
         >
           {/* Icon & Title */}
@@ -45,18 +44,18 @@ export default function InterventionCards({ interventions, onSelect }: Intervent
             <span className="text-2xl group-hover:scale-110 transition-transform">
               {INTERVENTION_ICONS[intervention.type] || '✨'}
             </span>
-            <h4 className="font-semibold text-gray-700">
+            <h4 className="font-semibold text-white">
               {intervention.title}
             </h4>
           </div>
 
           {/* Description */}
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-zinc-300 leading-relaxed">
             {intervention.description}
           </p>
 
           {/* Action hint */}
-          <div className="mt-3 text-xs text-gray-400 group-hover:text-gray-600 transition-colors">
+          <div className="mt-3 text-xs text-zinc-400 group-hover:text-white transition-colors">
             Click to start →
           </div>
         </button>

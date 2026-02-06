@@ -187,7 +187,7 @@ export default function Home() {
 
           {/* Feature Cards */}
           <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full px-4">
-            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 shadow-2xl group">
+            <div className="glass-card p-8 text-center group">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
                 <Lock className="w-7 h-7 text-white" />
               </div>
@@ -195,7 +195,7 @@ export default function Home() {
               <p className="text-zinc-300 leading-relaxed">Your words are scrubbed of personal info before processing. Nothing is ever stored.</p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 shadow-2xl group">
+            <div className="glass-card p-8 text-center group">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
                 <Brain className="w-7 h-7 text-white" />
               </div>
@@ -203,7 +203,7 @@ export default function Home() {
               <p className="text-zinc-300 leading-relaxed">Powered by local AI. Understands your emotions without judgment or data collection.</p>
             </div>
 
-            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 shadow-2xl group">
+            <div className="glass-card p-8 text-center group">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
                 <Sprout className="w-7 h-7 text-white" />
               </div>
@@ -283,35 +283,51 @@ export default function Home() {
 
   // Journal View
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+    <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-8">
+      {/* Background Video (Reused) */}
+      <div className="fixed inset-0 overflow-hidden -z-10">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute w-full h-full object-cover"
+          style={{ filter: 'brightness(0.7)' }}
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50 backdrop-blur-[2px]"></div>
+      </div>
+
       {/* Back Button */}
       <button
         onClick={() => setActiveView('landing')}
-        className="fixed top-6 left-6 flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
+        className="fixed top-6 left-6 flex items-center gap-2 text-white/70 hover:text-white transition-colors z-20"
       >
         <span>←</span>
         <span>Back</span>
       </button>
 
       {/* Header */}
-      <header className="text-center mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-700 mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
+      <header className="text-center mb-8 relative z-10">
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight" style={{ fontFamily: 'var(--font-heading)' }}>
           Journal Entry
         </h1>
-        <p className="text-gray-500">Express yourself freely</p>
+        <p className="text-zinc-200">Express yourself freely</p>
         
         <div className="mt-4 flex items-center justify-center gap-2 text-sm">
-          <span className={`w-2 h-2 rounded-full ${apiConnected ? 'bg-green-400' : 'bg-yellow-400'}`}></span>
-          <span className="text-gray-400">
+          <span className={`w-2 h-2 rounded-full ${apiConnected ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-yellow-400'}`}></span>
+          <span className="text-zinc-300 font-mono text-xs">
             {apiConnected ? 'AI Ready' : 'Connecting...'}
           </span>
         </div>
       </header>
 
       {/* Main Content Area */}
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-2xl relative z-10">
         {!analysisResult ? (
-          <div className="glass rounded-2xl p-6 md:p-8 shadow-lg">
+          <div className="glass-card p-6 md:p-8">
             <JournalInput
               value={journalText}
               onChange={handleTextChange}
@@ -324,7 +340,7 @@ export default function Home() {
             <div className="mt-4 text-center">
               <button
                 onClick={() => setShowDoodle(!showDoodle)}
-                className="text-sm text-gray-500 hover:text-gray-700 underline transition-colors"
+                className="text-sm text-zinc-400 hover:text-zinc-200 underline transition-colors"
               >
                 {showDoodle ? 'Hide mood doodle' : 'Or express with a mood doodle ✨'}
               </button>

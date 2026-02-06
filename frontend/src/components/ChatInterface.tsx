@@ -105,19 +105,19 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   if (!selectedMode) {
     return (
       <div className="w-full max-w-2xl mx-auto">
-        <div className="glass rounded-2xl p-6 md:p-8 shadow-lg">
+        <div className="glass-card p-6 md:p-8">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <button
               onClick={onBack}
-              className="text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-2"
+              className="text-zinc-400 hover:text-white transition-colors flex items-center gap-2"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M19 12H5M12 19l-7-7 7-7"/>
               </svg>
               Back
             </button>
-            <h2 className="text-xl font-semibold text-gray-700" style={{ fontFamily: 'var(--font-heading)' }}>
+            <h2 className="text-xl font-semibold text-white tracking-wide" style={{ fontFamily: 'var(--font-heading)' }}>
               Choose a Companion
             </h2>
             <div className="w-16"></div>
@@ -134,13 +134,13 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
                 <button
                   key={mode.id}
                   onClick={() => handleModeSelect(mode)}
-                  className="mode-card text-left p-5 rounded-xl border-2 border-transparent hover:border-purple-300 bg-gradient-to-br from-white to-purple-50 shadow-md hover:shadow-lg transition-all duration-300 group"
+                  className="glass-card text-left p-5 hover:bg-white/20 transition-all duration-300 group shadow-lg"
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-3xl group-hover:scale-110 transition-transform">{mode.emoji}</span>
-                    <h3 className="font-semibold text-gray-700">{mode.name}</h3>
+                    <h3 className="font-semibold text-white">{mode.name}</h3>
                   </div>
-                  <p className="text-sm text-gray-500">{mode.description}</p>
+                  <p className="text-sm text-zinc-300">{mode.description}</p>
                 </button>
               ))}
             </div>
@@ -158,9 +158,9 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   // Chat screen
   return (
     <div className="w-full max-w-2xl mx-auto">
-      <div className="glass rounded-2xl shadow-lg flex flex-col h-[600px]">
+      <div className="glass-card flex flex-col h-[600px]">
         {/* Chat Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+        <div className="flex items-center justify-between p-4 border-b border-white/10">
           <button
             onClick={handleNewChat}
             className="text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-2"
@@ -172,11 +172,11 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
           </button>
           <div className="flex items-center gap-2">
             <span className="text-xl">{selectedMode.emoji}</span>
-            <span className="font-medium text-gray-700">{selectedMode.name}</span>
+            <span className="font-medium text-white">{selectedMode.name}</span>
           </div>
           <button
             onClick={onBack}
-            className="text-gray-400 hover:text-gray-600 transition-colors text-sm"
+            className="text-zinc-400 hover:text-white transition-colors text-sm"
           >
             Exit Chat
           </button>
