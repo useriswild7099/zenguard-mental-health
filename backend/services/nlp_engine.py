@@ -142,10 +142,14 @@ class NLPEngine:
             
         Returns dict with emotions, risk score, and supportive message
         """
-        # Simple prompt for faster response
+        # Enhanced prompt for better variety and specificity
         prompt = f"""Analyze this specific text: "{text[:500]}"
 
-Respond with JSON only. Make the support message specific to what they wrote."""
+Respond with JSON only.
+CRITICAL: The 'support_message' MUST be unique to this specific situation.
+- Do NOT use generic phrases like "It's important to remember" or "I understand."
+- Reflect the specific content they wrote about.
+- If they mentioned a specific event, mention it in your support."""
 
         response = await self.client.generate(
             prompt=prompt,

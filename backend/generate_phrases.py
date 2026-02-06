@@ -10,7 +10,7 @@ client = OllamaClient()
 
 OUTPUT_FILE = "data/all_personality_phrases.json"
 
-async def generate_phrases_for_mode(mode: ChatMode, count: int = 100):
+async def generate_phrases_for_mode(mode: ChatMode, count: int = 20):
     """Generates signature phrases for a single mode using its system prompt."""
     
     mode_name = MODE_INFO[mode]["name"]
@@ -71,7 +71,7 @@ async def main():
     # Iterate through all available modes
     # NOTE: To test quicker, you can slice this list e.g. list(ChatMode)[:3]
     for mode in list(ChatMode):
-        phrases = await generate_phrases_for_mode(mode, count=100)
+        phrases = await generate_phrases_for_mode(mode, count=20)
         all_data[mode.value] = {
             "name": MODE_INFO[mode]["name"],
             "description": MODE_INFO[mode]["description"],

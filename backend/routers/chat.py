@@ -9,7 +9,7 @@ from typing import Optional
 from models.schemas import ChatRequest, ChatResponse, ChatMode, ChatMessage
 from services.ollama_client import OllamaClient
 from privacy.text_obfuscator import TextObfuscator
-from services.risk_scorer import analyze_risk
+
 from services.knowledge_base import kb  # Import Knowledge Base
 from prompts import (
     MODE_PROMPTS,

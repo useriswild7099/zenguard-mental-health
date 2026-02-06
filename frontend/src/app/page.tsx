@@ -12,6 +12,7 @@ import MemoryBox from '@/components/MemoryBox';
 import MoodDoodle from '@/components/MoodDoodle';
 import ChatInterface from '@/components/ChatInterface';
 import EnhancedJournal from '@/components/EnhancedJournal';
+import FeatureShowcase from '@/components/FeatureShowcase';
 import { 
   Shield, PenLine, MessageCircle, Lock, Brain, Sprout, 
   WifiOff, Cpu, UserX, Code, Sparkles, Activity, CheckCircle2 
@@ -106,6 +107,11 @@ export default function Home() {
     setActiveIntervention(null);
   };
 
+  // Scroll to top when view changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeView]);
+
   // Landing Page View
   if (activeView === 'landing') {
     return (
@@ -190,32 +196,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Feature Cards */}
-          <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full px-4">
-            <div className="glass-card p-8 text-center group animate-fade-up stagger-5">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
-                <Lock className="w-7 h-7 text-white" />
-              </div>
-              <h3 className="font-semibold text-xl text-white mb-3">Private by Design</h3>
-              <p className="text-zinc-300 leading-relaxed">Your words are scrubbed of personal info before processing. Nothing is ever stored.</p>
-            </div>
 
-            <div className="glass-card p-8 text-center group animate-fade-up stagger-6">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
-                <Brain className="w-7 h-7 text-white" />
-              </div>
-              <h3 className="font-semibold text-xl text-white mb-3">AI That Listens</h3>
-              <p className="text-zinc-300 leading-relaxed">Powered by local AI. Understands your emotions without judgment or data collection.</p>
-            </div>
 
-            <div className="glass-card p-8 text-center group animate-fade-up stagger-7">
-              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
-                <Sprout className="w-7 h-7 text-white" />
-              </div>
-              <h3 className="font-semibold text-xl text-white mb-3">Gentle Guidance</h3>
-              <p className="text-zinc-300 leading-relaxed">Breathing exercises, grounding techniques, and self-care suggestions when you need them.</p>
-            </div>
-          </div>
+
+
+          {/* New Feature Showcase */}
+          <FeatureShowcase />
+
 
           {/* Trust Indicators */}
           <div className="mt-20 flex flex-wrap justify-center gap-8 md:gap-12 animate-fade-up stagger-8">
