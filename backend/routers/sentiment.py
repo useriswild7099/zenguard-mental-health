@@ -93,11 +93,25 @@ async def analyze_sentiment(request: AnalysisRequest):
             mood_color=wellness_result["mood_color"],
             recommended_interventions=interventions,
             supportive_message=supportive_message,
+            therapeutic_insight=sentiment_result.get("therapeutic_insight"),
+            key_patterns=sentiment_result.get("key_patterns", []),
             data_stored=False  # Privacy guarantee
         )
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
+
+
+@router.post("/release-affirmation")
+async def get_release_affirmation(request: QuickCheckRequest):
+    """
+    Get a quick, context-aware affirmation for the release ritual.
+    """
+    try:
+        affirmation = await nlp_engine.generate_release_affirmation(request.text)
+        return {"affirmation": affirmation}
+    except Exception:
+        return {"affirmation": "You have expressed yourself honestly. Let it go."}
 
 
 @router.post("/quick-check", response_model=QuickCheckResponse)

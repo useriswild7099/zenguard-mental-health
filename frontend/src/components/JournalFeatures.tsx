@@ -42,7 +42,7 @@ export function TimerDisplay({ seconds, totalSeconds }: TimerDisplayProps) {
     <div className="flex items-center gap-3 text-zinc-300">
       <Clock className="w-4 h-4" />
       <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
-        <div 
+        <div
           className="h-full bg-gradient-to-r from-purple-400 to-pink-400 transition-all duration-1000"
           style={{ width: `${progress}%` }}
         />
@@ -85,7 +85,7 @@ export function ExportOptions({ text, onClose }: ExportOptionsProps) {
         <p className="text-zinc-400 text-sm mb-6">
           Take it with you. We never store anything.
         </p>
-        
+
         <div className="space-y-3">
           <button
             onClick={handleCopy}
@@ -94,7 +94,7 @@ export function ExportOptions({ text, onClose }: ExportOptionsProps) {
             <Copy className="w-5 h-5" />
             {copied ? 'Copied!' : 'Copy to Clipboard'}
           </button>
-          
+
           <button
             onClick={handleDownload}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-colors text-white"
@@ -132,14 +132,15 @@ export function EphemeralBadge({ className = '' }: EphemeralBadgeProps) {
 
 interface EndOfSessionProps {
   onClose: () => void;
+  affirmation?: string;
 }
 
-export function EndOfSessionRitual({ onClose }: EndOfSessionProps) {
+export function EndOfSessionRitual({ onClose, affirmation }: EndOfSessionProps) {
   const [step, setStep] = useState(0);
-  
+
   const steps = [
     { text: "Take a deep breath...", delay: 2000 },
-    { text: "You've expressed yourself honestly.", delay: 2500 },
+    { text: affirmation || "You've expressed yourself honestly.", delay: 3500 }, // Longer delay for reading
     { text: "You don't need to keep this.", delay: 2500 },
     { text: "Let it go.", delay: 2000 },
   ];
@@ -173,7 +174,7 @@ export function useSelfDestruct(
 ) {
   useEffect(() => {
     if (!enabled) return;
-    
+
     const timer = setTimeout(onDestruct, seconds * 1000);
     return () => clearTimeout(timer);
   }, [enabled, seconds, onDestruct]);
@@ -185,18 +186,18 @@ export function useTypingSpeed() {
   const lastTypeTime = useCallback(() => {
     let lastTime = Date.now();
     let keyCount = 0;
-    
+
     return () => {
       const now = Date.now();
       const timeDiff = now - lastTime;
       keyCount++;
-      
+
       if (keyCount % 10 === 0) {
         if (timeDiff < 500) setSpeed('fast');
         else if (timeDiff > 2000) setSpeed('slow');
         else setSpeed('normal');
       }
-      
+
       lastTime = now;
     };
   }, []);

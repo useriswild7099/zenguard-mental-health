@@ -14,9 +14,9 @@ import ChatInterface from '@/components/ChatInterface';
 import EnhancedJournal from '@/components/EnhancedJournal';
 import FeatureShowcase from '@/components/FeatureShowcase';
 import BackgroundMusic from '@/components/BackgroundMusic';
-import { 
-  Shield, PenLine, MessageCircle, Lock, Brain, Sprout, 
-  WifiOff, Cpu, UserX, Code, Sparkles, Activity, CheckCircle2 
+import {
+  Shield, PenLine, MessageCircle, Lock, Brain, Sprout,
+  WifiOff, Cpu, UserX, Code, Sparkles, Activity, CheckCircle2
 } from 'lucide-react';
 
 const JOURNAL_PROMPTS = [
@@ -79,10 +79,8 @@ export default function Home() {
     setIsAnalyzing(true);
     try {
       const { scrubbed, piiDetected } = prepareText(journalText);
-      if (piiDetected) {
-      const { scrubbed, piiDetected } = prepareText(journalText);
       // PII Detected: scrubbed before transmission
-      }
+
       const result = await sentimentClient.analyzeEntry(scrubbed, sessionId);
       setAnalysisResult(result);
       setQuickCheck(null);
@@ -163,8 +161,8 @@ export default function Home() {
               </div>
             </div>
 
-            <h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] drop-shadow-xl tracking-tight animate-fade-up stagger-2" 
+            <h1
+              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] drop-shadow-xl tracking-tight animate-fade-up stagger-2"
               style={{ fontFamily: 'var(--font-heading)' }}
             >
               A quiet space for <br />
@@ -174,7 +172,7 @@ export default function Home() {
             </h1>
 
             <p className="text-lg md:text-xl text-zinc-100 mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-md font-light animate-fade-up stagger-3">
-              Express how you're feeling. Get gentle insights. 
+              Express how you're feeling. Get gentle insights.
               <span className="block mt-2 text-zinc-300 font-medium">Everything stays with you — nothing is stored.</span>
             </p>
 
@@ -214,7 +212,7 @@ export default function Home() {
               </div>
               <span className="text-zinc-300 font-mono text-xs tracking-wide">Fully Offline</span>
             </div>
-            
+
             <div className="flex flex-col items-center gap-3 group">
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
                 <Cpu className="w-6 h-6 text-blue-400" />
@@ -311,7 +309,7 @@ export default function Home() {
           Journal Entry
         </h1>
         <p className="text-zinc-200">Express yourself freely</p>
-        
+
         <div className="mt-4 flex items-center justify-center gap-2 text-sm">
           <span className={`w-2 h-2 rounded-full ${apiConnected ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-yellow-400'}`}></span>
           <span className="text-zinc-300 font-mono text-xs">
@@ -329,7 +327,7 @@ export default function Home() {
               onAnalyze={handleSubmit}
               isAnalyzing={isAnalyzing}
             />
-            
+
             <div className="mt-4 text-center">
               <button
                 onClick={() => setShowDoodle(!showDoodle)}
@@ -338,7 +336,7 @@ export default function Home() {
                 {showDoodle ? 'Hide mood doodle' : 'Or express with a mood doodle ✨'}
               </button>
             </div>
-            
+
             {showDoodle && (
               <div className="mt-4">
                 <MoodDoodle sessionId={sessionId} />
@@ -354,11 +352,28 @@ export default function Home() {
                 wellnessScore={analysisResult.wellness_score}
                 confidence={analysisResult.confidence}
               />
-              
+
               <p className="mt-6 text-lg text-zinc-200 italic">
                 "{analysisResult.supportive_message}"
               </p>
-              
+
+              {analysisResult.therapeutic_insight && (
+                <div className="mt-6 p-5 bg-white/5 rounded-xl text-left border border-white/10">
+                  <h4 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-2">Therapeutic Insight</h4>
+                  <p className="text-zinc-200 leading-relaxed">{analysisResult.therapeutic_insight}</p>
+                </div>
+              )}
+
+              {analysisResult.key_patterns && analysisResult.key_patterns.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                  {analysisResult.key_patterns.map((pattern, i) => (
+                    <span key={i} className="px-3 py-1 bg-zinc-800/50 rounded-full text-xs text-zinc-400 border border-zinc-700/50">
+                      {pattern}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               {analysisResult.masking.detected && (
                 <div className="mt-4 p-4 bg-purple-500/20 rounded-lg text-sm text-purple-200 border border-purple-400/30">
                   <p>💜 It's okay to not be okay. You don't have to hide how you truly feel.</p>

@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import { sentimentClient } from '@/lib/api';
 
+import MoodCanvas from './MoodCanvas';
+
 interface MoodDoodleProps {
   sessionId: string;
 }
@@ -14,28 +16,15 @@ export default function MoodDoodle({ sessionId }: MoodDoodleProps) {
     emotional_intensity: number;
     interpretation: string;
   } | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDoodling, setIsDoodling] = useState(true);
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file');
-      return;
-    }
-
-    // Show preview
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setPreview(e.target?.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    // Upload and analyze
+  const handleAnalyze = async (blob: Blob) => {
     setIsUploading(true);
+    setIsDoodling(false);
+
+    // Create a File from the Blob for the API
+    const file = new File([blob], 'doodle.png', { type: 'image/png' });
+
     try {
       const response = await sentimentClient.analyzeVisual(file);
       setResult({
@@ -46,95 +35,84 @@ export default function MoodDoodle({ sessionId }: MoodDoodleProps) {
     } catch (error) {
       console.error('Visual analysis failed:', error);
       setResult(null);
+      setIsDoodling(true);
     } finally {
       setIsUploading(false);
     }
   };
 
-  const handleClear = () => {
-    setPreview(null);
+  const handleReset = () => {
     setResult(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
+    setIsDoodling(true);
   };
 
   return (
-    <div className="glass rounded-xl p-6">
-      <h3 className="text-lg font-semibold text-gray-700 mb-2 text-center" style={{ fontFamily: 'var(--font-heading)' }}>
-        ✏️ Mood Doodle
-      </h3>
-      <p className="text-sm text-gray-500 mb-4 text-center">
-        Upload a sketch or doodle that expresses how you feel
-      </p>
-
-      {/* Hidden file input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileSelect}
-        className="hidden"
-      />
-
-      {!preview ? (
-        /* Upload area */
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="w-full h-40 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-purple-400 hover:bg-purple-50 transition-all"
-        >
-          <span className="text-3xl">🎨</span>
-          <span className="text-gray-500">Click to upload your doodle</span>
-          <span className="text-xs text-gray-400">PNG, JPG up to 5MB</span>
-        </button>
-      ) : (
-        /* Preview and result */
-        <div className="space-y-4">
-          {/* Image preview */}
-          <div className="relative">
-            <img
-              src={preview}
-              alt="Your mood doodle"
-              className="w-full h-40 object-contain rounded-lg bg-gray-100"
-            />
-            <button
-              onClick={handleClear}
-              className="absolute top-2 right-2 bg-white/80 rounded-full p-1 text-gray-500 hover:text-gray-700"
-            >
-              ×
-            </button>
-          </div>
-
-          {/* Analysis result */}
-          {isUploading ? (
-            <div className="text-center text-gray-500 animate-pulse">
-              <span className="inline-block w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin mr-2"></span>
-              Analyzing your expression...
-            </div>
-          ) : result ? (
-            <div className="p-4 bg-purple-50 rounded-lg">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-xl">✨</span>
-                <span className="font-semibold text-purple-700 capitalize">
-                  {result.visual_emotion}
-                </span>
-                <span className="text-sm text-purple-500">
-                  ({Math.round(result.emotional_intensity * 100)}% intensity)
-                </span>
-              </div>
-              {result.interpretation && (
-                <p className="text-sm text-purple-600 italic">
-                  "{result.interpretation}"
-                </p>
-              )}
-            </div>
-          ) : null}
+    <div className="glass rounded-3xl p-6 border border-white/10 shadow-2xl">
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h3 className="text-xl font-bold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+            ✏️ Mood Doodle v2
+          </h3>
+          <p className="text-sm text-zinc-400">
+            Sketch your feelings for AI interpretation
+          </p>
         </div>
-      )}
+        {!isDoodling && result && (
+          <button
+            onClick={handleReset}
+            className="text-sm text-purple-400 hover:text-purple-300 font-medium"
+          >
+            New Doodle
+          </button>
+        )}
+      </div>
 
-      {/* Privacy notice */}
-      <p className="text-xs text-gray-400 text-center mt-4">
-        🔒 Your image is analyzed and immediately discarded
+      <div className="relative">
+        {isDoodling ? (
+          <MoodCanvas onAnalyze={handleAnalyze} isAnalyzing={isUploading} />
+        ) : (
+          <div className="space-y-6 animate-fade-up">
+            {isUploading ? (
+              <div className="h-[400px] flex flex-col items-center justify-center gap-4 text-zinc-400">
+                <div className="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin" />
+                <p className="animate-pulse">Decoding your artistic expression...</p>
+              </div>
+            ) : result ? (
+              <div className="p-6 bg-purple-500/10 rounded-2xl border border-purple-500/20 backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-2xl">
+                    ✨
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-white capitalize">
+                      {result.visual_emotion} Detected
+                    </h4>
+                    <p className="text-sm text-purple-300">
+                      {Math.round(result.emotional_intensity * 100)}% emotional intensity
+                    </p>
+                  </div>
+                </div>
+
+                <div className="relative p-4 bg-black/20 rounded-xl italic text-zinc-300 border-l-4 border-purple-500">
+                  "{result.interpretation}"
+                </div>
+
+                <div className="mt-6 p-4 bg-white/5 rounded-xl text-sm text-zinc-400">
+                  <p><b>AI Insight:</b> Your use of strokes and space suggests a {result.visual_emotion} state. This is a safe space to explore that further.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center p-12 text-zinc-500">
+                Something went wrong. Let's try again.
+                <button onClick={handleReset} className="block mx-auto mt-4 text-purple-400 underline">Restart</button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      <p className="text-[10px] text-zinc-600 text-center mt-6 uppercase tracking-widest font-mono">
+        🔒 Private Processing • Nothing Saved
       </p>
     </div>
   );
