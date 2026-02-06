@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { sentimentClient, AnalysisResponse, QuickCheckResponse } from '@/lib/api';
 import { prepareText, generateSessionId } from '@/lib/privacy';
@@ -129,7 +131,7 @@ export default function Home() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center shadow-lg shadow-purple-500/20">
               <Shield className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-semibold text-white tracking-wide" style={{ fontFamily: 'var(--font-heading)' }}>
+            <span className="text-xl font-bold text-white tracking-[0.5em] uppercase" style={{ fontFamily: 'var(--font-heading)' }}>
               ZenGuard
             </span>
           </div>
@@ -216,28 +218,28 @@ export default function Home() {
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
                 <WifiOff className="w-6 h-6 text-green-400" />
               </div>
-              <span className="text-zinc-300 font-medium text-sm">Fully Offline</span>
+              <span className="text-zinc-300 font-mono text-xs tracking-wide">Fully Offline</span>
             </div>
             
             <div className="flex flex-col items-center gap-3 group">
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
                 <Cpu className="w-6 h-6 text-blue-400" />
               </div>
-              <span className="text-zinc-300 font-medium text-sm">Local Processing</span>
+              <span className="text-zinc-300 font-mono text-xs tracking-wide">Local Processing</span>
             </div>
 
             <div className="flex flex-col items-center gap-3 group">
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
                 <UserX className="w-6 h-6 text-purple-400" />
               </div>
-              <span className="text-zinc-300 font-medium text-sm">No Account Needed</span>
+              <span className="text-zinc-300 font-mono text-xs tracking-wide">No Account Needed</span>
             </div>
 
             <div className="flex flex-col items-center gap-3 group">
               <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
                 <Code className="w-6 h-6 text-yellow-400" />
               </div>
-              <span className="text-zinc-300 font-medium text-sm">Open Source</span>
+              <span className="text-zinc-300 font-mono text-xs tracking-wide">Open Source</span>
             </div>
           </div>
 
@@ -254,8 +256,25 @@ export default function Home() {
   // Chat View
   if (activeView === 'chat') {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-2xl">
+      <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-8">
+        {/* Background Video */}
+        <div className="fixed inset-0 overflow-hidden -z-10">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="absolute w-full h-full object-cover"
+            style={{ filter: 'brightness(0.6)' }}
+          >
+            <source src="/chat-bg.mp4" type="video/mp4" />
+          </video>
+          {/* Dark overlay for readability */}
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+        </div>
+
+        <div className="w-full max-w-2xl z-10">
           <ChatInterface onBack={() => setActiveView('landing')} />
         </div>
       </div>
