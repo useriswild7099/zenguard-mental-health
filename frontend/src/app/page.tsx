@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { sentimentClient, AnalysisResponse, QuickCheckResponse } from '@/lib/api';
 import { prepareText, generateSessionId } from '@/lib/privacy';
@@ -11,6 +9,10 @@ import GroundingExercise from '@/components/GroundingExercise';
 import MemoryBox from '@/components/MemoryBox';
 import MoodDoodle from '@/components/MoodDoodle';
 import ChatInterface from '@/components/ChatInterface';
+import { 
+  Shield, PenLine, MessageCircle, Lock, Brain, Sprout, 
+  WifiOff, Cpu, UserX, Code, Sparkles, Activity, CheckCircle2 
+} from 'lucide-react';
 
 const JOURNAL_PROMPTS = [
   "How are you feeling right now?",
@@ -124,16 +126,16 @@ export default function Home() {
         {/* Navigation */}
         <nav className="relative z-10 flex justify-between items-center px-6 md:px-12 py-6">
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center">
-              <span className="text-white text-lg">🧘</span>
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-400 to-blue-400 flex items-center justify-center shadow-lg shadow-purple-500/20">
+              <Shield className="w-6 h-6 text-white" />
             </div>
             <span className="text-xl font-semibold text-white tracking-wide" style={{ fontFamily: 'var(--font-heading)' }}>
               ZenGuard
             </span>
           </div>
-          <div className="flex items-center gap-2 text-sm">
-            <span className={`w-2 h-2 rounded-full ${apiConnected ? 'bg-green-400' : 'bg-yellow-400'}`}></span>
-            <span className="text-white/80">{apiConnected ? 'AI Ready' : 'Connecting...'}</span>
+          <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+            <div className={`w-2 h-2 rounded-full ${apiConnected ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-yellow-400'}`}></div>
+            <span className="text-white/90 font-medium">{apiConnected ? 'AI Ready' : 'Connecting...'}</span>
           </div>
         </nav>
 
@@ -142,93 +144,103 @@ export default function Home() {
           <div className="text-center max-w-3xl mx-auto">
             {/* Breathing indicator */}
             <div className="mb-8 flex justify-center">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-300/40 to-blue-300/40 flex items-center justify-center animate-breathe">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400/60 to-blue-400/60"></div>
+              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-300/20 to-blue-300/20 flex items-center justify-center animate-breathe backdrop-blur-sm border border-white/10">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400/40 to-blue-400/40 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-white/80" />
+                </div>
               </div>
             </div>
 
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg" style={{ fontFamily: 'var(--font-heading)' }}>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-xl" style={{ fontFamily: 'var(--font-heading)' }}>
               A quiet space for <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-200 to-blue-200">
                 your thoughts
               </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-zinc-100 mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-md">
+            <p className="text-lg md:text-xl text-zinc-100 mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-md font-light">
               Express how you're feeling. Get gentle insights. 
-              <span className="block mt-2 text-zinc-300">Everything stays with you — nothing is stored.</span>
+              <span className="block mt-2 text-zinc-300 font-medium">Everything stays with you — nothing is stored.</span>
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 onClick={() => setActiveView('journal')}
-                className="group px-8 py-4 bg-gradient-to-r from-purple-500 to-blue-500 text-white rounded-2xl font-medium text-lg shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300 hover:-translate-y-1"
+                className="group px-8 py-4 bg-white text-gray-900 rounded-2xl font-semibold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
               >
-                <span className="flex items-center gap-3">
-                  <span>Start Journaling</span>
-                  <span className="group-hover:translate-x-1 transition-transform">✍️</span>
-                </span>
+                <span>Start Journaling</span>
+                <PenLine className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
                 onClick={() => setActiveView('chat')}
-                className="px-8 py-4 bg-white/80 backdrop-blur-sm text-gray-700 rounded-2xl font-medium text-lg border border-gray-200 hover:bg-white hover:border-purple-200 transition-all duration-300 hover:-translate-y-1"
+                className="px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-2xl font-semibold text-lg border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
               >
-                <span className="flex items-center gap-3">
-                  <span>Talk to AI Friend</span>
-                  <span>💬</span>
-                </span>
+                <span>Talk to AI Friend</span>
+                <MessageCircle className="w-5 h-5" />
               </button>
             </div>
           </div>
 
           {/* Feature Cards */}
-          <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto w-full">
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300 shadow-xl">
-              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-                <span className="text-2xl">🔒</span>
+          <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full px-4">
+            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 shadow-2xl group">
+              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
+                <Lock className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-semibold text-white mb-2">Private by Design</h3>
-              <p className="text-sm text-zinc-200">Your words are scrubbed of personal info before processing. Nothing is ever stored.</p>
+              <h3 className="font-semibold text-xl text-white mb-3">Private by Design</h3>
+              <p className="text-zinc-300 leading-relaxed">Your words are scrubbed of personal info before processing. Nothing is ever stored.</p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300 shadow-xl">
-              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-                <span className="text-2xl">🧠</span>
+            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 shadow-2xl group">
+              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
+                <Brain className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-semibold text-white mb-2">AI That Listens</h3>
-              <p className="text-sm text-zinc-200">Powered by local AI. Understands your emotions without judgment or data collection.</p>
+              <h3 className="font-semibold text-xl text-white mb-3">AI That Listens</h3>
+              <p className="text-zinc-300 leading-relaxed">Powered by local AI. Understands your emotions without judgment or data collection.</p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center hover:-translate-y-1 transition-transform duration-300 shadow-xl">
-              <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center mx-auto mb-4 backdrop-blur-md">
-                <span className="text-2xl">🌱</span>
+            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 text-center hover:-translate-y-2 transition-all duration-500 shadow-2xl group">
+              <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-white/20 transition-colors">
+                <Sprout className="w-7 h-7 text-white" />
               </div>
-              <h3 className="font-semibold text-white mb-2">Gentle Guidance</h3>
-              <p className="text-sm text-zinc-200">Breathing exercises, grounding techniques, and self-care suggestions when you need them.</p>
+              <h3 className="font-semibold text-xl text-white mb-3">Gentle Guidance</h3>
+              <p className="text-zinc-300 leading-relaxed">Breathing exercises, grounding techniques, and self-care suggestions when you need them.</p>
             </div>
           </div>
 
           {/* Trust Indicators */}
-          <div className="mt-16 flex flex-wrap justify-center gap-6 text-sm text-zinc-300 font-medium">
-            <div className="flex items-center gap-2">
-              <span className="text-green-500">✓</span>
-              <span>Fully Offline</span>
+          <div className="mt-20 flex flex-wrap justify-center gap-8 md:gap-12">
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                <WifiOff className="w-6 h-6 text-green-400" />
+              </div>
+              <span className="text-zinc-300 font-medium text-sm">Fully Offline</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-500">✓</span>
-              <span>100% Local Processing</span>
+            
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                <Cpu className="w-6 h-6 text-blue-400" />
+              </div>
+              <span className="text-zinc-300 font-medium text-sm">Local Processing</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-500">✓</span>
-              <span>No Account Required</span>
+
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                <UserX className="w-6 h-6 text-purple-400" />
+              </div>
+              <span className="text-zinc-300 font-medium text-sm">No Account Needed</span>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-green-500">✓</span>
-              <span>Open Source</span>
+
+            <div className="flex flex-col items-center gap-3 group">
+              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                <Code className="w-6 h-6 text-yellow-400" />
+              </div>
+              <span className="text-zinc-300 font-medium text-sm">Open Source</span>
             </div>
           </div>
+
         </main>
 
         {/* Footer */}
