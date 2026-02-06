@@ -514,3 +514,82 @@ body {
 .stagger-6 { animation-delay: 0.6s; }
 .stagger-7 { animation-delay: 0.7s; }
 .stagger-8 { animation-delay: 0.8s; }
+
+/* ===== BURN AFTER WRITING ANIMATIONS ===== */
+
+@keyframes burn-text {
+  0% {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+    transform: scale(1);
+  }
+  30% {
+    opacity: 0.8;
+    filter: blur(2px) brightness(1.5);
+    color: #ff6b35;
+  }
+  60% {
+    opacity: 0.4;
+    filter: blur(4px) brightness(2);
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(10px) brightness(0.5);
+    transform: scale(0.95) translateY(-20px);
+  }
+}
+
+@keyframes flame-dance {
+  0%, 100% {
+    transform: scale(1) rotate(-5deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(-3deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(7deg);
+  }
+}
+
+@keyframes smoke-rise {
+  0% {
+    opacity: 0.5;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(2);
+  }
+}
+
+.animate-burn-text {
+  animation: burn-text 2s ease-out forwards;
+}
+
+.animate-flame {
+  animation: flame-dance 0.5s ease-in-out infinite;
+}
+
+.animate-smoke {
+  animation: smoke-rise 3s ease-out forwards;
+}
+
+/* Void Mode - Minimal UI */
+.void-mode {
+  background: #000 !important;
+}
+
+.void-mode * {
+  border-radius: 0 !important;
+}
+
+.void-mode .glass-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+

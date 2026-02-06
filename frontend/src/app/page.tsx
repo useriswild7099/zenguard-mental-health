@@ -11,6 +11,7 @@ import GroundingExercise from '@/components/GroundingExercise';
 import MemoryBox from '@/components/MemoryBox';
 import MoodDoodle from '@/components/MoodDoodle';
 import ChatInterface from '@/components/ChatInterface';
+import EnhancedJournal from '@/components/EnhancedJournal';
 import { 
   Shield, PenLine, MessageCircle, Lock, Brain, Sprout, 
   WifiOff, Cpu, UserX, Code, Sparkles, Activity, CheckCircle2 
@@ -331,13 +332,10 @@ export default function Home() {
       <div className="w-full max-w-2xl relative z-10">
         {!analysisResult ? (
           <div className="glass-card p-6 md:p-8">
-            <JournalInput
-              value={journalText}
-              onChange={handleTextChange}
+            <EnhancedJournal
               onSubmit={handleSubmit}
-              placeholder={currentPrompt}
+              onAnalyze={handleSubmit}
               isAnalyzing={isAnalyzing}
-              quickCheck={quickCheck}
             />
             
             <div className="mt-4 text-center">
