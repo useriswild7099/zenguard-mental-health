@@ -117,13 +117,16 @@ Then output JSON:
 
 
 class NLPEngine:
-    """Main NLP engine with Chain-of-Thought reasoning and multimodal support"""
+    """Main NLP engine with Chain-of-Thought reasoning and multimodal support
+    
+    PRIVACY: No session data is stored. Each request is processed independently.
+    """
     
     def __init__(self):
         self.client = OllamaClient()
         self._repetition_threshold = 3
-        # Session context storage (in-memory only, never persisted)
-        self._session_contexts: Dict[str, List[str]] = {}
+        # PRIVACY: Session context storage DISABLED - no data retention
+        # self._session_contexts: Dict[str, List[str]] = {}  # REMOVED
     
     async def analyze_sentiment(
         self, 
@@ -151,13 +154,10 @@ Respond with JSON only. Make the support message specific to what they wrote."""
             max_tokens=256
         )
         
-        # Store in session context (max 10 entries per session)
-        if session_id:
-            if session_id not in self._session_contexts:
-                self._session_contexts[session_id] = []
-            self._session_contexts[session_id].append(text[:500])  # Truncate long entries
-            if len(self._session_contexts[session_id]) > 10:
-                self._session_contexts[session_id].pop(0)
+        # PRIVACY: Session context storage DISABLED
+        # We do NOT store any text, even temporarily
+        # if session_id:
+        #     ... storage removed for privacy ...
         
         # Parse response (extract JSON after <think> tags)
         result = self._parse_reasoning_response(response)
@@ -191,36 +191,13 @@ Respond with JSON only. Make the support message specific to what they wrote."""
     
     async def analyze_session_trends(self, session_id: str) -> Dict:
         """
-        Analyze trends across an entire session using 128K context window
-        
-        Returns insights about emotional trajectory and patterns
+        DISABLED: Session trend analysis requires storing data, which violates privacy.
+        This feature is intentionally disabled.
         """
-        if session_id not in self._session_contexts:
-            return {"error": "No session data found"}
-        
-        entries = self._session_contexts[session_id]
-        if len(entries) < 2:
-            return {"error": "Need at least 2 entries for trend analysis"}
-        
-        # Build full session context
-        session_text = "\n\n---\n\n".join([
-            f"Entry {i+1}:\n{entry}" for i, entry in enumerate(entries)
-        ])
-        
-        prompt = f"""Analyze this complete journaling session for emotional trends and patterns:
-
-{session_text}
-
-Consider the full arc of the session. Use <think> tags to reason about patterns."""
-
-        response = await self.client.generate(
-            prompt=prompt,
-            system_prompt=SESSION_TREND_PROMPT,
-            temperature=0.3,
-            max_tokens=2048
-        )
-        
-        return self._parse_reasoning_response(response)
+        return {
+            "error": "Session trend analysis is disabled for privacy. Each entry is analyzed independently.",
+            "data_stored": False
+        }
     
     async def detect_masking(self, text: str) -> MaskingIndicator:
         """
@@ -375,9 +352,8 @@ Use <think> tags to reason about the visual cues you observe before providing yo
             return "stable"
     
     def clear_session(self, session_id: str):
-        """Clear session context (called when session ends)"""
-        if session_id in self._session_contexts:
-            del self._session_contexts[session_id]
+        """DISABLED: No session data is stored, so nothing to clear"""
+        pass  # No-op - we don't store anything
     
     def _parse_reasoning_response(self, response: str) -> Dict:
         """
