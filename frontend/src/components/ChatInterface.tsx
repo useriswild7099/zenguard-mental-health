@@ -173,7 +173,7 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
                     <span className="text-3xl group-hover:scale-110 transition-transform">{mode.emoji}</span>
                     <h3 className="font-semibold text-white">{mode.name}</h3>
                   </div>
-                  <p className="text-sm text-zinc-300 line-clamp-2">{mode.description}</p>
+                  <p className="text-sm text-zinc-300">{mode.description}</p>
                   {mode.category && (
                     <span className="inline-block mt-3 text-[10px] uppercase tracking-wider text-zinc-500 bg-white/5 px-2 py-1 rounded">
                       {mode.category}
