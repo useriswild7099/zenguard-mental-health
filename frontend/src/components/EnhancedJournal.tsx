@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Flame, Download, Clock, Zap, Moon, Volume2, VolumeX } from 'lucide-react';
+import { ArrowRight, Download, Clock, Zap, Moon, Volume2, VolumeX } from 'lucide-react';
 import EmotionPicker, { Emotion, EMOTION_PROMPTS, getTimeBasedPrompt } from './EmotionPicker';
 import { BurnAnimation, ExportOptions, EphemeralBadge, EndOfSessionRitual, TimerDisplay } from './JournalFeatures';
+import ReleaseLoopSystem from './ReleaseLoopSystem';
 import VoiceInput from './VoiceInput';
 
 // Journal mode types
@@ -35,6 +36,8 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
   
   // Void mode
   const [isVoidMode, setIsVoidMode] = useState(false);
+  const [showVoidConfirm, setShowVoidConfirm] = useState(false);
+  const [showReleaseLoop, setShowReleaseLoop] = useState(false);
   
   // Ambient sound
   const [ambientSound, setAmbientSound] = useState<string | null>(null);
@@ -134,6 +137,19 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
       
       {/* End of Session Ritual */}
       {showEndRitual && <EndOfSessionRitual onClose={() => setShowEndRitual(false)} />}
+
+      {/* Release Loop System */}
+      {showReleaseLoop && (
+        <ReleaseLoopSystem 
+          text={text}
+          onComplete={() => {
+            setShowReleaseLoop(false);
+            setText('');
+            toggleVoidMode();
+          }}
+          onClose={() => setShowReleaseLoop(false)}
+        />
+      )}
 
       <div className={`space-y-4 ${isVoidMode ? 'void-mode' : ''}`}>
         {/* Ephemeral Badge */}
@@ -256,14 +272,14 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
                 <Download className="w-4 h-4" />
               </button>
 
-              {/* Burn */}
+              {/* Go - Submit for analysis */}
               <button
-                onClick={handleBurn}
-                disabled={!text.trim()}
-                className="px-4 py-2 rounded-lg bg-red-500/20 text-red-300 hover:bg-red-500/30 disabled:opacity-50 transition-colors flex items-center gap-2"
+                onClick={() => onAnalyze(text)}
+                disabled={!text.trim() || isAnalyzing}
+                className="px-4 py-2 rounded-lg bg-green-500/20 text-green-300 hover:bg-green-500/30 disabled:opacity-50 transition-colors flex items-center gap-2"
               >
-                <Flame className="w-4 h-4" />
-                Burn This
+                <ArrowRight className="w-4 h-4" />
+                Go
               </button>
 
               {/* Analyze */}
@@ -281,18 +297,48 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
 
         {/* Void Mode Exit */}
         {isVoidMode && (
-          <div className="fixed bottom-8 left-1/2 -translate-x-1/2">
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
             <button
               onClick={() => {
                 if (text.trim()) {
-                  handleBurn();
+                  setShowVoidConfirm(true);
+                } else {
+                  toggleVoidMode();
                 }
-                toggleVoidMode();
               }}
               className="px-6 py-3 bg-white/5 text-zinc-400 hover:text-white rounded-full transition-colors"
             >
               {text.trim() ? 'Let it go' : 'Exit void'}
             </button>
+          </div>
+        )}
+
+        {/* Void Mode Confirmation Dialog */}
+        {showVoidConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+            <div className="glass-card p-6 max-w-sm w-full mx-4 text-center">
+              <h3 className="text-white text-lg font-semibold mb-3">Release your words?</h3>
+              <p className="text-zinc-400 text-sm mb-6">
+                This will permanently erase what you wrote. Nothing will be saved.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={() => setShowVoidConfirm(false)}
+                  className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                >
+                  Keep writing
+                </button>
+                <button
+                  onClick={() => {
+                    setShowVoidConfirm(false);
+                    setShowReleaseLoop(true);
+                  }}
+                  className="px-4 py-2 bg-purple-500/30 hover:bg-purple-500/40 text-purple-200 rounded-lg transition-colors"
+                >
+                  Let it go
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

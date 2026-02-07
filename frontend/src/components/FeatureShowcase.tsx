@@ -1,28 +1,31 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Users, Sparkles, Shield, Brain, Zap, 
-  MessageCircle, Heart, Star, BookOpen, Coffee 
+  MessageCircle, Heart, Star, BookOpen, Coffee,
+  Wind, Flame, Cloud
 } from 'lucide-react';
 
 const PERSONALITIES = [
   { name: "Socrates", emoji: "🏛️", desc: "Deep philosophical questioning" },
   { name: "Steve Jobs", emoji: "📱", desc: "Design-focused minimalist" },
-  { name: "Grandmother", emoji: "👵", desc: "Warm comfort & food" },
+  { name: "Mother", emoji: "👩", desc: "Warm comfort & nurturing" },
   { name: "Rumi", emoji: "📜", desc: "Poetic soul connections" },
   { name: "David Goggins", emoji: "💪", desc: "Therapeutic toughness" },
   { name: "The Universe", emoji: "🌌", desc: "Cosmic perspective" },
   { name: "Best Friend", emoji: "🫂", desc: "Unconditional support" },
-  { name: "School Teacher", emoji: "🍎", desc: "Patient guidance" },
+  { name: "Academic Coach", emoji: "📚", desc: "Patient guidance" },
   { name: "Marcus Aurelius", emoji: "👑", desc: "Stoic resilience" },
-  { name: "Cool Aunt", emoji: "🍷", desc: "Fun & honest advice" },
+  { name: "Motivational Coach", emoji: "🚀", desc: "Inspiring action" },
   { name: "Sherlock", emoji: "🎻", desc: "Analytical breakdown" },
-  { name: "Nature Guide", emoji: "🌿", desc: "Grounding in reality" },
+  { name: "Mindfulness Guide", emoji: "🌿", desc: "Grounding in reality" },
 ];
 
 export default function FeatureShowcase() {
-  const [activeTab, setActiveTab] = useState<'personalities' | 'analysis' | 'privacy'>('personalities');
+  const [activeTab, setActiveTab] = useState<'personalities' | 'analysis' | 'release' | 'privacy'>('personalities');
 
   return (
     <section className="py-24 relative z-10 w-full max-w-7xl mx-auto px-6">
@@ -41,6 +44,7 @@ export default function FeatureShowcase() {
       <div className="flex flex-wrap justify-center gap-4 mb-12">
         {[
           { id: 'personalities', label: '57+ Personalities', icon: Users },
+          { id: 'release', label: 'Release & Reflect', icon: Wind },
           { id: 'analysis', label: 'Deep Analysis', icon: Brain },
           { id: 'privacy', label: 'Privacy First', icon: Shield },
         ].map((tab) => (
@@ -66,11 +70,24 @@ export default function FeatureShowcase() {
             {PERSONALITIES.map((persona, i) => (
               <div 
                 key={persona.name}
-                className="glass-card p-4 hover:bg-white/10 transition-colors flex items-start gap-4"
+                className="glass-card p-4 hover:bg-white/10 transition-colors flex items-center gap-4 group"
               >
-                <span className="text-4xl">{persona.emoji}</span>
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <Image
+                    src={`/personalities/${persona.name.toLowerCase()}.png`}
+                    alt={persona.name}
+                    fill
+                    className="rounded-full object-cover border border-white/10 group-hover:scale-110 transition-transform"
+                    onError={(e) => {
+                      // Fallback to emoji if image fails (handled by hiding image and showing emoji span)
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                    }}
+                  />
+                  <span className="hidden text-3xl absolute inset-0 flex items-center justify-center">{persona.emoji}</span>
+                </div>
                 <div>
-                  <h3 className="font-bold text-white text-lg">{persona.name}</h3>
+                  <h3 className="font-bold text-white text-base leading-tight">{persona.name}</h3>
                   <p className="text-xs text-zinc-400 mt-1">{persona.desc}</p>
                 </div>
               </div>
@@ -78,6 +95,67 @@ export default function FeatureShowcase() {
           </div>
           <div className="text-center mt-8 text-zinc-500 italic">
             + 45 more personas found inside chat mode
+          </div>
+        </div>
+      )}
+
+      {/* FEATURE: RELEASE LOOPS */}
+      {activeTab === 'release' && (
+        <div className="animate-fade-in glass-card p-8 md:p-12 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="order-2 md:order-1 relative h-80 bg-black/40 rounded-2xl border border-white/10 overflow-hidden group flex items-center justify-center">
+               {/* Visual representation of release loops */}
+               <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black"></div>
+               <div className="grid grid-cols-2 gap-4 p-4 opacity-50 group-hover:opacity-100 transition-opacity duration-700">
+                  <div className="flex flex-col items-center gap-2 animate-float-slow">
+                     <Wind className="text-yellow-400 w-8 h-8" />
+                     <span className="text-xs text-zinc-400">Anxious</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-2 animate-float-delayed">
+                     <Flame className="text-red-400 w-8 h-8" />
+                     <span className="text-xs text-zinc-400">Angry</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-2 animate-float-reverse">
+                     <Cloud className="text-blue-400 w-8 h-8" />
+                     <span className="text-xs text-zinc-400">Sad</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-2 animate-float-delayed-reverse">
+                     <Sparkles className="text-green-400 w-8 h-8" />
+                     <span className="text-xs text-zinc-400">Hopeful</span>
+                  </div>
+               </div>
+               <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-32 h-32 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm bg-white/5">
+                    <span className="text-white font-light text-lg tracking-widest uppercase">Release</span>
+                  </div>
+               </div>
+            </div>
+
+            <div className="space-y-6 order-1 md:order-2">
+              <div className="flex items-center gap-3 mb-2">
+                <Wind className="text-blue-300" />
+                <h3 className="text-2xl font-bold text-white">Let It Go, For Real.</h3>
+              </div>
+              <p className="text-zinc-300 leading-relaxed">
+                Enter the Void Mode to release intense emotions safely.
+              </p>
+              <ul className="space-y-4">
+                {[
+                  { title: "30+ Mood Loops", desc: "Tailored experiences for Anxiety, Anger, Sadness, and more." },
+                  { title: "Visual Release", desc: "Watch your words shatter, burn, fade, or dissolve." },
+                  { title: "AI Reflection", desc: "Receive instant, validating insight for your specific state." },
+                  { title: "Cool-Downs", desc: "Guided breathing and grounding to reset your nervous system." }
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3 text-zinc-400">
+                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0"></div>
+                    <div>
+                      <strong className="text-zinc-200 block">{item.title}</strong>
+                      <span className="text-sm">{item.desc}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       )}
