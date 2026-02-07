@@ -578,18 +578,9 @@ body {
   animation: smoke-rise 3s ease-out forwards;
 }
 
-/* Void Mode - Minimal UI */
-.void-mode {
-  background: #000 !important;
-}
-
-.void-mode * {
-  border-radius: 0 !important;
-}
-
-.void-mode .glass-card {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+/* Void Mode - Textarea Override */
+.glass-card textarea {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
 }
 
