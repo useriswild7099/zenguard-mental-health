@@ -80,8 +80,7 @@ export default function Home() {
     try {
       const { scrubbed, piiDetected } = prepareText(journalText);
       if (piiDetected) {
-      const { scrubbed, piiDetected } = prepareText(journalText);
-      // PII Detected: scrubbed before transmission
+        console.log('PII detected and scrubbed');
       }
       const result = await sentimentClient.analyzeEntry(scrubbed, sessionId);
       setAnalysisResult(result);

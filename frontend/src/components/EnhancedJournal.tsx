@@ -151,7 +151,7 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
         />
       )}
 
-      <div className={`space-y-4 ${isVoidMode ? 'void-mode' : ''}`}>
+      <div className={`transition-all duration-1000 space-y-4 ${isVoidMode ? 'glass-card p-8 min-h-[60vh] flex flex-col justify-center' : ''}`}>
         {/* Ephemeral Badge */}
         {!isVoidMode && (
           <div className="text-center">
@@ -275,22 +275,14 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
               {/* Go - Submit for analysis */}
               <button
                 onClick={() => onAnalyze(text)}
-                disabled={!text.trim() || isAnalyzing}
+                disabled={!text.trim() || isAnalyzing || (mode === 'timed' && isTimerActive)}
                 className="px-4 py-2 rounded-lg bg-green-500/20 text-green-300 hover:bg-green-500/30 disabled:opacity-50 transition-colors flex items-center gap-2"
               >
                 <ArrowRight className="w-4 h-4" />
                 Go
               </button>
 
-              {/* Analyze */}
-              <button
-                onClick={() => onAnalyze(text)}
-                disabled={!text.trim() || isAnalyzing || (mode === 'timed' && isTimerActive)}
-                className="px-4 py-2 rounded-lg bg-purple-500/30 text-purple-200 hover:bg-purple-500/40 disabled:opacity-50 transition-colors flex items-center gap-2"
-              >
-                <Zap className="w-4 h-4" />
-                {isAnalyzing ? 'Analyzing...' : 'Get Insights'}
-              </button>
+
             </div>
           </div>
         )}

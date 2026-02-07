@@ -170,7 +170,7 @@ export default function ReleaseLoopSystem({ text, onComplete, onClose }: Release
   }, [phase, coolDownTimer, nextPhase]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center">
+    <div className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center">
       <AnimatePresence mode="wait">
         {/* Phase 1: Mood Selection */}
         {phase === 'mood-select' && (
