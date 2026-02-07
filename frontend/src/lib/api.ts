@@ -38,8 +38,6 @@ export interface AnalysisResponse {
   mood_color: string;
   recommended_interventions: Intervention[];
   supportive_message: string;
-  therapeutic_insight?: string;
-  key_patterns: string[];
   data_stored: boolean;
 }
 
@@ -78,22 +76,6 @@ class SentimentClient {
   /**
    * Check if the API is available
    */
-  async getReleaseAffirmation(text: string): Promise<string> {
-    try {
-      const response = await fetch(`${API_BASE_URL}/sentiment/release-affirmation`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
-      });
-      if (!response.ok) throw new Error('Failed to get affirmation');
-      const data = await response.json();
-      return data.affirmation;
-    } catch (error) {
-      console.error('Affirmation error:', error);
-      return "You have expressed yourself honestly. Let it go.";
-    }
-  }
-
   async healthCheck(): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseUrl}/health`);

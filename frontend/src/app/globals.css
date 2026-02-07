@@ -12,18 +12,18 @@
   --zen-sky-dark: #B8C9D9;
   --zen-sand: #F2E8D5;
   --zen-cream: #FDF8F3;
-
+  
   /* Mood colors - soft, non-alarming */
   --mood-flourishing: #4ECDC4;
   --mood-blooming: #7EC8A3;
   --mood-growing: #F7DC6F;
   --mood-seedling: #E8B87C;
   --mood-withered: #E87C8A;
-
-  /* Gradient backgrounds - More vibrant and clear */
-  --gradient-calm: linear-gradient(135deg, #f0e6f7 0%, #e6f0f7 50%, #e6f7f0 100%);
-  --gradient-breathing: linear-gradient(135deg, #e6f7f0 0%, #e6f0f7 100%);
-
+  
+  /* Gradient backgrounds */
+  --gradient-calm: linear-gradient(135deg, #E8D5F2 0%, #D5E8F2 50%, #D5F2E8 100%);
+  --gradient-breathing: linear-gradient(135deg, #D5F2E8 0%, #D5E8F2 100%);
+  
   /* Typography - Mapped to Next.js Fonts */
   --font-heading: var(--font-heading), 'Space Grotesk', system-ui, sans-serif;
   --font-body: var(--font-body), 'Inter', system-ui, sans-serif;
@@ -32,7 +32,7 @@
   /* Text optimization */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
+  
   /* Spacing */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -40,17 +40,17 @@
   --space-lg: 1.5rem;
   --space-xl: 2rem;
   --space-2xl: 3rem;
-
+  
   /* Border radius - soft, rounded */
   --radius-sm: 0.5rem;
   --radius-md: 1rem;
   --radius-lg: 1.5rem;
   --radius-full: 9999px;
-
+  
   /* Shadows - soft and subtle */
   --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
   --shadow-glow: 0 0 30px rgba(78, 205, 196, 0.2);
-
+  
   /* Animation timing */
   --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-slow: 0.6s;
@@ -76,13 +76,10 @@ body {
 
 /* Animations */
 @keyframes breathe {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1);
     opacity: 0.8;
   }
-
   50% {
     transform: scale(1.15);
     opacity: 1;
@@ -90,24 +87,18 @@ body {
 }
 
 @keyframes gentle-pulse {
-
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.6;
   }
-
   50% {
     opacity: 1;
   }
 }
 
 @keyframes float {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0);
   }
-
   50% {
     transform: translateY(-10px);
   }
@@ -117,7 +108,6 @@ body {
   0% {
     background-position: -200% 0;
   }
-
   100% {
     background-position: 200% 0;
   }
@@ -128,11 +118,9 @@ body {
     transform: scale(0.5);
     opacity: 0;
   }
-
   50% {
     transform: scale(1.1);
   }
-
   100% {
     transform: scale(1);
     opacity: 1;
@@ -144,26 +132,10 @@ body {
     transform: scale(0.8);
     opacity: 1;
   }
-
   100% {
     transform: scale(2.5);
     opacity: 0;
   }
-}
-
-/* Noise Background Overlay - Makes UI feel clearer and more premium */
-.noise-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 5;
-  /* Between background and content */
-  opacity: 0.05;
-  /* Extremely subtle */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 /* Animation classes */
@@ -342,10 +314,12 @@ body {
 
 /* Loading shimmer */
 .shimmer {
-  background: linear-gradient(90deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.5) 50%,
-      rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
@@ -356,12 +330,12 @@ body {
     font-size: 1rem;
     padding: var(--space-md);
   }
-
+  
   .mood-seed {
     width: 100px;
     height: 100px;
   }
-
+  
   .breathing-circle {
     width: 150px;
     height: 150px;
@@ -436,12 +410,9 @@ body {
 
 /* Gradient Animation for Hero Text */
 @keyframes gradient-x {
-
-  0%,
-  100% {
+  0%, 100% {
     background-position: 0% 50%;
   }
-
   50% {
     background-position: 100% 50%;
   }
@@ -460,7 +431,6 @@ body {
     opacity: 0;
     transform: translateY(40px);
   }
-
   to {
     opacity: 1;
     transform: translateY(0);
@@ -473,7 +443,6 @@ body {
     opacity: 0;
     transform: scale(0.9);
   }
-
   to {
     opacity: 1;
     transform: scale(1);
@@ -482,12 +451,9 @@ body {
 
 /* Gentle breathing/float effect */
 @keyframes gentle-float {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0);
   }
-
   50% {
     transform: translateY(-10px);
   }
@@ -495,12 +461,9 @@ body {
 
 /* Soft glow pulse */
 @keyframes soft-glow {
-
-  0%,
-  100% {
+  0%, 100% {
     box-shadow: 0 0 20px rgba(168, 139, 250, 0.3);
   }
-
   50% {
     box-shadow: 0 0 40px rgba(168, 139, 250, 0.5);
   }
@@ -512,7 +475,6 @@ body {
     opacity: 0;
     filter: blur(10px);
   }
-
   to {
     opacity: 1;
     filter: blur(0);
@@ -544,37 +506,14 @@ body {
 }
 
 /* Staggered animation delays */
-.stagger-1 {
-  animation-delay: 0.1s;
-}
-
-.stagger-2 {
-  animation-delay: 0.2s;
-}
-
-.stagger-3 {
-  animation-delay: 0.3s;
-}
-
-.stagger-4 {
-  animation-delay: 0.4s;
-}
-
-.stagger-5 {
-  animation-delay: 0.5s;
-}
-
-.stagger-6 {
-  animation-delay: 0.6s;
-}
-
-.stagger-7 {
-  animation-delay: 0.7s;
-}
-
-.stagger-8 {
-  animation-delay: 0.8s;
-}
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+.stagger-7 { animation-delay: 0.7s; }
+.stagger-8 { animation-delay: 0.8s; }
 
 /* ===== BURN AFTER WRITING ANIMATIONS ===== */
 
@@ -584,19 +523,16 @@ body {
     filter: blur(0) brightness(1);
     transform: scale(1);
   }
-
   30% {
     opacity: 0.8;
     filter: blur(2px) brightness(1.5);
     color: #ff6b35;
   }
-
   60% {
     opacity: 0.4;
     filter: blur(4px) brightness(2);
     transform: scale(1.02);
   }
-
   100% {
     opacity: 0;
     filter: blur(10px) brightness(0.5);
@@ -605,20 +541,15 @@ body {
 }
 
 @keyframes flame-dance {
-
-  0%,
-  100% {
+  0%, 100% {
     transform: scale(1) rotate(-5deg);
   }
-
   25% {
     transform: scale(1.1) rotate(5deg);
   }
-
   50% {
     transform: scale(1.2) rotate(-3deg);
   }
-
   75% {
     transform: scale(1.1) rotate(7deg);
   }
@@ -629,7 +560,6 @@ body {
     opacity: 0.5;
     transform: translateY(0) scale(1);
   }
-
   100% {
     opacity: 0;
     transform: translateY(-100px) scale(2);
@@ -662,47 +592,4 @@ body {
   border: none !important;
   box-shadow: none !important;
 }
-@keyframes star-parallax {
-  from { transform: translateY(0); }
-  to { transform: translateY(-1000px); }
-}
 
-.stars-sm, .stars-md, .stars-lg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 200%;
-  pointer-events: none;
-}
-
-.stars-sm {
-  background: transparent;
-  box-shadow: 100px 100px 1px #fff, 300px 200px 1px #fff, 500px 600px 1px #fff, 700px 100px 1px #fff, 900px 800px 1px #fff, 200px 400px 1px #fff, 800px 300px 1px #fff, 400px 900px 1px #fff, 150px 750px 1px #fff, 650px 450px 1px #fff, 850px 50px 1px #fff, 250px 150px 1px #fff, 950px 250px 1px #fff, 550px 350px 1px #fff, 450px 550px 1px #fff, 750px 650px 1px #fff, 350px 850px 1px #fff, 50px 950px 1px #fff;
-  animation: star-parallax 100s linear infinite;
-  z-index: -20;
-}
-
-.stars-md {
-  background: transparent;
-  box-shadow: 150px 250px 2px #fff, 450px 350px 2px #fff, 750px 150px 2px #fff, 250px 550px 2px #fff, 850px 750px 2px #fff, 550px 850px 2px #fff, 350px 50px 2px #fff, 950px 450px 2px #fff, 650px 950px 2px #fff, 50px 650px 2px #fff;
-  animation: star-parallax 150s linear infinite;
-  z-index: -19;
-}
-
-.stars-lg {
-  background: transparent;
-  box-shadow: 200px 400px 3px #fff, 600px 100px 3px #fff, 800px 700px 3px #fff, 400px 800px 3px #fff, 100px 300px 3px #fff;
-  animation: star-parallax 200s linear infinite;
-  z-index: -18;
-}
-
-@keyframes ripple {
-  0% { transform: scale(1); opacity: 1; filter: blur(0px); }
-  50% { transform: scale(1.02); opacity: 0.8; filter: blur(2px); }
-  100% { transform: scale(1.05); opacity: 0; filter: blur(10px); }
-}
-
-.animate-ripple {
-  animation: ripple 1.5s ease-out forwards;
-}

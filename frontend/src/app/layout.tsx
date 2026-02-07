@@ -44,9 +44,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${courierPrime.variable}`}>
       <body className="antialiased">
-        {/* Noise Texture Overlay */}
-        <div className="noise-bg"></div>
-        
         {/* Privacy Notice - Always visible */}
         <div className="fixed bottom-4 right-4 z-50">
           <div className="privacy-badge">
