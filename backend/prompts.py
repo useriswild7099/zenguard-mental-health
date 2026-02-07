@@ -1247,28 +1247,32 @@ MODE_INFO = {
         "emoji": "💜",
         "description": "A warm, understanding listener who offers emotional support",
         "category": "general",
-        "color": "purple"
+        "color": "purple",
+        "image": "/personalities/compasionate friend.png"
     },
     ChatMode.ACADEMIC_COACH: {
         "name": "Academic Coach",
         "emoji": "📚",
         "description": "Helps with study stress, time management, and academic goals",
         "category": "general",
-        "color": "indigo"
+        "color": "indigo",
+        "image": "/personalities/academic coach.png"
     },
     ChatMode.MINDFULNESS_GUIDE: {
         "name": "Mindfulness Guide",
         "emoji": "🧘",
         "description": "Guides you through breathing exercises and present-moment awareness",
         "category": "general",
-        "color": "teal"
+        "color": "teal",
+        "image": "/personalities/mindfullness guide.png"
     },
     ChatMode.MOTIVATIONAL_COACH: {
         "name": "Motivational Coach",
         "emoji": "🚀",
         "description": "Inspires action and helps you see your potential",
         "category": "general",
-        "color": "purple"
+        "color": "purple",
+        "image": "/personalities/motivational coach.png"
     },
     
     # Family
@@ -1277,42 +1281,48 @@ MODE_INFO = {
         "emoji": "👩",
         "description": "Warm, nurturing, and always there for you",
         "category": "family",
-        "color": "rose"
+        "color": "rose",
+        "image": "/personalities/mother.png"
     },
     ChatMode.FATHER: {
         "name": "Father",
         "emoji": "👨",
         "description": "Supportive, wise, and believes in you",
         "category": "family",
-        "color": "blue"
+        "color": "blue",
+        "image": "/personalities/father.png"
     },
     ChatMode.SISTER: {
         "name": "Sister",
         "emoji": "👧",
         "description": "Your ride-or-die, always has your back",
         "category": "family",
-        "color": "pink"
+        "color": "pink",
+        "image": "/personalities/sister.png"
     },
     ChatMode.BROTHER: {
         "name": "Brother",
         "emoji": "👦",
         "description": "Protective, fun, and keeps it real",
         "category": "family",
-        "color": "cyan"
+        "color": "cyan",
+        "image": "/personalities/brother.png"
     },
     ChatMode.COOL_PARENT: {
         "name": "Cool Parent",
         "emoji": "🕶️",
         "description": "Chill, experienced advice without the lecture",
         "category": "family",
-        "color": "amber"
+        "color": "amber",
+        "image": "/personalities/cool parents.png"
     },
     ChatMode.COOL_UNCLE_AUNT: {
         "name": "Cool Uncle/Aunt",
         "emoji": "✨",
         "description": "Fun, non-judgmental, and understands your world",
         "category": "family",
-        "color": "fuchsia"
+        "color": "fuchsia",
+        "image": "/personalities/cool uncle.png"
     },
 
     # Education
@@ -1321,14 +1331,16 @@ MODE_INFO = {
         "emoji": "🍎",
         "description": "Patient, encouraging, and helps you grow",
         "category": "education",
-        "color": "green"
+        "color": "green",
+        "image": "/personalities/school teacher.png"
     },
     ChatMode.UNIVERSITY_PROFESSOR: {
         "name": "Professor",
         "emoji": "🎓",
         "description": "Wisdom, perspective, and deep understanding",
         "category": "education",
-        "color": "slate"
+        "color": "slate",
+        "image": "/personalities/university professor.png"
     },
 
     # Friend
@@ -1337,14 +1349,16 @@ MODE_INFO = {
         "emoji": "🤝",
         "description": "Always in your corner, no judgment",
         "category": "friend",
-        "color": "yellow"
+        "color": "yellow",
+        "image": "/personalities/best friend.png"
     },
     ChatMode.STUDY_PARTNER: {
         "name": "Study Partner",
         "emoji": "📝",
         "description": "Studying with you at 2am, sharing the load",
         "category": "friend",
-        "color": "orange"
+        "color": "orange",
+        "image": "/personalities/study partner.png"
     },
 
     # Dating
@@ -1353,7 +1367,8 @@ MODE_INFO = {
         "emoji": "💝",
         "description": "Safe, loving, and emotionally attuned",
         "category": "dating",
-        "color": "red"
+        "color": "red",
+        "image": "/personalities/lover.png"
     },
 
     # Spiritual
@@ -1362,14 +1377,16 @@ MODE_INFO = {
         "emoji": "🏵️",
         "description": "Compassion, inner peace, and gentle wisdom",
         "category": "spiritual",
-        "color": "amber"
+        "color": "amber",
+        "image": "/personalities/Dalai Lama.png"
     },
     ChatMode.SADGURU: {
         "name": "Modern Mystic",
         "emoji": "🪴",
         "description": "Clarity, insight, and grounded realization",
         "category": "spiritual",
-        "color": "green"
+        "color": "green",
+        "image": "/personalities/Sadguru.png"
     },
 
     # Psychology
@@ -1378,21 +1395,24 @@ MODE_INFO = {
         "emoji": "👂",
         "description": "Unconditional positive regard and deep listening",
         "category": "psychology",
-        "color": "teal"
+        "color": "teal",
+        "image": "/personalities/Carl Rogers.png"
     },
     ChatMode.SIGMUND_FREUD: {
         "name": "The Analyst",
         "emoji": "🛋️",
         "description": "Exploring the depths of your mind and patterns",
         "category": "psychology",
-        "color": "indigo"
+        "color": "indigo",
+        "image": "/personalities/Sigmund Freud.png"
     },
     ChatMode.OPRAH_MENTOR: {
         "name": "Empowering Mentor",
         "emoji": "🌟",
         "description": "Inspirational guidance to find your best self",
         "category": "psychology",
-        "color": "purple"
+        "color": "purple",
+        "image": "/personalities/Oprah Mentor.png"
     },
 
     # Entrepreneur
@@ -1401,21 +1421,24 @@ MODE_INFO = {
         "emoji": "💻",
         "description": "Problem-solving with logic and humility",
         "category": "entrepreneur",
-        "color": "blue"
+        "color": "blue",
+        "image": "/personalities/Logical Mentor.png"
     },
     ChatMode.MUKESH_AMBANI: {
         "name": "Visionary Builder",
         "emoji": "🏢",
         "description": "Long-term vision, patience, and discipline",
         "category": "entrepreneur",
-        "color": "emerald"
+        "color": "emerald",
+        "image": "/personalities/Mukesh Ambani.png"
     },
     ChatMode.ELON_MENTOR: {
         "name": "First Principles",
         "emoji": "🚀",
         "description": "Solving hard problems with engineering mindset",
         "category": "entrepreneur",
-        "color": "slate"
+        "color": "slate",
+        "image": "/personalities/elon musk.png"
     },
 
     # Famous
@@ -1424,21 +1447,24 @@ MODE_INFO = {
         "emoji": "🤪",
         "description": "Humor, wit, and real talk",
         "category": "famous",
-        "color": "pink"
+        "color": "pink",
+        "image": "/personalities/Brittany Broski.png"
     },
     ChatMode.DELANEY_ROWE: {
         "name": "Delaney",
         "emoji": "🎭",
         "description": "Observant, dry humor, and main character energy",
         "category": "famous",
-        "color": "violet"
+        "color": "violet",
+        "image": "/personalities/Delaney Rowe.png"
     },
     ChatMode.ROB_ANDERSON: {
         "name": "Rob",
         "emoji": "😐",
         "description": "Dry wit and calm, logical perspectives",
         "category": "famous",
-        "color": "zinc"
+        "color": "zinc",
+        "image": "/personalities/Rob Anderson.png"
     },
 
     # Indian Stars
@@ -1447,49 +1473,56 @@ MODE_INFO = {
         "emoji": "🎬",
         "description": "Relatable, funny, and grounded brotherly vibes",
         "category": "indian_stars",
-        "color": "red"
+        "color": "red",
+        "image": "/personalities/ashish chanchalani.png"
     },
     ChatMode.BHUVAN_BAM: {
         "name": "Bhuvan",
         "emoji": "🎸",
         "description": "Creativity, struggle, and figuring it out",
         "category": "indian_stars",
-        "color": "yellow"
+        "color": "yellow",
+        "image": "/personalities/bhuvan bam.png"
     },
     ChatMode.SAMEY_RAINA: {
         "name": "Samey",
         "emoji": "♟️",
         "description": "Sharp wit, chess moves, and chill interactions",
         "category": "indian_stars",
-        "color": "cyan"
+        "color": "cyan",
+        "image": "/personalities/samay raina.png"
     },
     ChatMode.SHAH_RUKH_KHAN: {
         "name": "King Khan",
         "emoji": "👑",
         "description": "Charisma, romance, and philosophy",
         "category": "indian_stars",
-        "color": "purple"
+        "color": "purple",
+        "image": "/personalities/shah rukh khan.png"
     },
     ChatMode.ZAKIR_KHAN: {
         "name": "Zakir",
         "emoji": "🎤",
         "description": "Relatable stories, poetry, and 'sakht launda' vibes",
         "category": "indian_stars",
-        "color": "slate"
+        "color": "slate",
+        "image": "/personalities/zakir khan.png"
     },
     ChatMode.RANVEER_ALLAHBADIA: {
         "name": "BeerBiceps",
         "emoji": "💪",
         "description": "Spiritual growth, podcast wisdom, and hustle",
         "category": "indian_stars",
-        "color": "orange"
+        "color": "orange",
+        "image": "/personalities/beerbiceps.png"
     },
     ChatMode.ANKUR_WARIKOO: {
         "name": "Warikoo",
         "emoji": "📉",
         "description": "Practical life advice, finance, and 'do epic shit'",
         "category": "indian_stars",
-        "color": "blue"
+        "color": "blue",
+        "image": "/personalities/warikoo.png"
     },
 
     # Philosophers
@@ -1498,28 +1531,32 @@ MODE_INFO = {
         "emoji": "🏛️",
         "description": "Resilience, duty, and inner strength",
         "category": "philosophers",
-        "color": "stone"
+        "color": "stone",
+        "image": "/personalities/marcus aurelius.png"
     },
     ChatMode.SOCRATES: {
         "name": "The Questioner",
         "emoji": "🤔",
         "description": "Deep questions to help you find your own answers",
         "category": "philosophers",
-        "color": "stone"
+        "color": "stone",
+        "image": "/personalities/Socrates.png"
     },
     ChatMode.ALAN_WATTS: {
         "name": "The Mystic",
         "emoji": "🌊",
         "description": "Philosophical flow, eastern wisdom, and irony",
         "category": "philosophers",
-        "color": "teal"
+        "color": "teal",
+        "image": "/personalities/alan watts.png"
     },
     ChatMode.RUMI: {
         "name": "The Poet",
         "emoji": "📜",
         "description": "Love, devotion, and mystical poetry",
         "category": "philosophers",
-        "color": "rose"
+        "color": "rose",
+        "image": "/personalities/rumi.png"
     },
 
     # Scientists
@@ -1528,28 +1565,32 @@ MODE_INFO = {
         "emoji": "🧪",
         "description": "Curiosity, imagination, and relatively simple answers",
         "category": "scientists",
-        "color": "neutral"
+        "color": "neutral",
+        "image": "/personalities/Albert Einstein.png"
     },
     ChatMode.APJ_ABDUL_KALAM: {
         "name": "Missile Man",
         "emoji": "🚀",
         "description": "Visionary, humble, and inspiring for students",
         "category": "scientists",
-        "color": "orange"
+        "color": "orange",
+        "image": "/personalities/APJ Abdul Kalam.png"
     },
     ChatMode.MARIE_CURIE: {
         "name": "Madame Curie",
         "emoji": "☢️",
         "description": "Persistence, dedication, and discovery",
         "category": "scientists",
-        "color": "green"
+        "color": "green",
+        "image": "/personalities/Marie Curie.png"
     },
     ChatMode.STEVE_JOBS: {
         "name": "The Visionary",
         "emoji": "🍏",
         "description": "Design, focus, and thinking different",
         "category": "scientists",
-        "color": "zinc"
+        "color": "zinc",
+        "image": "/personalities/Steve Jobs.png"
     },
 
     # Tough Love
@@ -1558,28 +1599,32 @@ MODE_INFO = {
         "emoji": "🏃",
         "description": "No excuses. Pure discipline and mental hardness.",
         "category": "tough_love",
-        "color": "stone"
+        "color": "stone",
+        "image": "/personalities/David Goggins.png"
     },
     ChatMode.JORDAN_PETERSON: {
         "name": "The Professor",
         "emoji": "🦞",
         "description": "Responsibility, order, and cleaning your room",
         "category": "tough_love",
-        "color": "blue"
+        "color": "blue",
+        "image": "/personalities/Jordan Peterson.png"
     },
     ChatMode.STRICT_COACH: {
         "name": "Head Coach",
         "emoji": "📢",
         "description": "Demanding but fair. Pushes you to win.",
         "category": "tough_love",
-        "color": "red"
+        "color": "red",
+        "image": "/personalities/strict coach.png"
     },
     ChatMode.GORDON_RAMSAY: {
         "name": "Chef",
         "emoji": "👨‍🍳",
         "description": "High standards and direct feedback (PG-13)",
         "category": "tough_love",
-        "color": "red"
+        "color": "red",
+        "image": "/personalities/gordon ramsay.png"
     },
 
     # Creative
@@ -1588,28 +1633,32 @@ MODE_INFO = {
         "emoji": "✍️",
         "description": "Finds beauty and rhyme in your struggle",
         "category": "creative",
-        "color": "indigo"
+        "color": "indigo",
+        "image": "/personalities/The Poet.png"
     },
     ChatMode.THE_ARTIST: {
         "name": "The Artist",
         "emoji": "🎨",
         "description": "Seeing life through color, shape, and perspective",
         "category": "creative",
-        "color": "fuchsia"
+        "color": "fuchsia",
+        "image": "/personalities/The Artist.png"
     },
     ChatMode.THE_MUSICIAN: {
         "name": "The Musician",
         "emoji": "🎵",
         "description": "Life as rhythm, harmony, and improvisation",
         "category": "creative",
-        "color": "cyan"
+        "color": "cyan",
+        "image": "/personalities/the musician.png"
     },
     ChatMode.BOB_ROSS: {
         "name": "Happy Painter",
         "emoji": "🌲",
         "description": "No mistakes, just happy accidents",
         "category": "creative",
-        "color": "green"
+        "color": "green",
+        "image": "/personalities/Bob Ross.png"
     },
 
     # Family Expansion
@@ -1618,28 +1667,32 @@ MODE_INFO = {
         "emoji": "👵",
         "description": "Warmth, stories, and unconditional pampering",
         "category": "family",
-        "color": "rose"
+        "color": "rose",
+        "image": "/personalities/grand mother.png"
     },
     ChatMode.GRANDFATHER: {
         "name": "Grandpa",
         "emoji": "👴",
         "description": "Old-school wisdom and gentle strength",
         "category": "family",
-        "color": "stone"
+        "color": "stone",
+        "image": "/personalities/grand father.png"
     },
     ChatMode.YOUNGER_SIBLING: {
         "name": "Little Sibling",
         "emoji": "🧸",
         "description": "Innocent, playful, and looks up to you",
         "category": "family",
-        "color": "sky"
+        "color": "sky",
+        "image": "/personalities/younger sibling.png"
     },
     ChatMode.THE_PET: {
         "name": "The Pet",
         "emoji": "🐾",
         "description": "Unconditional love, zero judgment, and golden retriever energy",
         "category": "family",
-        "color": "yellow"
+        "color": "yellow",
+        "image": "/personalities/pet.png"
     },
 
     # Archetypes
@@ -1648,27 +1701,31 @@ MODE_INFO = {
         "emoji": "📚",
         "description": "Quiet, organized, and resourceful",
         "category": "archetypes",
-        "color": "amber"
+        "color": "amber",
+        "image": "/personalities/the librarian.png"
     },
     ChatMode.THE_GARDENER: {
         "name": "Gardener",
         "emoji": "🌱",
         "description": "Patience, growth, and nurturing roots",
         "category": "archetypes",
-        "color": "green"
+        "color": "green",
+        "image": "/personalities/the gardener.png"
     },
     ChatMode.THE_TIME_TRAVELER: {
         "name": "Time Traveler",
         "emoji": "⏳",
         "description": "Perspective from the future. It gets better.",
         "category": "archetypes",
-        "color": "violet"
+        "color": "violet",
+        "image": "/personalities/the time traveller.png"
     },
     ChatMode.THE_UNIVERSE: {
         "name": "The Universe",
         "emoji": "🌌",
         "description": "Vast, infinite, and uncaring but holding you",
         "category": "archetypes",
-        "color": "black"
+        "color": "black",
+        "image": "/personalities/the universe.png"
     }
 }

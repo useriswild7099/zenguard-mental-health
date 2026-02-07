@@ -185,6 +185,7 @@ export interface ChatMode {
   description: string;
   category?: string;
   color?: string;
+  image?: string;
 }
 
 export interface ChatMessage {

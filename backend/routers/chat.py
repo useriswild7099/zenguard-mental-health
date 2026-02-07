@@ -41,7 +41,8 @@ async def get_chat_modes():
                 "emoji": info["emoji"],
                 "description": info["description"],
                 "category": info.get("category", "general"),
-                "color": info.get("color", "purple")
+                "color": info.get("color", "purple"),
+                "image": info.get("image")
             }
             for mode, info in MODE_INFO.items()
         ]

@@ -1,9 +1,30 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { chatClient, ChatMode, ChatMessage } from '@/lib/api';
 import { prepareText } from '@/lib/privacy';
 import VoiceInput from './VoiceInput';
+
+// Helper component for personality avatar
+function PersonalityAvatar({ mode, size = 48, className = '' }: { mode: ChatMode; size?: number; className?: string }) {
+  const [imgError, setImgError] = useState(false);
+  
+  if (!mode.image || imgError) {
+    return <span className={`text-${size <= 32 ? '2xl' : size <= 48 ? '3xl' : '5xl'} ${className}`}>{mode.emoji}</span>;
+  }
+  
+  return (
+    <Image
+      src={mode.image}
+      alt={mode.name}
+      width={size}
+      height={size}
+      className={`rounded-full object-cover ${className}`}
+      onError={() => setImgError(true)}
+    />
+  );
+}
 
 interface ChatInterfaceProps {
   onBack: () => void;
@@ -170,7 +191,9 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
                 >
                   <div className={`absolute top-0 left-0 w-1 h-full bg-${mode.color || 'purple'}-500/50`}></div>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-3xl group-hover:scale-110 transition-transform">{mode.emoji}</span>
+                    <div className="group-hover:scale-110 transition-transform">
+                      <PersonalityAvatar mode={mode} size={40} />
+                    </div>
                     <h3 className="font-semibold text-white">{mode.name}</h3>
                   </div>
                   <p className="text-sm text-zinc-300">{mode.description}</p>
@@ -213,7 +236,9 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
           </button>
           
           <div className="flex flex-col items-center">
-            <span className="text-2xl mb-1">{selectedMode.emoji}</span>
+            <div className="mb-1">
+              <PersonalityAvatar mode={selectedMode} size={32} />
+            </div>
             <span className="font-medium text-white text-sm">{selectedMode.name}</span>
           </div>
 
@@ -229,7 +254,9 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.length === 0 && (
             <div className="text-center text-zinc-400 py-12">
-              <span className="text-5xl mb-4 block opacity-50">{selectedMode.emoji}</span>
+              <div className="flex justify-center mb-4 opacity-80">
+                <PersonalityAvatar mode={selectedMode} size={64} />
+              </div>
               <p className="text-lg text-white mb-2">Speak with {selectedMode.name}</p>
               <p className="text-sm max-w-xs mx-auto opacity-70">{selectedMode.description}</p>
             </div>

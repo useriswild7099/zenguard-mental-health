@@ -134,31 +134,32 @@ interface EndOfSessionProps {
   onClose: () => void;
 }
 
+// Ritual steps defined outside component for stable reference
+const END_SESSION_STEPS = [
+  { text: "Take a deep breath...", delay: 2000 },
+  { text: "You've expressed yourself honestly.", delay: 2500 },
+  { text: "You don't need to keep this.", delay: 2500 },
+  { text: "Let it go.", delay: 2000 },
+];
+
 export function EndOfSessionRitual({ onClose }: EndOfSessionProps) {
   const [step, setStep] = useState(0);
-  
-  const steps = [
-    { text: "Take a deep breath...", delay: 2000 },
-    { text: "You've expressed yourself honestly.", delay: 2500 },
-    { text: "You don't need to keep this.", delay: 2500 },
-    { text: "Let it go.", delay: 2000 },
-  ];
 
   useEffect(() => {
-    if (step < steps.length - 1) {
-      const timer = setTimeout(() => setStep(s => s + 1), steps[step].delay);
+    if (step < END_SESSION_STEPS.length - 1) {
+      const timer = setTimeout(() => setStep(s => s + 1), END_SESSION_STEPS[step].delay);
       return () => clearTimeout(timer);
     } else {
-      const timer = setTimeout(onClose, steps[step].delay);
+      const timer = setTimeout(onClose, END_SESSION_STEPS[step].delay);
       return () => clearTimeout(timer);
     }
-  }, [step, onClose, steps]);
+  }, [step, onClose]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
       <div className="text-center px-8">
         <p className="text-2xl md:text-3xl text-white font-light animate-fade-up">
-          {steps[step].text}
+          {END_SESSION_STEPS[step].text}
         </p>
       </div>
     </div>
