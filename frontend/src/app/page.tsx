@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import Image from 'next/image';
 import { sentimentClient, AnalysisResponse, QuickCheckResponse } from '@/lib/api';
 import { prepareText, generateSessionId } from '@/lib/privacy';
 import JournalInput from '@/components/JournalInput';
@@ -153,13 +154,16 @@ export default function Home() {
         {/* Hero Section */}
         <main className="relative z-10 flex flex-col items-center justify-center px-6 pt-12 pb-20 md:pt-20">
           <div className="text-center max-w-3xl mx-auto">
-            {/* Breathing indicator */}
+            {/* Logo */}
             <div className="mb-8 flex justify-center animate-fade-scale">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-300/20 to-blue-300/20 flex items-center justify-center animate-gentle-float backdrop-blur-sm border border-white/10">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400/40 to-blue-400/40 flex items-center justify-center animate-soft-glow">
-                  <Sparkles className="w-6 h-6 text-white/80" />
-                </div>
-              </div>
+              <Image 
+                src="/logo.png" 
+                alt="ZenGuard Logo" 
+                width={256}
+                height={256}
+                className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl animate-gentle-float"
+                priority
+              />
             </div>
 
             <h1 
