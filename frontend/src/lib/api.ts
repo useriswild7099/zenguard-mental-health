@@ -40,14 +40,6 @@ export interface AnalysisResponse {
   supportive_message: string;
   therapeutic_insight?: string;
   key_patterns: string[];
-  selected_breathing?: {
-    name: string;
-    description: string;
-    pattern?: string;
-    duration_seconds: number;
-    category: string;
-    situation_category: string;
-  };
   data_stored: boolean;
 }
 
@@ -86,7 +78,7 @@ class SentimentClient {
   /**
    * Check if the API is available
    */
-  async getReleaseAffirmation(text: string): Promise<{ affirmation: string, breathing?: any }> {
+  async getReleaseAffirmation(text: string): Promise<string> {
     try {
       const response = await fetch(`${API_BASE_URL}/sentiment/release-affirmation`, {
         method: 'POST',
@@ -95,13 +87,10 @@ class SentimentClient {
       });
       if (!response.ok) throw new Error('Failed to get affirmation');
       const data = await response.json();
-      return {
-        affirmation: data.affirmation,
-        breathing: data.breathing
-      };
+      return data.affirmation;
     } catch (error) {
       console.error('Affirmation error:', error);
-      return { affirmation: "You have expressed yourself honestly. Let it go." };
+      return "You have expressed yourself honestly. Let it go.";
     }
   }
 

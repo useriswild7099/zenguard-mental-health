@@ -5,7 +5,6 @@ import { Flame, Download, Clock, Zap, Moon, Volume2, VolumeX } from 'lucide-reac
 import EmotionPicker, { Emotion, EMOTION_PROMPTS, getTimeBasedPrompt } from './EmotionPicker';
 import { BurnAnimation, ExportOptions, EphemeralBadge, EndOfSessionRitual, TimerDisplay } from './JournalFeatures';
 import VoiceInput from './VoiceInput';
-import { BreathingGuide } from './BreathingGuide';
 
 // Journal mode types
 type JournalMode = 'free' | 'timed' | 'void';
@@ -49,8 +48,6 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
 
   // Release affirmation
   const [affirmation, setAffirmation] = useState<string>("");
-  const [showBreathing, setShowBreathing] = useState(false);
-  const [selectedBreathing, setSelectedBreathing] = useState<any>(null);
 
   // Update prompt based on emotion
   useEffect(() => {
@@ -160,26 +157,7 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
       {showExport && <ExportOptions text={text} onClose={() => setShowExport(false)} />}
 
       {/* End of Session Ritual */}
-      {showEndRitual && (
-        <EndOfSessionRitual
-          onClose={() => {
-            setShowEndRitual(false);
-            if (selectedBreathing) setShowBreathing(true);
-          }}
-          affirmation={affirmation}
-        />
-      )}
-
-      {/* Breathing Guide */}
-      {showBreathing && selectedBreathing && (
-        <BreathingGuide
-          exercise={selectedBreathing}
-          onComplete={() => {
-            setShowBreathing(false);
-            setSelectedBreathing(null);
-          }}
-        />
-      )}
+      {showEndRitual && <EndOfSessionRitual onClose={() => setShowEndRitual(false)} affirmation={affirmation} />}
 
       <div className={`space-y-4 ${isVoidMode ? 'void-mode' : ''}`}>
         {/* Ephemeral Badge */}
@@ -328,10 +306,7 @@ export default function EnhancedJournal({ onSubmit, onAnalyze, isAnalyzing }: En
 
                   // Trigger background affirmation check
                   import('@/lib/api').then(({ sentimentClient }) => {
-                    sentimentClient.getReleaseAffirmation(currentText).then(res => {
-                      setAffirmation(res.affirmation);
-                      setSelectedBreathing(res.breathing);
-                    });
+                    sentimentClient.getReleaseAffirmation(currentText).then(setAffirmation);
                   });
 
                   if (randomEffect === 'space') {

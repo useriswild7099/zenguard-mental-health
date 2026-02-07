@@ -3,10 +3,8 @@ Intervention Engine
 Selects and prioritizes self-care interventions based on emotional state
 """
 
-from typing import List, Optional, Dict
-import random
+from typing import List, Optional
 from models.schemas import Intervention, InterventionType, EmotionType, Emotion
-from services.breathing_data import BREATHING_EXERCISES, BreathingExercise
 
 
 class InterventionEngine:
@@ -179,43 +177,3 @@ class InterventionEngine:
             message += " Remember, it's okay to not be okay. You don't have to hide how you truly feel."
         
         return message
-
-    def get_breathing_exercise(self, text: str, primary_emotion: Emotion, risk_score: float) -> Optional[Dict]:
-        """
-        Select a specific breathing exercise based on the situation.
-        """
-        text_lower = text.lower()
-        
-        # 1. Check for Focus/Study context
-        focus_keywords = ["study", "exam", "test", "focus", "work", "deadline", "prepare", "reading"]
-        if any(kw in text_lower for kw in focus_keywords):
-            category = "Focus & Study Preparation"
-        
-        # 2. Check for Anxiety/Distress
-        elif primary_emotion.type in [EmotionType.ANXIETY, EmotionType.FEAR, EmotionType.ANGER, EmotionType.SADNESS] or risk_score > 7:
-            category = "Anxiety Relief & Emotional Processing"
-            
-        # 3. Check for low mood/energy
-        elif primary_emotion.intensity > 0.8 and primary_emotion.type in [EmotionType.SADNESS, EmotionType.NEUTRAL]:
-            category = "Energy & Mood Lifting"
-            
-        # 4. Check for reflective/zen-like (Socrates/Rumi common words if we had them)
-        # For now, default to Mindfulness if calm, else Reset
-        elif primary_emotion.type == EmotionType.JOY or primary_emotion.intensity < 0.4:
-            category = "Mindfulness & Meditation Style"
-        else:
-            category = "Calm & Nervous System Reset"
-            
-        exercises = BREATHING_EXERCISES.get(category, [])
-        if not exercises:
-            return None
-            
-        exercise = random.choice(exercises)
-        return {
-            "name": exercise.name,
-            "description": exercise.description,
-            "pattern": exercise.pattern,
-            "duration_seconds": exercise.duration_seconds,
-            "category": exercise.category,
-            "situation_category": category
-        }
