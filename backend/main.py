@@ -14,7 +14,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
 
-from routers import sentiment, chat
+from routers import sentiment, chat, sia, translate
 from config import settings
 
 # Disable request logging for privacy
@@ -62,6 +62,8 @@ app.add_middleware(
 # Include routers
 app.include_router(sentiment.router, prefix="/api", tags=["Sentiment Analysis"])
 app.include_router(chat.router, prefix="/api", tags=["AI Chat"])
+app.include_router(sia.router, prefix="/api", tags=["Sia Navigator"])
+app.include_router(translate.router, prefix="/api", tags=["Multilingual Support"])
 
 
 @app.get("/health")

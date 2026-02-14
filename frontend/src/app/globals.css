@@ -176,11 +176,17 @@
   /* Shadows - soft and subtle */
   --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
   --shadow-glow: 0 0 30px rgba(78, 205, 196, 0.2);
+  --shadow-premium: 0 20px 50px -10px rgba(0, 0, 0, 0.5), 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+  --shadow-elite: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 100px -20px rgba(168, 139, 250, 0.3);
   
   /* Animation timing */
   --ease-gentle: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-slow: 0.6s;
   --duration-breathing: 4s;
+  
+  /* Premium Shadows */
+  --shadow-premium: 0 20px 50px -10px rgba(0, 0, 0, 0.5), 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+  --shadow-elite: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 30px 60px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* Global styles */
@@ -514,19 +520,40 @@ body {
 
 /* Apple-style Glass Cards */
 .glass-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 1.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
+  will-change: transform, background-color, border-color;
 }
 
 .glass-card:hover {
   transform: translateY(-8px);
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.glass-card-premium {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 2.5rem;
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-premium:hover {
+  transform: translateY(-4px) scale(1.01);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.7);
 }
 
 /* Override existing card styles for glass mode */
@@ -752,3 +779,129 @@ body {
 .text-mood-low   { color: hsl(var(--mood-low)); }
 .text-mood-bad   { color: hsl(var(--mood-bad)); }
 
+
+/* ===== SIA ROBOT ANIMATIONS ===== */
+@keyframes sia-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+@keyframes sia-pop-up {
+  0% { transform: translateY(100%) scale(0.5); opacity: 0; }
+  60% { transform: translateY(-10%) scale(1.1); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.animate-sia-wave {
+  animation: sia-wave 2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.animate-sia-pop-up {
+  animation: sia-pop-up 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-sia-float {
+  animation: gentle-float 3s ease-in-out infinite;
+}
+
+@keyframes sia-premium-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(1deg); }
+  50% { transform: translateY(-15px) rotate(-1deg); }
+  75% { transform: translateY(-7px) rotate(0.5deg); }
+}
+
+@keyframes sia-eye-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+@keyframes sia-core-pulse {
+  0%, 100% { opacity: 0.3; filter: blur(4px) scale(1); }
+  50% { opacity: 0.7; filter: blur(6px) scale(1.2); }
+}
+
+@keyframes sia-peek-right {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(30%); opacity: 1; }
+}
+
+.animate-sia-peek-right {
+  animation: sia-peek-right 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes sia-peek-out {
+  0% { transform: translateX(30%); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.animate-sia-peek-out {
+  animation: sia-peek-out 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-sia-premium-float {
+  animation: sia-premium-float 6s ease-in-out infinite;
+}
+
+.animate-sia-eye-blink {
+  animation: sia-eye-blink 4s infinite;
+}
+
+.animate-sia-core-pulse {
+  animation: sia-core-pulse 3s ease-in-out infinite;
+}
+
+@keyframes sia-slide-in-right {
+  0% { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.animate-sia-slide-in {
+  animation: sia-slide-in-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-sia-elastic-pop {
+  animation: sia-elastic-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* ===== PREMIUM GLASS PILL BUTTONS ===== */
+.glass-pill-button {
+  @apply relative overflow-hidden transition-all duration-500 border border-white/30 backdrop-blur-2xl;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border-radius: 2rem; /* Rounded rectangle (32px) */
+  box-shadow: 
+    0 15px 45px -15px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.glass-pill-button::before {
+  content: '';
+  @apply absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 80%);
+}
+
+.glass-pill-button:hover {
+  @apply border-white/50 -translate-y-2 scale-[1.03];
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  box-shadow: 
+    0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    inset 0 1px 3px 0 rgba(255, 255, 255, 0.5);
+}
+
+.glass-pill-button:active {
+  @apply scale-95 translate-y-0 duration-100;
+}
+
+.border-glow:focus-within {
+  box-shadow: 0 0 0 2px rgba(168, 139, 250, 0.2), 0 0 20px rgba(168, 139, 250, 0.4);
+}
+
+.premium-text-gradient {
+  background: linear-gradient(to right, #fff, #a855f7);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

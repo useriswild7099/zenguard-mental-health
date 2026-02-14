@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 interface BreathingExerciseProps {
-  onClose: () => void;
+  onBack: () => void;
 }
 
 type Phase = 'inhale' | 'hold' | 'exhale' | 'rest';
@@ -22,7 +22,7 @@ const PHASE_LABELS: Record<Phase, string> = {
   rest: 'Rest...',
 };
 
-export default function BreathingExercise({ onClose }: BreathingExerciseProps) {
+export default function BreathingExercise({ onBack }: BreathingExerciseProps) {
   const [phase, setPhase] = useState<Phase>('rest');
   const [cycleCount, setCycleCount] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -90,7 +90,7 @@ export default function BreathingExercise({ onClose }: BreathingExerciseProps) {
       <div className="glass-card p-8 max-w-md w-full mx-4 text-center relative">
         {/* Close button */}
         <button
-          onClick={onClose}
+          onClick={onBack}
           className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl"
         >
           ×
@@ -164,7 +164,7 @@ export default function BreathingExercise({ onClose }: BreathingExerciseProps) {
               Pause
             </button>
           )}
-          <button onClick={onClose} className="btn-zen btn-zen-secondary">
+          <button onClick={onBack} className="btn-zen btn-zen-secondary">
             Done
           </button>
         </div>

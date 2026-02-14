@@ -7,9 +7,10 @@ import { Image as ImageIcon, PenTool } from 'lucide-react';
 
 interface MoodDoodleProps {
   sessionId: string;
+  onBack: () => void;
 }
 
-export default function MoodDoodle({ sessionId }: MoodDoodleProps) {
+export default function MoodDoodle({ sessionId, onBack }: MoodDoodleProps) {
   const [mode, setMode] = useState<'draw' | 'upload'>('draw');
   const [isUploading, setIsUploading] = useState(false);
   const [result, setResult] = useState<{
@@ -81,14 +82,24 @@ export default function MoodDoodle({ sessionId }: MoodDoodleProps) {
 
   return (
     <div className="glass rounded-xl p-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center gap-4 mb-6">
+        <button 
+          onClick={onBack} 
+          className="p-2 hover:bg-black/5 rounded-full transition-colors text-gray-400 hover:text-gray-600"
+          title="Go Back"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
         <h3 className="text-lg font-semibold text-gray-700" style={{ fontFamily: 'var(--font-heading)' }}>
           ✏️ Mood Doodle V2
         </h3>
         
         {/* Mode Toggle */}
         {!preview && (
-          <div className="flex bg-gray-100/50 p-1 rounded-lg">
+          <div className="flex bg-gray-100/50 p-1 rounded-lg ml-auto">
             <button
               onClick={() => setMode('draw')}
               className={`p-2 rounded-md transition-all flex items-center gap-2 text-xs font-medium ${
@@ -160,13 +171,13 @@ export default function MoodDoodle({ sessionId }: MoodDoodleProps) {
               <p className="text-sm text-purple-600/70">Interpreting strokes, colors, and intensity</p>
             </div>
           ) : result ? (
-            <div className="glass-card bg-gradient-to-br from-white/80 to-purple-50/50 p-6 border-l-4 border-purple-500">
+            <div className="glass-card bg-gradient-to-br from-white/80 to-purple-50/50 p-6 border-l-4 border-purple-500 text-purple-900">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-3 bg-purple-100 rounded-full">
                   <span className="text-2xl">✨</span>
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-gray-800 capitalize">
+                  <h4 className="text-lg font-bold capitalize">
                     {result.visual_emotion}
                   </h4>
                   <div className="flex items-center gap-2">

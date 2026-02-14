@@ -4,16 +4,30 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { sentimentClient } from '@/lib/api';
 import ChatInterface from '@/components/ChatInterface';
+import KnowledgeHub from '@/components/KnowledgeHub';
+import HelpHub from '@/components/HelpHub';
+import CopingNavigator from '@/components/CopingNavigator';
 import FeatureShowcase from '@/components/FeatureShowcase';
 import BackgroundMusic from '@/components/BackgroundMusic';
+import SiaAssistant from '@/components/SiaAssistant';
 import { 
   PenLine, MessageCircle, 
   WifiOff, Cpu, UserX, Code, 
-  Plus, BookOpen, Lightbulb, Flame, Calendar, Shield
+  Plus, BookOpen, Lightbulb, Flame, Calendar, Shield,
+  GraduationCap, Sparkles, LifeBuoy, Zap, Languages,
+  Palette, Wind, MapPin, Volume2, VolumeX
 } from 'lucide-react';
+import MoodDoodle from '@/components/MoodDoodle';
+import BreathingExercise from '@/components/BreathingExercise';
+import GroundingExercise from '@/components/GroundingExercise';
+import WellnessPillars from '@/components/WellnessPillars';
+import MethodologySection from '@/components/MethodologySection';
+import TechnicalPrivacySection from '@/components/TechnicalPrivacySection';
+import SafetySection from '@/components/SafetySection';
 
 // ZenGuard Journal imports
 import { JournalEntry } from '@/types/journal';
+import { KnowledgeArticle } from '@/lib/knowledge';
 import { journalStorage, generateInsights } from '@/lib/storage';
 import { NewEntryFlow } from '@/components/journal/NewEntryFlow';
 import { TimelineView } from '@/components/journal/TimelineView';
@@ -28,12 +42,16 @@ import { Toaster } from '@/components/ui/sonner';
 
 export default function Home() {
   const [apiConnected, setApiConnected] = useState(false);
-  const [activeView, setActiveView] = useState<'landing' | 'journal' | 'chat'>('landing');
+  const [activeView, setActiveView] = useState<'landing' | 'journal' | 'chat' | 'knowledge' | 'help' | 'doodle' | 'breathing' | 'grounding'>('landing');
+  const [showCopingNavigator, setShowCopingNavigator] = useState(false);
+  const [routedArticle, setRoutedArticle] = useState<KnowledgeArticle | null>(null);
 
   // ZenGuard Journal state
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [isCreatingEntry, setIsCreatingEntry] = useState(false);
   const [activeTab, setActiveTab] = useState<'timeline' | 'insights' | 'stats' | 'calendar'>('timeline');
+  const [globalLanguage, setGlobalLanguage] = useState('English');
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     sentimentClient.healthCheck().then(setApiConnected);
@@ -66,346 +84,296 @@ export default function Home() {
     window.scrollTo(0, 0);
   }, [activeView]);
 
-  // ===== LANDING PAGE VIEW =====
-  if (activeView === 'landing') {
-    return (
-      <div className="min-h-screen relative">
-        <BackgroundMusic />
-        {/* Background Video */}
-        <div className="fixed inset-0 overflow-hidden">
+  return (
+    <div className={`min-h-screen relative ${activeView !== 'journal' ? 'dark' : ''}`}>
+      <BackgroundMusic isMuted={isMuted} />
+
+      {/* Unified Background System */}
+      <div className="fixed inset-0 overflow-hidden -z-10">
+        {activeView === 'landing' || activeView === 'journal' ? (
           <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
+            autoPlay loop muted playsInline preload="metadata"
             className="absolute w-full h-full object-cover"
-            style={{ filter: 'brightness(0.7)' }}
+            style={{ filter: activeView === 'landing' ? 'brightness(0.7)' : 'brightness(0.5)' }}
           >
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40"></div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="relative z-10 flex justify-between items-center px-6 md:px-12 py-6">
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold text-white tracking-[0.5em] uppercase" style={{ fontFamily: 'var(--font-heading)' }}>
-              ZenGuard
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-sm bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-            <div className={`w-2 h-2 rounded-full ${apiConnected ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-yellow-400'}`}></div>
-            <span className="text-white/90 font-medium">{apiConnected ? 'AI Ready' : 'Connecting...'}</span>
-          </div>
-        </nav>
-
-        {/* Hero Section */}
-        <main className="relative z-10 flex flex-col items-center justify-center px-6 pt-12 pb-20 md:pt-20">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="mb-8 flex justify-center animate-fade-scale">
-              <Image 
-                src="/logo.png" 
-                alt="ZenGuard Logo" 
-                width={256}
-                height={256}
-                className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl animate-gentle-float"
-                priority
-              />
-            </div>
-
-            <h1 
-              className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] drop-shadow-xl tracking-tight animate-fade-up stagger-2" 
-              style={{ fontFamily: 'var(--font-heading)' }}
-            >
-              A quiet space for <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-200 to-blue-300 animate-gradient-x">
-                your thoughts
-              </span>
-            </h1>
-
-            <p className="text-lg md:text-xl text-zinc-100 mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-md font-light animate-fade-up stagger-3">
-              Express how you&apos;re feeling. Get gentle insights. 
-              <span className="block mt-2 text-zinc-300 font-medium">Everything stays with you — nothing is stored.</span>
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-up stagger-4">
-              <button
-                onClick={() => setActiveView('journal')}
-                className="group px-8 py-4 bg-white text-gray-900 rounded-2xl font-semibold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
-              >
-                <span>Start Journaling</span>
-                <PenLine className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <button
-                onClick={() => setActiveView('chat')}
-                className="px-8 py-4 bg-white/10 backdrop-blur-md text-white rounded-2xl font-semibold text-lg border border-white/20 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
-              >
-                <span>Talk to AI Friend</span>
-                <MessageCircle className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          <FeatureShowcase />
-
-          {/* Trust Indicators */}
-          <div className="mt-20 flex flex-wrap justify-center gap-8 md:gap-12 animate-fade-up stagger-8">
-            <div className="flex flex-col items-center gap-3 group">
-              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                <WifiOff className="w-6 h-6 text-green-400" />
-              </div>
-              <span className="text-zinc-300 font-mono text-xs tracking-wide">Fully Offline</span>
-            </div>
-            
-            <div className="flex flex-col items-center gap-3 group">
-              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                <Cpu className="w-6 h-6 text-blue-400" />
-              </div>
-              <span className="text-zinc-300 font-mono text-xs tracking-wide">Local Processing</span>
-            </div>
-
-            <div className="flex flex-col items-center gap-3 group">
-              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                <UserX className="w-6 h-6 text-purple-400" />
-              </div>
-              <span className="text-zinc-300 font-mono text-xs tracking-wide">No Account Needed</span>
-            </div>
-
-            <div className="flex flex-col items-center gap-3 group">
-              <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                <Code className="w-6 h-6 text-yellow-400" />
-              </div>
-              <span className="text-zinc-300 font-mono text-xs tracking-wide">Open Source</span>
-            </div>
-          </div>
-        </main>
-
-        <footer className="relative z-10 text-center py-8 text-sm text-gray-400">
-          <p>Built for mental wellness. Your peace of mind matters.</p>
-        </footer>
-      </div>
-    );
-  }
-
-  // ===== CHAT VIEW =====
-  if (activeView === 'chat') {
-    return (
-      <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-8 dark">
-        <BackgroundMusic />
-        <div className="fixed inset-0 overflow-hidden -z-10">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="absolute w-full h-full object-cover"
-            style={{ filter: 'brightness(0.6)' }}
-          >
-            <source src="/chat-bg.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
-        </div>
-
-        <div className="w-full max-w-2xl z-10">
-          <ChatInterface onBack={() => setActiveView('landing')} />
-        </div>
-      </div>
-    );
-  }
-
-  // New Entry Flow (full screen)
-  if (isCreatingEntry) {
-    return (
-      <div className="dark min-h-screen relative flex items-start justify-center p-4 py-8">
-        {/* Background Video (Consitent with Homepage) */}
-        <div className="fixed inset-0 overflow-hidden">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            className="absolute w-full h-full object-cover"
-            style={{ filter: 'brightness(0.6)' }}
-          >
-            <source src="/chat-bg.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
-        </div>
-
-        <div className="relative z-10 w-full max-w-4xl">
-          <button
-            onClick={() => { setIsCreatingEntry(false); setActiveView('landing'); }}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8"
-          >
-            <span>←</span>
-            <span>Home</span>
-          </button>
-          <NewEntryFlow onSave={handleSaveEntry} onCancel={() => setIsCreatingEntry(false)} />
-        </div>
-        <Toaster />
-      </div>
-    );
-  }
-
-  // Journal Dashboard View
-  return (
-    <div className="dark min-h-screen relative">
-      {/* Background Video (Consitent with Homepage) */}
-      <div className="fixed inset-0 overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          className="absolute w-full h-full object-cover"
-          style={{ filter: 'brightness(0.5)' }}
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-[1px]"></div>
-      </div>
-
-      <header className="relative z-10 border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 shadow-2xl">
-        <div className="container max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setActiveView('landing')}
-                className="flex items-center gap-2 text-white/50 hover:text-white transition-colors"
-              >
-                <span>←</span>
-              </button>
-              <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 shadow-xl">
-                <Shield className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">ZenGuard</h1>
-                <p className="text-xs text-white/40">Your Reflective Space</p>
-              </div>
-            </div>
-            <Button onClick={() => setIsCreatingEntry(true)} size="lg" className="gap-2 bg-white text-black hover:bg-white/90 border-0 shadow-xl">
-              <Plus className="h-5 w-5" />
-              New Entry
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="relative z-10 container max-w-7xl mx-auto px-4 py-8 text-white">
-        {entries.length === 0 ? (
-          <div className="max-w-3xl mx-auto text-center space-y-8 py-20">
-            <div className="w-24 h-24 bg-white/5 border border-white/10 rounded-full mx-auto flex items-center justify-center backdrop-blur-md shadow-2xl">
-              <BookOpen className="h-12 w-12 text-white/60" />
-            </div>
-            <h2 className="text-4xl font-bold">Welcome to ZenGuard</h2>
-            <p className="text-xl text-white/50">A mental wellness app with 10 scientifically-proven features for better emotional health.</p>
-            <Button onClick={() => setIsCreatingEntry(true)} size="lg" className="gap-2 px-8 bg-white text-black hover:bg-white/90 border-0 shadow-2xl">
-              <Plus className="h-5 w-5" />
-              Start Your First Entry
-            </Button>
-          </div>
         ) : (
-          <div className="space-y-12">
-            <StreakTracker streak={streak} />
-            <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="w-full">
-              <TabsList className="bg-white/5 border border-white/10 p-1 mb-8">
-                <TabsTrigger value="timeline" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white">
-                  <BookOpen className="h-4 w-4 mr-2" />
-                  Timeline
-                </TabsTrigger>
-                <TabsTrigger value="calendar" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Calendar
-                </TabsTrigger>
-                <TabsTrigger value="insights" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white">
-                  <Lightbulb className="h-4 w-4 mr-2" />
-                  Insights
-                </TabsTrigger>
-                <TabsTrigger value="stats" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white">
-                  <Flame className="h-4 w-4 mr-2" />
-                  Stats
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="timeline" className="mt-0 focus-visible:outline-none">
-                <TimelineView entries={entries} />
-              </TabsContent>
-
-              <TabsContent value="insights" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-                <div className="space-y-8">
-                  <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
-                    <h2 className="text-2xl font-bold mb-6">10 Science-Backed Features</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <ul className="space-y-3 text-sm text-white/70">
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-purple-400"></div> Mood Predictor - 70% accuracy</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-blue-400"></div> Weekly Heatmap - 40% awareness boost</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-pink-400"></div> Positive Memory Bank - 3x happiness</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-yellow-400"></div> Social Connection Tracker</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400"></div> Sleep Correlation - 60% impact</li>
-                      </ul>
-                      <ul className="space-y-3 text-sm text-white/70">
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-green-400"></div> CBT Reframing - 50-60% reduction</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-orange-400"></div> Three Good Things - 2-10% happiness</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400"></div> Worry Dump - 50% thought reduction</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-teal-400"></div> Future Self Letters - 30% goal boost</li>
-                        <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-lime-400"></div> Timed Free-Write - 40% focus boost</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <InsightsDashboard insights={insights} />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="stats" className="mt-0 focus-visible:outline-none">
-                <div className="space-y-6">
-                  <h2 className="text-2xl font-semibold">Your Statistics</h2>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
-                      <p className="text-sm text-white/40 mb-1">Total Entries</p>
-                      <p className="text-5xl font-bold text-white">{entries.length}</p>
-                    </div>
-                    <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
-                      <p className="text-sm text-white/40 mb-1">Average Mood</p>
-                      <p className="text-5xl font-bold text-white">
-                        {entries.length > 0 ? (entries.reduce((sum, e) => sum + e.pulse.mood, 0) / entries.length).toFixed(1) : '0'}<span className="text-xl text-white/30 ml-1">/10</span>
-                      </p>
-                    </div>
-                    <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
-                      <p className="text-sm text-white/40 mb-1">Total Words</p>
-                      <p className="text-5xl font-bold text-white">
-                        {entries.reduce((sum, e) => sum + (e.content?.split(/\s+/).filter(Boolean).length || 0), 0).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Mood Trend Chart */}
-                  <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
-                    <h3 className="text-xl font-bold mb-6">Mood Trend (14 days)</h3>
-                    <MoodChart entries={entries} days={14} />
-                  </div>
-
-                  {/* Year in Pixels */}
-                  <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
-                    <h3 className="text-xl font-bold mb-6">Last 90 Days</h3>
-                    <YearInPixels entries={entries} />
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="calendar" className="mt-0 focus-visible:outline-none">
-                <JournalCalendar entries={entries} />
-              </TabsContent>
-            </Tabs>
-          </div>
+          <video
+            autoPlay loop muted playsInline preload="metadata"
+            className="absolute w-full h-full object-cover"
+            style={{ filter: activeView === 'help' ? 'brightness(0.2)' : activeView === 'knowledge' ? 'brightness(0.4)' : 'brightness(0.6)' }}
+          >
+            <source src="/chat-bg.mp4" type="video/mp4" />
+          </video>
         )}
-      </main>
+        <div className={`absolute inset-0 ${
+          activeView === 'help' ? 'bg-black/80 backdrop-blur-[6px]' :
+          activeView === 'knowledge' ? 'bg-black/60 backdrop-blur-[4px]' :
+          activeView === 'chat' || isCreatingEntry ? 'bg-black/40 backdrop-blur-[2px]' :
+          activeView === 'landing' ? 'bg-gradient-to-b from-black/30 via-black/20 to-black/40' :
+          'bg-black/50 backdrop-blur-[1px]'
+        }`}></div>
+      </div>
+
+      {/* View Content Hub */}
+      {activeView === 'landing' && (
+        <div className="min-h-screen relative flex flex-col">
+          <nav className="relative z-10 flex justify-between items-center px-6 md:px-12 py-6">
+            <div className="flex items-center gap-2">
+              <span className="text-xl font-bold text-white tracking-[0.5em] uppercase" style={{ fontFamily: 'var(--font-heading)' }}>
+                ZenGuard
+              </span>
+            </div>
+            <div className="flex items-center gap-4">
+              {/* Sound Toggle */}
+              <button 
+                onClick={() => setIsMuted(!isMuted)}
+                className="flex items-center justify-center w-10 h-10 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all text-white/60 hover:text-white"
+                title={isMuted ? "Unmute" : "Mute"}
+              >
+                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 animate-pulse" />}
+              </button>
+
+              {/* Language Switcher */}
+              <div className="relative group/lang z-50">
+                <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all h-10">
+                  <Languages className="w-4 h-4 text-purple-400" />
+                  <span className="text-xs font-bold text-white uppercase tracking-wider">{globalLanguage}</span>
+                </button>
+                <div className="absolute right-0 top-full mt-2 w-40 bg-black/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all overflow-hidden flex flex-col py-1">
+                  {['English', 'Hindi', 'Assamese', 'Bengali', 'Spanish', 'French', 'German'].map(lang => (
+                    <button 
+                      key={lang}
+                      onClick={() => setGlobalLanguage(lang)}
+                      className={`px-4 py-2 text-left text-xs hover:bg-white/10 transition-colors ${globalLanguage === lang ? 'text-purple-400 font-bold' : 'text-zinc-400'}`}
+                    >
+                      {lang}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* AI Status Indicator */}
+              <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-black bg-white/5 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10 h-10">
+                <div className={`w-2 h-2 rounded-full ${apiConnected ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]' : 'bg-rose-400'}`}></div>
+                <span className="text-white/60 font-black">{apiConnected ? 'AI READY' : 'OFFLINE'}</span>
+              </div>
+            </div>
+          </nav>
+
+          <main className="relative z-10 flex flex-col items-center justify-center px-6 pt-12 pb-20 md:pt-20 flex-1">
+            <div className="text-center max-w-6xl mx-auto">
+              <div className="mb-8 flex justify-center animate-fade-scale">
+                <Image src="/logo.png" alt="ZenGuard Logo" width={256} height={256} className="w-48 h-48 md:w-64 md:h-64 object-contain drop-shadow-2xl animate-gentle-float" priority />
+              </div>
+              <div className="max-w-3xl mx-auto">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-[1.1] drop-shadow-xl tracking-tight animate-fade-up stagger-2" style={{ fontFamily: 'var(--font-heading)' }}>
+                  A quiet space for <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-200 to-blue-300 animate-gradient-x">your thoughts</span>
+                </h1>
+                <p className="text-lg md:text-xl text-zinc-100 mb-12 max-w-xl mx-auto leading-relaxed drop-shadow-md font-light animate-fade-up stagger-3">
+                  Express how you&apos;re feeling. Get gentle insights. 
+                  <span className="block mt-2 text-zinc-300 font-medium">Everything stays with you — nothing is stored.</span>
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full mt-16 animate-fade-up stagger-4 max-w-5xl mx-auto">
+                {[
+                  { label: "Start\nJournaling", view: 'journal', icon: PenLine, color: 'white' },
+                  { label: "Talk to\nAI Friend", view: 'chat', icon: MessageCircle, color: 'purple' },
+                  { label: "MindSpace\nLibrary", view: 'knowledge', icon: GraduationCap, color: 'blue' },
+                  { label: "Professional\nHelp Hub", view: 'help', icon: LifeBuoy, color: 'red' }
+                ].map((btn, i) => (
+                  <button key={i} onClick={() => setActiveView(btn.view as any)} className={`glass-pill-button group p-6 flex flex-col items-center justify-center gap-3 min-h-[140px] text-center`}>
+                    <div className={`p-3 rounded-full bg-white/5 border border-white/10 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+                      <btn.icon className={`w-6 h-6 ${btn.color === 'purple' ? 'text-purple-400' : btn.color === 'blue' ? 'text-blue-400' : btn.color === 'red' ? 'text-red-400' : 'text-white'}`} />
+                    </div>
+                    <span className="text-white font-bold leading-tight whitespace-pre-line text-base drop-shadow-sm">{btn.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <FeatureShowcase />
+            <WellnessPillars onNavigate={(view) => setActiveView(view)} />
+            <MethodologySection onNavigate={(view) => setActiveView(view)} />
+            <TechnicalPrivacySection />
+            <SafetySection onNavigate={(view) => setActiveView(view)} />
+            <div className="mt-20 flex flex-wrap justify-center gap-8 md:gap-12 animate-fade-up stagger-8 pb-20">
+              {[
+                { icon: WifiOff, label: "Fully Offline", color: "text-green-400" },
+                { icon: Cpu, label: "Local Processing", color: "text-blue-400" },
+                { icon: UserX, label: "No Account Needed", color: "text-purple-400" },
+                { icon: Code, label: "Open Source", color: "text-yellow-400", action: () => window.open('https://github.com/useriswild7099/zenguard-mental-health', '_blank') }
+              ].map((item, i) => (
+                <div 
+                  key={i} 
+                  className={`flex flex-col items-center gap-3 group ${item.action ? 'cursor-pointer' : ''}`}
+                  onClick={item.action}
+                >
+                  <div className="w-12 h-12 glass-card flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                    <item.icon className={`w-6 h-6 ${item.color}`} />
+                  </div>
+                  <span className="text-zinc-300 font-mono text-xs tracking-wide">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </main>
+          <footer className="relative z-10 text-center py-8 text-sm text-gray-400">
+            <p>Built for mental wellness. Your peace of mind matters.</p>
+          </footer>
+        </div>
+      )}
+
+      {activeView === 'chat' && (
+        <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-8">
+          <div className="w-full max-w-2xl z-10">
+            <ChatInterface onBack={() => setActiveView('landing')} />
+          </div>
+        </div>
+      )}
+
+      {activeView === 'knowledge' && (
+        <div className="min-h-screen relative flex flex-col items-center p-4 md:p-12 overflow-x-hidden">
+          <KnowledgeHub 
+            onBack={() => { setActiveView('landing'); setRoutedArticle(null); }} 
+            onNavigateToHelp={() => { setActiveView('help'); setRoutedArticle(null); }}
+            initialArticle={routedArticle}
+            sessionLanguage={globalLanguage}
+          />
+        </div>
+      )}
+
+      {activeView === 'help' && (
+        <div className="min-h-screen relative flex flex-col items-center p-4 md:p-12 overflow-x-hidden">
+          <HelpHub onBack={() => setActiveView('landing')} />
+        </div>
+      )}
+
+      {isCreatingEntry && (
+        <div className="min-h-screen relative flex items-start justify-center p-4 py-8">
+          <div className="relative z-10 w-full max-w-4xl">
+            <button
+              onClick={() => { setIsCreatingEntry(false); setActiveView('landing'); }}
+              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-8"
+            >
+              <span>←</span><span>Home</span>
+            </button>
+            <NewEntryFlow onSave={handleSaveEntry} onCancel={() => setIsCreatingEntry(false)} />
+          </div>
+        </div>
+      )}
+
+      {activeView === 'doodle' && !isCreatingEntry && (
+        <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-12 overflow-x-hidden">
+          <MoodDoodle sessionId="session_123" onBack={() => setActiveView('landing')} />
+        </div>
+      )}
+
+      {activeView === 'breathing' && !isCreatingEntry && (
+        <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-12 overflow-x-hidden">
+          <BreathingExercise onBack={() => setActiveView('landing')} />
+        </div>
+      )}
+
+      {activeView === 'grounding' && !isCreatingEntry && (
+        <div className="min-h-screen relative flex flex-col items-center justify-center p-4 md:p-12 overflow-x-hidden">
+          <GroundingExercise onBack={() => setActiveView('landing')} />
+        </div>
+      )}
+
+      {activeView === 'journal' && !isCreatingEntry && (
+        <div className="min-h-screen flex flex-col">
+          <header className="relative z-10 border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 shadow-2xl">
+            <div className="container max-w-7xl mx-auto px-4 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <button onClick={() => setActiveView('landing')} className="flex items-center gap-2 text-white/50 hover:text-white transition-colors"><span>←</span></button>
+                  <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 shadow-xl"><Shield className="h-6 w-6 text-white" /></div>
+                  <div><h1 className="text-2xl font-bold text-white">ZenGuard</h1><p className="text-xs text-white/40">Your Reflective Space</p></div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <Button variant="ghost" onClick={() => setActiveView('knowledge')} className="text-white/60 hover:text-white hover:bg-white/5 gap-2 hidden md:flex"><GraduationCap className="h-5 w-5" />Library</Button>
+                  <Button variant="ghost" onClick={() => setActiveView('help')} className="text-red-400/60 hover:text-red-400 hover:bg-red-400/5 gap-2 hidden md:flex"><LifeBuoy className="h-5 w-5" />Help</Button>
+                  <Button onClick={() => setIsCreatingEntry(true)} size="lg" className="gap-2 bg-white text-black hover:bg-white/90 border-0 shadow-xl"><Plus className="h-5 w-5" />New Entry</Button>
+                </div>
+              </div>
+            </div>
+          </header>
+          <main className="relative z-10 container max-w-7xl mx-auto px-4 py-8 text-white flex-1">
+            {entries.length === 0 ? (
+              <div className="max-w-3xl mx-auto text-center space-y-8 py-20">
+                <div className="w-24 h-24 bg-white/5 border border-white/10 rounded-full mx-auto flex items-center justify-center backdrop-blur-md shadow-2xl"><BookOpen className="h-12 w-12 text-white/60" /></div>
+                <h2 className="text-4xl font-bold">Welcome to ZenGuard</h2>
+                <p className="text-xl text-white/50">A mental wellness app with 10 scientifically-proven features for better emotional health.</p>
+                <Button onClick={() => setIsCreatingEntry(true)} size="lg" className="gap-2 px-8 bg-white text-black hover:bg-white/90 border-0 shadow-2xl"><Plus className="h-5 w-5" />Start Your First Entry</Button>
+              </div>
+            ) : (
+              <div className="space-y-12">
+                <StreakTracker streak={streak} />
+                <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)} className="w-full">
+                  <TabsList className="bg-white/5 border border-white/10 p-1 mb-8">
+                    <TabsTrigger value="timeline" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white"><BookOpen className="h-4 w-4 mr-2" />Timeline</TabsTrigger>
+                    <TabsTrigger value="calendar" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white"><Calendar className="h-4 w-4 mr-2" />Calendar</TabsTrigger>
+                    <TabsTrigger value="insights" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white"><Lightbulb className="h-4 w-4 mr-2" />Insights</TabsTrigger>
+                    <TabsTrigger value="stats" className="data-[state=active]:bg-white/10 text-white/60 data-[state=active]:text-white"><Flame className="h-4 w-4 mr-2" />Stats</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="timeline" className="mt-0 focus-visible:outline-none"><TimelineView entries={entries} /></TabsContent>
+                  <TabsContent value="insights" className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                    <div className="space-y-8">
+                      <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl">
+                        <h2 className="text-2xl font-bold mb-6">10 Science-Backed Features</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <ul className="space-y-3 text-sm text-white/70">
+                            {["Mood Predictor - 70% accuracy", "Weekly Heatmap - 40% awareness boost", "Positive Memory Bank - 3x happiness", "Social Connection Tracker", "Sleep Correlation - 60% impact"].map((f, i) => (
+                              <li key={i} className="flex items-center gap-2"><div className={`w-1.5 h-1.5 rounded-full ${['bg-purple-400', 'bg-blue-400', 'bg-pink-400', 'bg-yellow-400', 'bg-indigo-400'][i]}`}></div> {f}</li>
+                            ))}
+                          </ul>
+                          <ul className="space-y-3 text-sm text-white/70">
+                            {["CBT Reframing - 50-60% reduction", "Three Good Things - 2-10% happiness", "Worry Dump - 50% thought reduction", "Future Self Letters - 30% goal boost", "Timed Free-Write - 40% focus boost"].map((f, i) => (
+                              <li key={i} className="flex items-center gap-2"><div className={`w-1.5 h-1.5 rounded-full ${['bg-green-400', 'bg-orange-400', 'bg-red-400', 'bg-teal-400', 'bg-lime-400'][i]}`}></div> {f}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                      <InsightsDashboard insights={insights} />
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="stats" className="mt-0 focus-visible:outline-none">
+                    <div className="space-y-6">
+                      <h2 className="text-2xl font-semibold">Your Statistics</h2>
+                      <div className="grid md:grid-cols-3 gap-6">
+                        <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl"><p className="text-sm text-white/40 mb-1">Total Entries</p><p className="text-5xl font-bold text-white">{entries.length}</p></div>
+                        <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl"><p className="text-sm text-white/40 mb-1">Average Mood</p><p className="text-5xl font-bold text-white">{entries.length > 0 ? (entries.reduce((sum, e) => sum + e.pulse.mood, 0) / entries.length).toFixed(1) : '0'}<span className="text-xl text-white/30 ml-1">/10</span></p></div>
+                        <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl"><p className="text-sm text-white/40 mb-1">Total Words</p><p className="text-5xl font-bold text-white">{entries.reduce((sum, e) => sum + (e.content?.split(/\s+/).filter(Boolean).length || 0), 0).toLocaleString()}</p></div>
+                      </div>
+                      <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl"><h3 className="text-xl font-bold mb-6">Mood Trend (14 days)</h3><MoodChart entries={entries} days={14} /></div>
+                      <div className="p-8 bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl"><h3 className="text-xl font-bold mb-6">Last 90 Days</h3><YearInPixels entries={entries} /></div>
+                    </div>
+                  </TabsContent>
+                  <TabsContent value="calendar" className="mt-0 focus-visible:outline-none"><JournalCalendar entries={entries} /></TabsContent>
+                </Tabs>
+              </div>
+            )}
+          </main>
+        </div>
+      )}
+
+      {/* Global Systems */}
       <Toaster />
+      <SiaAssistant 
+        activeView={activeView}
+        onNavigate={(view) => setActiveView(view)}
+        onNavigateTab={(tab) => {
+          setActiveView('journal');
+          setActiveTab(tab as any);
+        }}
+        onOpenArticle={(article) => {
+          setRoutedArticle(article);
+          setActiveView('knowledge');
+        }}
+        language={globalLanguage}
+      />
     </div>
   );
 }

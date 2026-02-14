@@ -105,7 +105,7 @@ export default function FeatureShowcase() {
       {activeTab === 'release' && (
         <div className="animate-fade-in glass-card p-8 md:p-12 max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1 relative h-80 bg-black/40 rounded-2xl border border-white/10 overflow-hidden group flex items-center justify-center">
+            <div className="order-2 md:order-1 relative h-80 glass-card overflow-hidden group flex items-center justify-center">
                {/* Visual representation of release loops */}
                <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black"></div>
                <div className="grid grid-cols-2 gap-4 p-4 opacity-50 group-hover:opacity-100 transition-opacity duration-700">
@@ -190,7 +190,7 @@ export default function FeatureShowcase() {
             </div>
             
             {/* Visual Abstract Representation */}
-            <div className="relative h-64 bg-black/40 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden group">
+            <div className="relative h-64 glass-card flex items-center justify-center overflow-hidden group">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-blue-500/10"></div>
               <div className="relative z-10 text-center">
                 <div className="w-24 h-24 mx-auto bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(74,222,128,0.3)] group-hover:scale-110 transition-transform duration-500">

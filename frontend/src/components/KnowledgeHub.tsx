@@ -1,0 +1,480 @@
+'use client';
+
+import { useState, useMemo, useEffect } from 'react';
+import { KNOWLEDGE_ARTICLES, KnowledgeArticle, KnowledgeCategory } from '@/lib/knowledge';
+import { 
+  Search, BookOpen, Brain, 
+  ArrowLeft, Clock, LayoutGrid, 
+  ChevronRight, Filter, AlertTriangle,
+  Zap, Compass, Info, LifeBuoy, Languages, Loader2
+} from 'lucide-react';
+import { Button } from './ui/button';
+
+interface KnowledgeHubProps {
+  onBack: () => void;
+  onNavigateToHelp?: () => void;
+  initialArticle?: KnowledgeArticle | null;
+  sessionLanguage?: string;
+}
+
+export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle, sessionLanguage = 'English' }: KnowledgeHubProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<KnowledgeCategory | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<KnowledgeArticle | null>(null);
+  const [showNavigator, setShowNavigator] = useState(false);
+  const [targetLanguage, setTargetLanguage] = useState(sessionLanguage);
+
+  // Sync with session language
+  useEffect(() => {
+    if (sessionLanguage && sessionLanguage !== targetLanguage) {
+      setTargetLanguage(sessionLanguage);
+      if (selectedArticle) {
+        handleTranslate(sessionLanguage);
+      }
+    }
+  }, [sessionLanguage]);
+  const [translatedContent, setTranslatedContent] = useState<string | null>(null);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translationCache, setTranslationCache] = useState<Record<string, Record<string, string>>>({});
+
+  // Handle initial article routing
+  useMemo(() => {
+    if (initialArticle) {
+      setSelectedArticle(initialArticle);
+      setTranslatedContent(null);
+    }
+  }, [initialArticle]);
+
+  const handleTranslate = async (lang: string) => {
+    if (!selectedArticle || lang === 'English') {
+      setTargetLanguage('English');
+      setTranslatedContent(null);
+      return;
+    }
+
+    setTargetLanguage(lang);
+
+    // Check cache
+    if (translationCache[selectedArticle.id]?.[lang]) {
+      setTranslatedContent(translationCache[selectedArticle.id][lang]);
+      return;
+    }
+
+    setIsTranslating(true);
+    try {
+      const response = await fetch('http://localhost:8000/api/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: selectedArticle.content,
+          target_language: lang
+        })
+      });
+      const data = await response.json();
+      if (data.translated_text) {
+        setTranslatedContent(data.translated_text);
+        // Update cache
+        setTranslationCache(prev => ({
+          ...prev,
+          [selectedArticle.id]: {
+            ...(prev[selectedArticle.id] || {}),
+            [lang]: data.translated_text
+          }
+        }));
+      }
+    } catch (error) {
+      console.error('Translation failed:', error);
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  const languages = [
+    'English', 'Hindi', 'Assamese', 'Bengali', 'Marathi', 'Tamil', 'Telugu', 
+    'Spanish', 'French', 'German', 'Japanese', 'Arabic', 'Russian'
+  ];
+
+  // Group articles by primary intent
+  const crisisArticles = useMemo(() => KNOWLEDGE_ARTICLES.filter(a => a.isCrisis), []);
+  const capsules = useMemo(() => KNOWLEDGE_ARTICLES.filter(a => a.category === 'Micro-Learning'), []);
+  const mainCategories: KnowledgeCategory[] = [
+    'Foundation', 'Daily Practices', 'Regulation', 
+    'Recognition', 'Condition Base', 'Life Problems'
+  ];
+
+  const filteredArticles = useMemo(() => {
+    return KNOWLEDGE_ARTICLES.filter(article => {
+      if (article.isCrisis || article.category === 'Micro-Learning') return false;
+      const matchesSearch = article.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                           article.summary.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory ? article.category === selectedCategory : true;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchQuery, selectedCategory]);
+
+  if (selectedArticle) {
+    return (
+      <div className="w-full max-w-4xl mx-auto animate-fade-in">
+        <div className="glass-card overflow-hidden">
+          {/* Article Header */}
+          <div className={`relative h-48 md:h-64 flex items-end p-6 md:p-10 ${selectedArticle.isCrisis ? 'bg-red-900/40' : 'bg-gradient-to-t from-black/80 to-transparent'}`}>
+            <div className={`absolute inset-0 ${selectedArticle.isCrisis ? 'bg-red-600/10' : 'bg-purple-600/20'} mix-blend-overlay`}></div>
+            <div className="relative z-10 w-full">
+              <button 
+                onClick={() => setSelectedArticle(null)}
+                className="flex items-center gap-2 text-white/70 hover:text-white mb-4 transition-colors group"
+              >
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                <span>Back to Library</span>
+              </button>
+              <div className="flex items-center gap-3 mb-3">
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold border border-white/10 uppercase tracking-wider ${
+                  selectedArticle.isCrisis ? 'bg-red-500 text-white' : 'bg-white/10 text-purple-200'
+                }`}>
+                  {selectedArticle.category}
+                </span>
+                <div className="flex items-center gap-1.5 text-xs text-white/50">
+                  <Clock className="w-3 h-3" />
+                  <span>{selectedArticle.readTime} read</span>
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                  {selectedArticle.title}
+                </h1>
+                
+                {/* Language Selector */}
+                <div className="relative group/lang">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl cursor-pointer transition-all">
+                    {isTranslating ? (
+                      <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
+                    ) : (
+                      <Languages className="w-4 h-4 text-purple-400" />
+                    )}
+                    <span className="text-sm font-medium text-white">{targetLanguage}</span>
+                  </div>
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-black/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all z-50 overflow-hidden">
+                    <div className="max-h-64 overflow-y-auto no-scrollbar py-2">
+                      {languages.map(lang => (
+                        <button
+                          key={lang}
+                          onClick={() => handleTranslate(lang)}
+                          className={`w-full text-left px-4 py-2.5 text-sm hover:bg-purple-500/20 transition-colors ${
+                            targetLanguage === lang ? 'text-purple-400 font-bold' : 'text-zinc-400'
+                          }`}
+                        >
+                          {lang}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Article Content */}
+          <div className="p-6 md:p-12 bg-white/5 backdrop-blur-2xl">
+            <div className="prose prose-invert max-w-none">
+              <div className="text-zinc-200 leading-relaxed space-y-6 text-lg">
+                {(translatedContent || selectedArticle.content).split('\n\n').map((paragraph, i) => {
+                  const p = paragraph.trim();
+                  if (p.startsWith('###')) {
+                    return (
+                      <h3 key={i} className={`text-2xl font-bold text-white mt-8 mb-4 border-l-4 pl-4 ${
+                        selectedArticle.isCrisis ? 'border-red-500' : 'border-purple-500'
+                      }`}>
+                        {p.replace(/###/g, '').trim()}
+                      </h3>
+                    );
+                  }
+                  if (p.startsWith('**Fact**:') || p.startsWith('**Breathe**:')) {
+                    return (
+                      <div key={i} className="bg-white/5 p-4 rounded-xl border border-white/10 my-4">
+                        <p className="opacity-100 font-medium">{p}</p>
+                      </div>
+                    );
+                  }
+                  return (
+                    <p key={i} className="opacity-90">
+                      {p.split('\n').map((line, j) => {
+                        const trimmedLine = line.trim();
+                        if (trimmedLine.startsWith('-') || /^\d+\./.test(trimmedLine)) {
+                          return (
+                            <span key={j} className="block pl-4 py-1 flex items-start gap-3">
+                              <span className={`${selectedArticle.isCrisis ? 'text-red-400' : 'text-purple-400'} mt-1`}>•</span>
+                              <span>{trimmedLine.replace(/^[-*]|\d+\.\s+/, '').trim()}</span>
+                            </span>
+                          );
+                        }
+                        return <span key={j}>{line}<br /></span>;
+                      })}
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Contextual Support Action */}
+            {selectedArticle.supportLink && (
+              <div className="mx-6 md:mx-12 mb-12 p-8 bg-gradient-to-br from-red-900/20 to-blue-900/20 rounded-[32px] border border-white/10 shadow-2xl relative overflow-hidden group animate-fade-up">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+                  <div className="space-y-3 text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-2 text-red-400">
+                      <LifeBuoy className="w-5 h-5 animate-pulse" />
+                      <span className="text-xs font-bold uppercase tracking-widest">Immediate Support Available</span>
+                    </div>
+                    <h4 className="text-2xl font-bold text-white">Need deeper, professional support?</h4>
+                    <p className="text-zinc-400 max-w-md">
+                      If this information feels overwhelming or you need a real human to talk to, our Professional Help Hub connects you to 24/7 counsellors and specialists.
+                    </p>
+                  </div>
+                  <Button 
+                    onClick={() => onNavigateToHelp?.()}
+                    size="lg" 
+                    className="bg-white text-black hover:bg-white/90 px-8 h-14 rounded-2xl font-bold shadow-xl shadow-white/5 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
+                  >
+                    Connect to Support
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <div className="px-6 md:px-12 pb-12">
+              <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+                <Button 
+                  onClick={() => setSelectedArticle(null)}
+                  variant="outline"
+                  className="w-full md:w-auto border-white/10 hover:bg-white/10 text-white gap-2"
+                >
+                  Finished Reading
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-7xl mx-auto space-y-12 animate-fade-in pb-20">
+      {/* Header & Dashboard-like Top Bar */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 text-purple-400 mb-2">
+            <Compass className="w-5 h-5 animate-spin-slow" />
+            <span className="text-xs font-bold uppercase tracking-[0.3em]">Wellness Navigator</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+            MindSpace Library
+          </h2>
+          <p className="text-zinc-400 text-lg max-w-2xl">
+            A comprehensive, scientifically-backed knowledge system for student mental health and resilience.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <Button onClick={onBack} variant="outline" className="border-white/10 hover:bg-white/10 text-white gap-2 h-12">
+            <ArrowLeft className="w-4 h-4" />
+            Hub
+          </Button>
+        </div>
+      </div>
+
+      {/* EMERGENCY SECTION */}
+      {crisisArticles.length > 0 && !selectedCategory && !searchQuery && (
+        <div className="animate-fade-up">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30">
+              <AlertTriangle className="w-4 h-4 text-red-500" />
+            </div>
+            <h3 className="text-xl font-bold text-white">Immediate Support</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {crisisArticles.map(article => {
+              const Icon = article.icon;
+              return (
+                <div 
+                  key={article.id}
+                  onClick={() => setSelectedArticle(article)}
+                  className="bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 p-6 rounded-3xl cursor-pointer transition-all flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-red-500 rounded-2xl flex items-center justify-center shadow-lg shadow-red-500/40">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                    <h4 className="font-bold text-white text-lg">{article.title}</h4>
+                    <p className="text-red-200/60 text-sm">{article.summary}</p>
+                  </div>
+                </div>
+                <ChevronRight className="w-6 h-6 text-red-500 group-hover:translate-x-1 transition-transform" />
+              </div>
+            );
+          })}
+          </div>
+        </div>
+      )}
+
+      {/* DISCOVERY & FILTERS */}
+      <div className="space-y-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="relative flex-1 group">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-purple-400 transition-colors" />
+            <input
+              type="text"
+              placeholder="Search concepts, tools, or feelings..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-4 text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30 transition-all text-lg"
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap border ${
+              selectedCategory === null 
+                ? 'bg-purple-600 border-purple-400 text-white shadow-xl shadow-purple-500/30' 
+                : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            All Insights
+          </button>
+          {mainCategories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap border ${
+                selectedCategory === cat 
+                  ? 'bg-purple-600 border-purple-400 text-white shadow-xl shadow-purple-500/30' 
+                  : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ARTICLE GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {filteredArticles.length > 0 ? (
+          filteredArticles.map(article => {
+            const Icon = article.icon;
+            return (
+              <div 
+                key={article.id}
+                onClick={() => setSelectedArticle(article)}
+                className="group glass-card p-8 cursor-pointer hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col"
+              >
+                <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-30 transition-all -rotate-12 group-hover:rotate-0">
+                  <Icon className="w-16 h-16 text-white" />
+                </div>
+                <div className="flex items-center gap-3 mb-6 relative z-10">
+                <span className="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-lg text-[10px] uppercase font-bold tracking-widest border border-purple-500/30">
+                  {article.category}
+                </span>
+                <span className="text-zinc-500 text-[10px] uppercase tracking-widest flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" /> {article.readTime}
+                </span>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors relative z-10 leading-snug">
+                {article.title}
+              </h3>
+              <p className="text-base text-zinc-400 line-clamp-3 leading-relaxed mb-8 flex-1 relative z-10 font-light">
+                {article.summary}
+              </p>
+              <div className="flex items-center justify-between text-purple-400 text-sm font-bold mt-auto relative z-10">
+                <div className="flex items-center gap-2">
+                   <span>Explore</span>
+                   <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+                {article.subcategory && (
+                  <span className="text-zinc-500 font-normal italic text-xs">{article.subcategory}</span>
+                )}
+              </div>
+            </div>
+          );
+        })
+        ) : (
+          <div className="col-span-full py-24 text-center">
+            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-inner">
+              <Filter className="w-8 h-8 text-zinc-600" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-2">Finding your answers...</h3>
+            <p className="text-zinc-500 mb-8 max-w-md mx-auto">No articles match your search. Try different keywords or browse a category.</p>
+            <Button 
+              onClick={() => { setSearchQuery(''); setSelectedCategory(null); }}
+              variant="outline"
+              className="border-white/10 hover:bg-white/10 text-white"
+            >
+              Reset Search
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* MICRO-LEARNING CAPSULES (Horizontal Scroll) */}
+      {!selectedCategory && !searchQuery && capsules.length > 0 && (
+        <div className="animate-fade-up">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center border border-yellow-500/30">
+                <Zap className="w-4 h-4 text-yellow-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-white">Micro-Learning</h3>
+            </div>
+            <div className="text-xs text-zinc-500 uppercase tracking-widest">30s quick takes</div>
+          </div>
+          <div className="flex gap-6 overflow-x-auto pb-8 no-scrollbar">
+            {capsules.map(capsule => {
+              const Icon = capsule.icon;
+              return (
+                <div 
+                  key={capsule.id}
+                  onClick={() => setSelectedArticle(capsule)}
+                  className="w-80 shrink-0 glass-card p-6 border-l-4 border-l-yellow-500 hover:bg-white/10 transition-all cursor-pointer flex flex-col group shadow-xl"
+                >
+                  <div className="mb-4 group-hover:scale-110 transition-transform origin-left">
+                    <Icon className="w-8 h-8 text-yellow-500" />
+                  </div>
+                  <h4 className="text-lg font-bold text-white mb-3 leading-tight">{capsule.title}</h4>
+                  <p className="text-zinc-400 text-sm line-clamp-3 mb-6 leading-relaxed italic">
+                    &quot;{capsule.summary}&quot;
+                  </p>
+                <div className="mt-auto flex items-center gap-2 text-[10px] font-bold text-yellow-500/80 uppercase">
+                  <span>Read Take</span>
+                  <ChevronRight className="w-3 h-3" />
+                </div>
+              </div>
+            );
+          })}
+          </div>
+        </div>
+      )}
+
+      {/* FOOTER INFO */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+        <div className="bg-white/5 p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50"></div>
+          <Info className="w-6 h-6 text-blue-400 mb-4" />
+          <h5 className="text-white font-bold text-lg mb-2">Scientific Foundation</h5>
+          <p className="text-zinc-400 leading-relaxed">
+            All content in the MindSpace Library is derived from peer-reviewed psychological research, including Cognitive Behavioral Therapy (CBT), Mindfulness-Based Stress Reduction (MBSR), and Neurobiology.
+          </p>
+        </div>
+        <div className="bg-white/5 p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-purple-500/50"></div>
+          <Brain className="w-6 h-6 text-purple-400 mb-4" />
+          <h5 className="text-white font-bold text-lg mb-2">Local & Private</h5>
+          <p className="text-zinc-400 leading-relaxed">
+            Remember: Your interactions with this library, like everything else in ZenGuard, are processed locally. Your reading history never leaves this device.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

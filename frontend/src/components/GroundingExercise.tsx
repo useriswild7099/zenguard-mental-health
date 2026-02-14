@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface GroundingExerciseProps {
-  onClose: () => void;
+  onBack: () => void;
 }
 
 interface GroundingStep {
@@ -21,7 +21,7 @@ const GROUNDING_STEPS: GroundingStep[] = [
   { count: 1, sense: 'TASTE', prompt: 'Name 1 thing you can taste', emoji: '👅' },
 ];
 
-export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
+export default function GroundingExercise({ onBack }: GroundingExerciseProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [inputs, setInputs] = useState<string[][]>(GROUNDING_STEPS.map(step => Array(step.count).fill('')));
   const [isComplete, setIsComplete] = useState(false);
@@ -37,7 +37,6 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
   };
 
   const canAdvance = () => {
-    // At least one input filled for current step
     return inputs[currentStep].some(input => input.trim().length > 0);
   };
 
@@ -67,7 +66,7 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
             You've grounded yourself in the present moment. 
             Take a deep breath and notice how you feel now.
           </p>
-          <button onClick={onClose} className="btn-zen btn-zen-primary">
+          <button onClick={onBack} className="btn-zen btn-zen-primary">
             Continue
           </button>
         </div>
@@ -78,10 +77,11 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="glass-card p-8 max-w-md w-full mx-4 relative">
-        {/* Close button */}
+        {/* Back/Close button */}
         <button
-          onClick={onClose}
+          onClick={onBack}
           className="absolute top-4 right-4 text-white/60 hover:text-white text-2xl"
+          title="Go Back"
         >
           ×
         </button>
@@ -153,7 +153,7 @@ export default function GroundingExercise({ onClose }: GroundingExerciseProps) {
                   ? 'bg-purple-500'
                   : index < currentStep
                   ? 'bg-purple-300'
-                  : 'bg-gray-200'
+                  : 'bg-white/10'
               }`}
             />
           ))}

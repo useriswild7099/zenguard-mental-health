@@ -233,9 +233,38 @@ class ChatRequest(BaseModel):
     history: List[ChatMessage] = []
 
 
+
 class ChatResponse(BaseModel):
     """Response from chat endpoint"""
     response: str
     mode: ChatMode
+    data_stored: bool = False
+
+
+class SiaRequest(BaseModel):
+    """Request for Sia Navigational Assistant"""
+    message: str = Field(min_length=1, max_length=2000)
+    context: Optional[str] = Field(default="general", description="Current page or search context")
+    history: List[ChatMessage] = []
+
+
+class SiaResponse(BaseModel):
+    """Response from Sia Assistant"""
+    response: str
+    suggested_action: Optional[str] = None  # e.g., "navigate:knowledge", "open:journal"
+    action_payload: Optional[str] = None    # e.g., "sleep-hygiene" (article id)
+    data_stored: bool = False
+
+
+class TranslationRequest(BaseModel):
+    """Request for on-demand content translation"""
+    text: str = Field(min_length=1)
+    target_language: str = Field(description="Target language name or code")
+
+
+class TranslationResponse(BaseModel):
+    """Response from translation engine"""
+    translated_text: str
+    detected_language: Optional[str] = None
     data_stored: bool = False
 
