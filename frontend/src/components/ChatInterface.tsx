@@ -11,7 +11,7 @@ function PersonalityAvatar({ mode, size = 48, className = '' }: { mode: ChatMode
   const [imgError, setImgError] = useState(false);
   
   if (!mode.image || imgError) {
-    return <span className={`text-${size <= 32 ? '2xl' : size <= 48 ? '3xl' : '5xl'} ${className}`}>{mode.emoji}</span>;
+    return <span className={`text-white text-${size <= 32 ? '2xl' : size <= 48 ? '3xl' : '5xl'} ${className}`}>{mode.emoji}</span>;
   }
   
   return (
@@ -165,13 +165,13 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 rounded-full text-sm capitalize transition-all ${
+                className={`px-4 py-2 rounded-full text-sm capitalize transition-all border border-white/10 ${
                   activeCategory === cat
-                    ? 'bg-purple-500/80 text-white shadow-lg shadow-purple-500/20'
-                    : 'bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white'
+                    ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/40'
+                    : 'bg-white/10 text-zinc-300 hover:bg-white/20 hover:text-white'
                 }`}
               >
-                {cat === 'all' ? 'All Companions' : cat}
+                {cat.replace('_', ' ') === 'all' ? 'All' : cat.replace('_', ' ')}
               </button>
             ))}
           </div>
@@ -187,16 +187,16 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
                 <button
                   key={mode.id}
                   onClick={() => handleModeSelect(mode)}
-                  className={`glass-card text-left p-5 hover:bg-white/20 transition-all duration-300 group shadow-lg relative overflow-hidden`}
+                  className={`glass-card text-left p-5 hover:bg-white/20 transition-all duration-300 group shadow-lg relative overflow-hidden flex flex-col items-center justify-center text-center`}
                 >
-                  <div className={`absolute top-0 left-0 w-1 h-full bg-${mode.color || 'purple'}-500/50`}></div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="group-hover:scale-110 transition-transform">
-                      <PersonalityAvatar mode={mode} size={40} />
+                  <div className={`absolute top-0 left-0 w-full h-1 bg-${mode.color || 'purple'}-500/50`}></div>
+                  <div className="flex flex-col items-center gap-3 mb-2">
+                    <div className="group-hover:scale-110 transition-transform bg-white/10 p-2 rounded-full">
+                      <PersonalityAvatar mode={mode} size={48} />
                     </div>
-                    <h3 className="font-semibold text-white">{mode.name}</h3>
+                    <h3 className="font-semibold text-white text-lg">{mode.name}</h3>
                   </div>
-                  <p className="text-sm text-zinc-300">{mode.description}</p>
+                  <p className="text-sm text-zinc-300 line-clamp-2">{mode.description}</p>
                   {mode.category && (
                     <span className="inline-block mt-3 text-[10px] uppercase tracking-wider text-zinc-500 bg-white/5 px-2 py-1 rounded">
                       {mode.category}

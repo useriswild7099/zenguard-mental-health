@@ -68,14 +68,19 @@ async def chat(request: ChatRequest):
                 rag_context = f"\n[COUNSELING MANUAL REFERENCE (Page {results[0]['page']})]:\n{results[0]['content']}\n"
                 print(f"📚 RAG Hit: Found reference on Page {results[0]['page']}")
 
-        # 5. Construct System Prompt
-        base_prompt = MODE_PROMPTS.get(request.mode, MODE_PROMPTS[ChatMode.COMPASSIONATE_FRIEND])
+        # 5. Construct System Prompt - Personality FIRST
+        personality_prompt = MODE_PROMPTS.get(request.mode, MODE_PROMPTS[ChatMode.COMPASSIONATE_FRIEND])
         
-        # Inject RAG context into prompt if found
-        if rag_context:
-            system_prompt = f"{base_prompt}\n{HUMAN_REALITY_FILTER}\n{rag_context}\n[INSTRUCTION]: Use the manual reference above if helpful, but speak naturally."
-        else:
-            system_prompt = f"{base_prompt}\n{HUMAN_REALITY_FILTER}"
+        # Build system prompt: Reality Filter (Constraints) + Personality (Behavior)
+        system_prompt = f"{HUMAN_REALITY_FILTER}\n\n[YOUR PRIMARY PERSONALITY]:\n{personality_prompt}"
+        
+        # Add RAG context ONLY if it's not a short greeting
+        if rag_context and len(obfuscated_message.split()) > 3:
+            system_prompt += f"\n\n[SITUATIONAL KNOWLEDGE]:\n{rag_context}\n(Use this only if relevant to the user's specific problem.)"
+        
+        # 6. Solution/Perspective Transition Logic
+        if len(request.history) >= 4:
+            system_prompt += "\n\n[DIRECTIVE]: You have enough context. DO NOT ask more questions. Transition to offering a solid perspective, a relevant story, or a character-specific solution that matches the user's current mood/energy."
         
         print(f"🎭 Appending Reality Filter to {request.mode}...")
         

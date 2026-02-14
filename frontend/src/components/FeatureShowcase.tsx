@@ -77,6 +77,8 @@ export default function FeatureShowcase() {
                     src={`/personalities/${persona.name.toLowerCase()}.png`}
                     alt={persona.name}
                     fill
+                    loading="lazy"
+                    sizes="48px"
                     className="rounded-full object-cover border border-white/10 group-hover:scale-110 transition-transform"
                     onError={(e) => {
                       // Fallback to emoji if image fails (handled by hiding image and showing emoji span)
