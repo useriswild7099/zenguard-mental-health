@@ -3,7 +3,7 @@ import sys
 import os
 
 # Add backend directory to sys.path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from models.schemas import ChatMode
 from prompts import MODE_PROMPTS, MODE_INFO

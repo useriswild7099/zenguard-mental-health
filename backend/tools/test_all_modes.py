@@ -6,7 +6,7 @@ import os
 from enum import Enum
 
 # Add backend directory to sys.path to import schemas
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from models.schemas import ChatMode
 
 BASE_URL = "http://localhost:8000"

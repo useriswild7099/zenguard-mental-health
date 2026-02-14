@@ -3,7 +3,7 @@ import sys
 import os
 
 # Add backend to path
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from services.ollama_client import OllamaClient
 from prompts import HUMAN_REALITY_FILTER
