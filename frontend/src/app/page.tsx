@@ -83,6 +83,11 @@ export default function Home() {
   // Scroll to top when view changes
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Add a small delay to ensure the DOM content has swapped and any browser scroll-behavior is bypassed
+    const timer = setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, 50);
+    return () => clearTimeout(timer);
   }, [activeView]);
 
   const isLight = theme === 'light';

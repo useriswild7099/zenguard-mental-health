@@ -67,7 +67,17 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   // Scroll to bottom when new messages arrive
   useEffect(() => {
     if (messages.length > 0) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      // Use direct scrollTop manipulation to avoid window-level scrolling that scrollIntoView can trigger
+      const container = messagesEndRef.current?.parentElement;
+      if (container) {
+        // Use a small timeout to ensure the DOM has updated with the new message
+        setTimeout(() => {
+          container.scrollTo({
+            top: container.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 100);
+      }
     }
   }, [messages]);
 

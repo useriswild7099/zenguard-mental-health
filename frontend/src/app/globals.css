@@ -195,7 +195,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; removed to prevent unintended jumps during view switches */
 }
 
 body {

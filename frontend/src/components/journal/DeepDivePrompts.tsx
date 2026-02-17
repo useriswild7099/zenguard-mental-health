@@ -112,7 +112,6 @@ export function DeepDivePrompts({
           onChange={(e) => setCurrentResponse(e.target.value)}
           placeholder="Take your time... There's no right or wrong answer."
           className="min-h-[200px] resize-none text-base leading-relaxed"
-          autoFocus
         />
 
         <div className="flex gap-3">

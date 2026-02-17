@@ -193,7 +193,6 @@ export function NewEntryFlow({ onSave, onCancel }: NewEntryFlowProps) {
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What's on your mind? Write freely, without judgment..."
                 className="min-h-[300px] resize-none text-base leading-relaxed"
-                autoFocus
               />
               
               <p className="text-sm text-muted-foreground">
