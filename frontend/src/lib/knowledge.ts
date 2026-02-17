@@ -1446,5 +1446,291 @@ export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
       Don't walk through the front door still ruminating on a spreadsheet. Sit in your car for 2 minutes. Breathe. Explicitly decide to be a father and a partner.
       Your family needs your attention more than they need your provision.
     `
+  },
+
+  // 7. DEEP DIVE / ADVANCED PROTOCOLS
+  {
+    id: 'perf-dopamine-detox',
+    title: 'The Dopamine Detox (Huberman Protocol)',
+    category: 'Performance',
+    subcategory: 'Neuroscience',
+    summary: 'A 24-hour protocol to reset your brain\'s reward pathways.',
+    readTime: '7 min',
+    icon: Zap,
+    content: `
+      **Source**: Dr. Andrew Huberman (Huberman Lab) & Dr. Anna Lembke (Dopamine Nation)
+
+      In a world of constant cheap dopamine (scrolling, sugar, notifications), our baseline for pleasure rises. This means "normal" activities—like reading, walking, or working—feel painfully boring. This isn\'t a discipline problem; it\'s a **dopamine deficit** problem.
+
+      ### The Science of Tolerance:
+      When you flood your brain with high spikes of dopamine, your brain tries to maintain balance (homeostasis) by down-regulating receptors. The result? You need *more* stimulation just to feel okay, and when you stop, you feel *below baseline* (pain).
+
+      ### The 24-Hour Reset Protocol:
+      For one full day, you will remove all "high-dopamine" inputs to resensitize your receptors.
+
+      **The "NO" List:**
+      - No social media or scrolling.
+      - No video games.
+      - No processed sugar / junk food.
+      - No music with lyrics (instrumental is okay).
+      - No pornography or masturbation.
+
+      **The "YES" List:**
+      - Walking.
+      - Reading physical books.
+      - Journaling.
+      - Meditating.
+      - Drinking water/tea.
+      - Sitting with boredom.
+
+      ### Why Boredom is the Goal:
+      Boredom is not a bug; it\'s a feature. When you allow yourself to be bored, your dopamine baseline resets. By the end of 24 hours, "boring" things will start to feel interesting again.
+    `
+  },
+  {
+    id: 'perf-deep-work',
+    title: 'Deep Work & Flow States',
+    category: 'Performance',
+    subcategory: 'Productivity',
+    summary: 'The Cal Newport protocol for elite cognitive focus.',
+    readTime: '6 min',
+    icon: Target,
+    content: `
+      **Source**: Cal Newport (Deep Work) & Mihaly Csikszentmihalyi (Flow)
+
+      "Deep Work" is the ability to focus without distraction on a cognitively demanding task. It is a superpower in the 21st century.
+
+      ### Deep vs. Shallow Work:
+      - **Shallow Work**: Emails, meetings, slack messages. Low value, easy to replicate.
+      - **Deep Work**: Coding, writing, strategic thinking. High value, hard to replicate.
+
+      ### The Rules of Engagement:
+      1. **Ritualize the Start**: Don\'t wait for "inspiration." Create a ritual (e.g., clear desk, pour coffee, put on headphones) that signals to your brain: "We are going deep."
+      2. **Embrace Boredom**: If you switch tabs the moment you feel stuck, you break the neural circuit of focus. **Stay with the struggle.** The struggle *is* the neurplasticity happening.
+      3. **Quit Social Media**: It fragments your attention span permanently.
+
+      ### The Shutdown Ritual:
+      Deep work is exhausting. You cannot do it for 8 hours. 4 hours is the elite limit. When you are done, have a strict "Shutdown Ritual" (e.g., close laptop, say "Shutdown Complete"). This releases your brain from the open loops of work functionality.
+    `
+  },
+  {
+    id: 'reg-cbt-reframing',
+    title: 'Advanced Cognitive Reframing',
+    category: 'Regulation',
+    subcategory: 'CBT',
+    summary: 'Moving beyond "positive thinking" to realistic thinking.',
+    readTime: '5 min',
+    icon: Brain,
+    content: `
+      **Source**: Dr. David Burns (Feeling Good) & Beck Institute
+
+      Reframing isn't about lying to yourself ("Everything is great!"). It's about correcting the distortions that make reality look worse than it is.
+
+      ### 1. Socratic Questioning:
+      Put your negative thought on trial.
+      - **Thought**: "I'm going to fail this exam."
+      - **Evidence For**: "I missed two lectures."
+      - **Evidence Against**: "I have studied for 3 days. I passed all previous quizzes. The material is familiar."
+      - **Verdict**: "I am unprepared for 10% of the material, but prepared for 90%." (This is more accurate and less paralyzed).
+
+      ### 2. The "Best / Worst / Likely" Technique:
+      When spiraling about a future event:
+      - **What is the WORST outcome?** (I fail. I retake the class. It costs money.) -> *Is it survivable? Yes.*
+      - **What is the BEST outcome?** (I get an A+.)
+      - **What is the MOST LIKELY outcome?** (I get a B or C.)
+
+      Usually, the "Most Likely" scenario is boringly manageable.
+    `
+  },
+  {
+    id: 'daily-sleep-architecture',
+    title: 'Sleep Architecture Deep Dive',
+    category: 'Daily Practices',
+    subcategory: 'Sleep Science',
+    summary: 'Understanding cyclical recovery for maximum energy.',
+    readTime: '6 min',
+    icon: Moon,
+    content: `
+      **Source**: Dr. Matthew Walker (Why We Sleep) & National Sleep Foundation
+
+      Sleep is not a uniform block of "off" time. It is a complex architectural structure of 90-minute cycles.
+
+      ### The Two States:
+      1. **NREM (Deep Sleep)**: Physical restoration. Your brain cleans out toxins (beta-amyloid). This happens mostly in the *first half* of the night.
+      2. **REM (Dream Sleep)**: Emotional and memory processing. This is therapy at night. This happens mostly in the *second half* of the night.
+
+      ### Why 6 Hours Isn't Enough:
+      If you sleep 6 hours instead of 8, you don't lose "25% of your sleep." You lose **60-90% of your REM sleep**, because REM is back-loaded. This leads to irritability and anxiety the next day.
+
+      ### The Caffeine Half-Life:
+      Caffeine has a half-life of ~6 hours. If you have a coffee at 4 PM, 50% of it is still in your brain at 10 PM. It might not stop you from *falling* asleep, but it will block you from entering *Deep Sleep*. 
+      **Rule**: No caffeine after 12 PM.
+    `
+  },
+  {
+    id: 'life-social-battery',
+    title: 'The Social Battery Manager',
+    category: 'Life Problems',
+    subcategory: 'Relationships',
+    summary: 'Managing energy economies for Introverts & Ambiverts.',
+    readTime: '4 min',
+    icon: Battery,
+    content: `
+      **Source**: Susan Cain (Quiet) & Psychology Today
+
+      Think of your social energy like a bank account, not an infinite well.
+
+      ### Introvert vs. Extrovert:
+      It's not about shyness. It's about stimulation.
+      - **Extroverts** have a low baseline arousal; they need social input to feel "normal."
+      - **Introverts** have a high baseline arousal; social input pushes them into "overwhelm."
+
+      ### Managing the Battery:
+      1. **Scheduled Recovery**: If you have a party on Saturday night, schedule "Do Nothing" time on Sunday morning. Put it in the calendar.
+      2. **The "Irish Goodbye"**: It is socially acceptable to leave a large gathering without saying goodbye to every single person. Find the host, say thanks, and leave. Prolonged goodbyes drain 20% of the night's energy.
+      3. **Energy Vampires**: Notice who leaves you feeling drained vs. energized. Minimize exposure to people who treat you like an emotional dumping ground.
+    `
+  },
+
+  // 8. BATCH 2 EXPANSION (Requested)
+  {
+    id: 'daily-atomic-habits',
+    title: 'Atomic Habits & Identity',
+    category: 'Daily Practices',
+    subcategory: 'Habit Formation',
+    summary: 'Building habits by changing who you are, not just what you do.',
+    readTime: '6 min',
+    icon: TrendingUp,
+    content: `
+      **Source**: James Clear (Atomic Habits)
+
+      Most people try to change habits by focusing on the *outcome* ("I want to lose 10kg"). The superior way is to focus on *identity*.
+
+      ### The Identity Shift:
+      - **Outcome**: "I'm trying to quit smoking." (Implies you are a smoker trying to do something hard).
+      - **Identity**: "I'm not a smoker." (Implies smoking contradicts who you are).
+
+      ### The 1% Rule:
+      Improving by 1% every day for a year makes you 37x better.
+      - **Habit Stacking**: "After [CURRENT HABIT], I will [NEW HABIT]."
+      - Example: "After I pour my coffee, I will meditate for 1 minute."
+
+      ### Environment Design:
+      Motivation is overrated; environment implies design. If you want to play guitar, buy a stand and put it in the middle of the living room. If you want to eat less sugar, hide the cookies on the top shelf.
+    `
+  },
+  {
+    id: 'life-four-horsemen',
+    title: 'The Four Horsemen of Conflict',
+    category: 'Life Problems',
+    subcategory: 'Relationships',
+    summary: 'The 4 behaviors that predict relationship collapse.',
+    readTime: '7 min',
+    icon: ShieldAlert,
+    content: `
+      **Source**: Dr. John Gottman (The Gottman Institute)
+
+      Dr. Gottman can predict divorce with 93% accuracy by watching a couple argue for 5 minutes. He looks for these "Four Horsemen":
+
+      ### 1. Criticism (vs. Complaint):
+      - **Criticism**: "You never think about anyone but yourself." (Attack on character).
+      - **Complaint**: "I was scared when you were late and didn't call." (Statement of feeling/fact).
+
+      ### 2. Contempt (The Killer):
+      Eye-rolling, sarcasm, mocking. This is the single biggest predictor of divorce. It signals disgust.
+      - **Antidote**: Build a culture of appreciation.
+
+      ### 3. Defensiveness:
+      "I wouldn't have shouted if you hadn't done X!"
+      - **Antidote**: Take responsibility for *part* of the problem. "You're right, I was late."
+
+      ### 4. Stonewalling:
+      Shutting down, looking away, leaving the room. physiological flooding.
+      - **Antidote**: Physiological self-soothing (take a 20-min break, then return).
+    `
+  },
+  {
+    id: 'reg-physiological-sigh',
+    title: 'The Physiological Sigh',
+    category: 'Regulation',
+    subcategory: 'Breathwork',
+    summary: 'The fastest way to reduce stress in real-time.',
+    readTime: '3 min',
+    icon: Wind,
+    content: `
+      **Source**: Dr. Andrew Huberman (Huberman Lab) & Jack Feldman
+
+      When you are stressed, the air sacs (alveoli) in your lungs collapse, raising carbon dioxide levels. This signals "THREAT" to the brain.
+
+      ### The Protocol:
+      You do this naturally when you cry or are about to sleep. You can do it voluntarily to hijack your nervous system.
+
+      1. **Double Inhale**: Inhale deeply through the nose. Then, strictly at the top, take a second, shorter inhale to fully inflate the lungs.
+      2. **Long Exhale**: Exhale fully through the mouth (making a "sigh" sound) for twice as long as the inhale.
+
+      ### Why it Works:
+      The double inhale pops open the collapsed alveoli. The long exhale offloads maximum carbon dioxide. Do this 2-3 times, and your heart rate *must* slow down. It is mechanical, not psychological.
+    `
+  },
+  {
+    id: 'found-zone2-cardio',
+    title: 'Zone 2 Training: The Mental Engine',
+    category: 'Condition Base',
+    subcategory: 'Physical Health',
+    summary: 'The link between mitochondrial health and mood stability.',
+    readTime: '6 min',
+    icon: Activity,
+    content: `
+      **Source**: Dr. Peter Attia (Outlive)
+
+      We often separate "mental health" from "physical health." This is a mistake. Your brain is a physical organ that demands massive energy.
+
+      ### What is Zone 2?
+      It is steady-state cardio where you can maintain a conversation, but you cannot sing.
+      - **Heart Rate**: Roughly 180 minus your age.
+      - **Mechanism**: This trains your mitochondria to burn fat for fuel instead of glucose.
+
+      ### The Antidepressant Effect:
+      Zone 2 exercise releases **BDNF** (Brain-Derived Neurotrophic Factor), which acts like "Miracle-Gro" for new neurons. It specifically targets the hippocampus (memory/mood), which shrinks during depression.
+      **Prescription**: 3-4 sessions of 45 minutes per week.
+    `
+  },
+  {
+    id: 'life-vulnerability-loop',
+    title: 'The Vulnerability Loop',
+    category: 'Life Problems',
+    subcategory: 'Connection',
+    summary: 'Why "staying strong" destroys trust.',
+    readTime: '5 min',
+    icon: HeartHandshake,
+    content: `
+      **Source**: Dr. Brené Brown (Daring Greatly)
+
+      We think vulnerability is weakness in ourselves, but we see it as courage in others.
+
+      ### The Myth of Self-Reliance:
+      We try to "go it alone" to avoid being a burden. But this denies others the chance to support us, creating distance.
+
+      ### The Loop:
+      1. **Signal**: Person A admits a mistake or a fear. ("I'm actually really struggling with this.")
+      2. **Response**: Person B does NOT judge, but matches the vulnerability. ("Me too. I feel lost sometimes.")
+      3. **Result**: Trust increases.
+
+      ### The Marble Jar:
+      Trust is built in small moments—like marbles in a jar. Remembering a name, asking about a sick parent, admitting a small error. You cannot build trust with one grand gesture; it requires a thousand small moments of vulnerability.
+    `
   }
 ];
+
+export interface BookRecommendation {
+  id: string;
+  title: string;
+  author: string;
+  summary: string;
+  targetAudience: string;
+  keyInsight: string;
+  color: string; // CSS gradient class
+  readUrl?: string; // Direct link to Gutenberg/Standard Ebooks
+  category: 'Modern' | 'Philosophy' | 'Psychology' | 'Self-Mastery' | 'Spirit' | 'Science';
+  externalSource?: string; // e.g. "Project Gutenberg"
+}

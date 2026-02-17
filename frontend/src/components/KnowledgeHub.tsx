@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { KNOWLEDGE_ARTICLES, KnowledgeArticle, KnowledgeCategory } from '@/lib/knowledge';
+import { KNOWLEDGE_ARTICLES, KnowledgeArticle, KnowledgeCategory, BookRecommendation } from '@/lib/knowledge';
+import { MASTER_LIBRARY } from '@/lib/books_data';
 import { 
   Search, BookOpen, Brain, 
   ArrowLeft, Clock, LayoutGrid, 
   ChevronRight, Filter, AlertTriangle,
-  Zap, Compass, Info, LifeBuoy, Languages, Loader2
+  Zap, Compass, Info, LifeBuoy, Languages, Loader2,
+  TrendingUp, ShieldAlert, Wind, Activity, HeartHandshake, ExternalLink
 } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -455,6 +457,98 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
               </div>
             );
           })}
+          </div>
+        </div>
+      )}
+
+      {/* BOOK LIBRARY SECTION */}
+      {!selectedCategory && !searchQuery && (
+        <div className="animate-fade-up mt-16">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                <BookOpen className="w-5 h-5 text-emerald-500" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold dark:text-white text-zinc-900">The Master Library</h3>
+                <p className="text-sm dark:text-zinc-400 text-zinc-500">500+ Curated Volumes on Mind, Soul & Performance</p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {MASTER_LIBRARY.map((book: BookRecommendation) => (
+              <div 
+                key={book.id}
+                className="group relative h-[450px] rounded-2xl overflow-hidden perspective-1000"
+              >
+                {/* Book Spine Shadow */}
+                <div className="absolute top-0 bottom-0 left-0 w-3 rounded-l-sm bg-gradient-to-r from-black/20 to-transparent z-20 pointer-events-none"></div>
+                
+                {/* Main Card */}
+                <div className={`w-full h-full bg-gradient-to-br ${book.color} p-8 flex flex-col justify-between text-white relative shadow-2xl transition-all duration-500 group-hover:-translate-y-2 group-hover:rotate-y-6 origin-left border border-white/10`}>
+                   {/* Background Elements */}
+                   <div className="absolute inset-0 bg-black/5"></div>
+                   <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+
+                   {/* Header */}
+                   <div className="relative z-10 space-y-4">
+                     <span className="px-2 py-1 rounded-md bg-white/10 border border-white/20 text-[10px] uppercase tracking-wider font-bold">
+                       {book.category}
+                     </span>
+                     <div className="space-y-1">
+                        <h4 className="text-2xl font-bold leading-tight font-serif tracking-tight">{book.title}</h4>
+                        <p className="text-white/80 text-sm font-medium">{book.author}</p>
+                     </div>
+                     <div className="w-12 h-[2px] bg-white/50"></div>
+                     <p className="text-sm text-white/90 leading-relaxed font-light italic">
+                       &quot;{book.keyInsight}&quot;
+                     </p>
+                   </div>
+                   
+                   {/* Footer Info / Overlay Trigger Area */}
+                   <div className="relative z-10 pt-4 border-t border-white/20">
+                     <p className="text-[10px] uppercase tracking-widest text-white/60 font-bold mb-2">Primary Insight</p>
+                     <p className="text-xs text-white/80 line-clamp-3 leading-relaxed">
+                       {book.summary}
+                     </p>
+                   </div>
+                </div>
+
+                {/* Hover Details Overlay */}
+                <div className="absolute inset-0 bg-zinc-900/98 backdrop-blur-xl p-8 flex flex-col justify-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-400 pointer-events-none group-hover:pointer-events-auto z-30 translate-y-4 group-hover:translate-y-0">
+                  <div className="space-y-4">
+                    <div className="flex flex-col gap-2">
+                       <h5 className="text-emerald-400 font-bold uppercase tracking-widest text-[10px]">Who Should Read This</h5>
+                       <p className="text-white/90 text-sm leading-relaxed">
+                         {book.targetAudience}
+                       </p>
+                    </div>
+                    {book.externalSource && (
+                      <div className="flex items-center gap-2 text-[10px] text-zinc-500 uppercase tracking-widest font-bold">
+                        <span>Source:</span>
+                        <span className="text-emerald-500/80">{book.externalSource}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-col gap-3">
+                    {book.readUrl && (
+                      <Button 
+                        onClick={() => window.open(book.readUrl, '_blank')}
+                        className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold h-11"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Read Online
+                      </Button>
+                    )}
+                    <Button variant="outline" className="w-full border-white/10 hover:bg-white/5 text-white h-11">
+                      Save to My Shelf
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
