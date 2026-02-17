@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
-  Zap, X, ArrowRight, MessageCircle, 
-  Sparkles, Search, BookOpen, PenLine, 
-  LifeBuoy, ChevronRight, LayoutGrid, Palette, Wind, Lightbulb
+  X, MessageCircle, 
+  BookOpen, PenLine, 
+  LifeBuoy, Palette, Wind, Lightbulb,
+  Moon, Sun, Volume2, VolumeX, Leaf
 } from 'lucide-react';
-import { Button } from './ui/button';
-import { KNOWLEDGE_ARTICLES } from '@/lib/knowledge';
+import { Switch } from './ui/switch';
 
 interface SiaAssistantProps {
   activeView: string;
@@ -15,138 +15,71 @@ interface SiaAssistantProps {
   onNavigateTab?: (tab: string) => void;
   onOpenArticle?: (article: any) => void;
   language?: string;
+  theme?: string;
+  onThemeChange?: (theme: string) => void;
+  isMuted?: boolean;
+  onToggleMusic?: () => void;
 }
 
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
-
-// SiaRobot removed in favor of static image
-
-export default function SiaAssistant({ activeView, onNavigate, onNavigateTab, onOpenArticle, language = 'English' }: SiaAssistantProps) {
+export default function SiaAssistant({ 
+  activeView, 
+  onNavigate, 
+  onNavigateTab, 
+  onOpenArticle, 
+  language = 'English',
+  theme = 'nature',
+  onThemeChange,
+  isMuted = true,
+  onToggleMusic
+}: SiaAssistantProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasNewMessage, setHasNewMessage] = useState(false);
-  const [isWaving, setIsWaving] = useState(false);
   const [isPeekingActive, setIsPeekingActive] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [greeting, setGreeting] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const isLight = theme === 'light';
+  const textPrimary = isLight ? 'text-zinc-900' : 'text-white';
+  const textSecondary = isLight ? 'text-zinc-500' : 'text-white/60';
+  const cardBg = isLight ? 'bg-zinc-100/70 border-zinc-200' : 'bg-white/5 border-white/10';
 
-  // Proactive Triggers State
-  const [viewSwitchCount, setViewSwitchCount] = useState(0);
-  const lastViewRef = useRef(activeView);
-
-  // Track view switches for proactive popup
+  // Click outside to close
   useEffect(() => {
-    if (activeView !== lastViewRef.current) {
-      setViewSwitchCount(prev => prev + 1);
-      lastViewRef.current = activeView;
-      
-      // Proactive trigger: User is navigating a lot, maybe they are lost
-      if (viewSwitchCount >= 4 && !isOpen) {
-        setIsOpen(true);
-        const triggerMsg = language === 'English' 
-          ? "I'm here to help you find whatever you need today—whether it's a quiet moment for your thoughts or a deep dive into your progress. How are you feeling right now?"
-          : `I see you are exploring ZenGuard! (I'll respond in ${language})`;
-        addSiaMessage(triggerMsg);
-        setViewSwitchCount(0); // Reset after trigger
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
       }
     }
-  }, [activeView, viewSwitchCount, isOpen]);
 
-  // Handle "Wave" on initial mount or proactive message
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  // Track view switches for proactive greeting updates
   useEffect(() => {
-    if (hasNewMessage || isOpen) {
-      setIsWaving(true);
-      const timer = setTimeout(() => setIsWaving(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [hasNewMessage, isOpen]);
+    const greetings: Record<string, string> = {
+      'English': "I'm here to guide you. Where should we go next?",
+      'Hindi': "मैं आपकी मार्गदर्शिका हूँ। आगे कहाँ चलना चाहिए?",
+    };
+    
+    const contextGreetings: Record<string, string> = {
+      'journal': "Your thoughts are safe here. Want to see your insights?",
+      'chat': "Deep conversations can be healing. Need a different tool?",
+      'doodle': "Art is a great release. Ready for some breathing exercises?",
+      'breathing': "Peace is within you. Shall we check the Library?",
+    };
 
-  // Initial welcome after delay
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (messages.length === 0) {
-        setHasNewMessage(true);
-      }
-    }, 5000);
-    return () => clearTimeout(timer);
-  }, [messages.length]);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const addSiaMessage = (text: string) => {
-    setMessages(prev => [...prev, { role: 'assistant', content: text }]);
-  };
-
-  const handleSendMessage = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!inputValue.trim() || isLoading) return;
-
-    const userMessage = inputValue.trim();
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-    setInputValue('');
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('http://localhost:8000/api/sia', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userMessage,
-          context: `${activeView} | preferred_language: ${language}`,
-          history: messages.slice(-5)
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (data.response) {
-        addSiaMessage(data.response);
-        
-        // Handle Suggested Actions
-        if (data.suggested_action) {
-          handleAction(data.suggested_action, data.action_payload);
-        }
-      }
-    } catch (error) {
-      addSiaMessage("I'm having a little trouble connecting right now, but I'm still here to help with navigation!");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleAction = (action: string, payload?: string) => {
-    if (action === 'navigate:help') onNavigate('help');
-    else if (action === 'navigate:knowledge') {
-      if (payload) {
-        const article = KNOWLEDGE_ARTICLES.find(a => a.id === payload);
-        if (article && onOpenArticle) onOpenArticle(article);
-      } else {
-        onNavigate('knowledge');
-      }
-    } 
-    else if (action === 'open:journal') onNavigate('journal');
-    else if (action === 'open:chat') onNavigate('chat');
-    else if (action === 'open:doodle') onNavigate('doodle');
-    else if (action === 'open:breathing') onNavigate('breathing');
-    else if (action === 'open:grounding') onNavigate('grounding');
-    else if (action.startsWith('journal:')) {
-      const tab = action.split(':')[1];
-      if (onNavigateTab) onNavigateTab(tab);
-    }
-  };
-
-  const getTranslatedLabels = () => {
-    if (language === 'Hindi') return { help: 'सहायता', library: 'पुस्तकालय', journal: 'जर्नल', chat: 'बात करें', doodle: 'डूडल', breathing: 'सांस लें', stats: 'आंकड़े' };
-    return { help: 'Help Hub', library: 'Library', journal: 'Journal', chat: 'AI Friend', doodle: 'Mood Doodle', breathing: 'Breathing', stats: 'Insights' };
-  };
+    const baseGreeting = greetings[language] || greetings['English'];
+    const contextual = contextGreetings[activeView];
+    
+    setGreeting(contextual || baseGreeting);
+  }, [activeView, language]);
 
   useEffect(() => {
     if (isOpen) {
@@ -161,9 +94,8 @@ export default function SiaAssistant({ activeView, onNavigate, onNavigateTab, on
       }, 5000);
     };
 
-    // Initial peek
     const timeout = setTimeout(runPeekCycle, 1000);
-    const interval = setInterval(runPeekCycle, 15000); // 5s in, 10s out
+    const interval = setInterval(runPeekCycle, 15000);
 
     return () => {
       clearTimeout(timeout);
@@ -171,23 +103,40 @@ export default function SiaAssistant({ activeView, onNavigate, onNavigateTab, on
     };
   }, [isOpen]);
 
+  const getTranslatedLabels = () => {
+    if (language === 'Hindi') return { 
+      help: 'सहायता', library: 'पुस्तकालय', journal: 'जर्नल', chat: 'बात करें', 
+      doodle: 'डूडल', breathing: 'सांस लें', stats: 'आंकड़े', shortcuts: 'शॉर्टकट्स',
+      system: 'सिस्टम', darkMode: 'डार्क मोड', music: 'संगीत',
+      natureMode: 'प्रकृति मोड', lightMode: 'लाइट मोड'
+    };
+    return { 
+      help: 'Help Hub', library: 'Library', journal: 'Journal', chat: 'AI Friend', 
+      doodle: 'Mood Doodle', breathing: 'Breathing', stats: 'Insights', shortcuts: 'Shortcuts',
+      system: 'System', darkMode: 'Dark Mode', music: 'Music',
+      natureMode: 'Nature', lightMode: 'Light'
+    };
+  };
+
   const labels = getTranslatedLabels();
 
   const quickActions = [
-    { label: labels.journal, icon: PenLine, action: () => onNavigate('journal') },
-    { label: labels.chat, icon: MessageCircle, action: () => onNavigate('chat') },
-    { label: labels.library, icon: BookOpen, action: () => onNavigate('knowledge') },
-    { label: labels.doodle, icon: Palette, action: () => onNavigate('doodle') },
-    { label: labels.breathing, icon: Wind, action: () => onNavigate('breathing') },
-    { label: labels.stats, icon: Lightbulb, action: () => onNavigateTab?.('insights') },
-    { label: labels.help, icon: LifeBuoy, action: () => onNavigate('help') },
+    { label: labels.journal, icon: PenLine, action: () => { onNavigate('journal'); setIsOpen(false); } },
+    { label: labels.chat, icon: MessageCircle, action: () => { onNavigate('chat'); setIsOpen(false); } },
+    { label: labels.library, icon: BookOpen, action: () => { onNavigate('knowledge'); setIsOpen(false); } },
+    { label: labels.doodle, icon: Palette, action: () => { onNavigate('doodle'); setIsOpen(false); } },
+    { label: labels.breathing, icon: Wind, action: () => { onNavigate('breathing'); setIsOpen(false); } },
+    { label: labels.stats, icon: Lightbulb, action: () => { onNavigateTab?.('insights'); setIsOpen(false); } },
+    { label: labels.help, icon: LifeBuoy, action: () => { onNavigate('help'); setIsOpen(false); } },
   ];
 
   return (
-    <div className="fixed bottom-1 md:bottom-0 right-4 md:right-2 z-[200] flex flex-col items-end">
-      {/* Sia Chat Window */}
+    <div ref={containerRef} className="fixed bottom-1 md:bottom-0 right-4 md:right-2 z-[200] flex flex-col items-end">
+      {/* Sia Navigator Window */}
       {isOpen && (
-        <div className="w-[calc(100vw-32px)] md:w-[300px] h-[500px] md:h-[450px] bg-white/5 backdrop-blur-[40px] border border-white/20 rounded-[32px] shadow-elite flex flex-col mb-2 md:mb-1 animate-sia-slide-in overflow-hidden">
+        <div className={`w-[calc(100vw-32px)] md:w-[320px] h-auto max-h-[600px] backdrop-blur-[40px] rounded-[32px] shadow-elite flex flex-col mb-2 md:mb-1 animate-sia-slide-in overflow-hidden border ${
+          isLight ? 'bg-white/90 border-zinc-200' : 'bg-black/40 border-white/20'
+        }`}>
           {/* Header */}
           <div className="p-4 pb-3 border-b border-white/10 flex items-center justify-between bg-white/5">
             <div className="flex items-center gap-2">
@@ -195,100 +144,94 @@ export default function SiaAssistant({ activeView, onNavigate, onNavigateTab, on
                 <img src="/sia-peeking.png" alt="Sia" className="w-[140%] h-[140%] object-contain -mr-3 mt-1" />
               </div>
               <div>
-                <h3 className="font-bold text-white text-[14px] md:text-[13px] leading-tight premium-text-gradient">Sia</h3>
-                <p className="text-[8px] text-white/30 uppercase tracking-[0.2em] font-black">Elite Guide</p>
+                <h3 className={`font-bold text-[14px] md:text-[13px] leading-tight ${isLight ? 'text-zinc-900' : 'premium-text-gradient text-white'}`}>Sia</h3>
+                <p className={`text-[8px] uppercase tracking-[0.2em] font-black ${isLight ? 'text-zinc-400' : 'text-white/30'}`}>Navigator</p>
               </div>
             </div>
             <button 
               onClick={() => setIsOpen(false)}
-              className="p-1.5 hover:bg-white/10 rounded-lg text-white/40 hover:text-white transition-all duration-300"
+              className={`p-1.5 rounded-lg transition-all duration-300 ${isLight ? 'hover:bg-zinc-100 text-zinc-400 hover:text-zinc-900' : 'hover:bg-white/10 text-white/40 hover:text-white'}`}
             >
               <X className="w-5 h-5 md:w-4 md:h-4" />
             </button>
           </div>
 
-          {/* Messages */}
-          <div 
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto p-5 md:p-4 space-y-4 no-scrollbar bg-transparent"
-          >
-            {messages.length === 0 && (
-              <div className="space-y-4 pt-1">
-                <div className="p-4 bg-white/5 rounded-[20px] border border-white/10 backdrop-blur-md">
-                  <p className="text-white/80 text-[13px] md:text-[11px] leading-relaxed text-center font-medium">
-                    {language === 'English' 
-                      ? "I'm here to help you find whatever you need today."
-                      : `I am your ZenGuard guide!`}
-                  </p>
-                </div>
-                
-                <div className="space-y-2">
-                  <p className="text-[8px] text-white/20 uppercase tracking-[0.3em] font-black text-center">Shortcuts</p>
-                  <div className="grid grid-cols-1 gap-2">
-                    {quickActions.slice(0, 4).map((qa, i) => (
-                      <button
-                        key={i}
-                        onClick={qa.action}
-                        className="p-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-[16px] text-[13px] md:text-[11px] text-white flex items-center gap-3 transition-all duration-500 active:scale-95 group"
-                      >
-                        <div className="p-1.5 bg-white/10 rounded-md group-hover:bg-white/20 transition-all border border-white/5">
-                          <qa.icon className="w-4 h-4 md:w-3.5 md:h-3.5 text-purple-300 group-hover:text-white transition-colors" />
-                        </div>
-                        <span className="font-bold tracking-tight text-white/50 group-hover:text-white">{qa.label}</span>
-                      </button>
-                    ))}
+          {/* Navigation Body */}
+          <div className="flex-1 overflow-y-auto p-5 md:p-4 space-y-6 no-scrollbar bg-transparent">
+            {/* Contextual Greeting */}
+            <div className={`p-4 rounded-[20px] border backdrop-blur-md ${cardBg}`}>
+              <p className={`text-[13px] md:text-[11px] leading-relaxed text-center font-medium ${isLight ? 'text-zinc-600' : 'text-white/70'}`}>
+                {greeting}
+              </p>
+            </div>
+            
+            {/* System Controls */}
+            <div className="space-y-3">
+              <p className={`text-[8px] uppercase tracking-[0.3em] font-black text-center ${isLight ? 'text-zinc-400' : 'text-white/20'}`}>{labels.system}</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className={`p-3 border rounded-[20px] flex flex-col items-center justify-center gap-2 group transition-all duration-500 ${cardBg}`}>
+                  <div className="flex items-center justify-between w-full px-1">
+                    <button 
+                      onClick={() => onThemeChange?.('nature')}
+                      className={`p-1.5 rounded-lg transition-all ${theme === 'nature' ? 'bg-green-400/20 text-green-500' : isLight ? 'text-zinc-300 hover:text-zinc-500' : 'text-white/20 hover:text-white/40'}`}
+                      title={labels.natureMode}
+                    >
+                      <Leaf className="w-3.5 h-3.5" />
+                    </button>
+                    <button 
+                      onClick={() => onThemeChange?.('light')}
+                      className={`p-1.5 rounded-lg transition-all ${theme === 'light' ? 'bg-amber-400/20 text-amber-500' : isLight ? 'text-zinc-300 hover:text-zinc-500' : 'text-white/20 hover:text-white/40'}`}
+                      title={labels.lightMode}
+                    >
+                      <Sun className="w-3.5 h-3.5" />
+                    </button>
+                    <button 
+                      onClick={() => onThemeChange?.('dark')}
+                      className={`p-1.5 rounded-lg transition-all ${theme === 'dark' ? 'bg-purple-400/20 text-purple-500' : isLight ? 'text-zinc-300 hover:text-zinc-500' : 'text-white/20 hover:text-white/40'}`}
+                      title={labels.darkMode}
+                    >
+                      <Moon className="w-3.5 h-3.5" />
+                    </button>
                   </div>
+                  <span className={`text-[9px] font-black uppercase tracking-widest ${isLight ? 'text-zinc-400' : 'text-white/30'}`}>Theme</span>
                 </div>
+                <button 
+                  onClick={onToggleMusic}
+                  className={`p-3 border rounded-[20px] flex flex-col items-center justify-center gap-2 group transition-all duration-500 hover:bg-white/10 ${cardBg}`}
+                >
+                  <div className="flex items-center justify-center w-full">
+                    {!isMuted ? <Volume2 className={`w-4 h-4 animate-pulse ${isLight ? 'text-green-600' : 'text-green-300'}`} /> : <VolumeX className={`w-4 h-4 ${isLight ? 'text-zinc-300' : 'text-white/20'}`} />}
+                  </div>
+                  <span className={`text-[9px] font-black uppercase tracking-widest ${isLight ? 'text-zinc-400' : 'text-white/30'}`}>{labels.music}</span>
+                </button>
               </div>
-            )}
+            </div>
 
-            {messages.map((msg, i) => (
-              <div 
-                key={i}
-                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`max-w-[85%] p-4 rounded-[24px] text-[14px] leading-relaxed shadow-xl ${
-                  msg.role === 'user' 
-                    ? 'bg-purple-600/40 text-white rounded-tr-none border border-white/20 backdrop-blur-md' 
-                    : 'bg-white/10 text-white/90 rounded-tl-none border border-white/10 backdrop-blur-xl'
-                }`}>
-                  {msg.content}
-                </div>
+            {/* Shortcuts */}
+            <div className="space-y-3">
+              <p className={`text-[8px] uppercase tracking-[0.3em] font-black text-center ${isLight ? 'text-zinc-400' : 'text-white/20'}`}>{labels.shortcuts}</p>
+              <div className="grid grid-cols-1 gap-2.5">
+                {quickActions.map((qa, i) => (
+                  <button
+                    key={i}
+                    onClick={qa.action}
+                    className={`p-3 border rounded-[16px] text-[13px] md:text-[11px] flex items-center gap-3 transition-all duration-500 active:scale-95 group ${
+                      isLight ? 'bg-zinc-50 hover:bg-zinc-100 border-zinc-200 text-zinc-900' : 'bg-white/5 hover:bg-white/10 border-white/10 text-white'
+                    }`}
+                  >
+                    <div className={`p-1.5 rounded-md transition-all border ${isLight ? 'bg-zinc-100 border-zinc-200 group-hover:bg-zinc-200' : 'bg-white/10 border-white/5 group-hover:bg-white/20'}`}>
+                      <qa.icon className="w-4 h-4 md:w-3.5 md:h-3.5 text-purple-500 group-hover:text-purple-600 transition-colors" />
+                    </div>
+                    <span className={`font-bold tracking-tight transition-colors ${isLight ? 'text-zinc-600 group-hover:text-zinc-900' : 'text-white/50 group-hover:text-white'}`}>{qa.label}</span>
+                  </button>
+                ))}
               </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-white/5 p-4 rounded-[24px] rounded-tl-none border border-white/10 flex gap-1.5 items-center backdrop-blur-md">
-                   <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce"></div>
-                   <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:0.2s]"></div>
-                   <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-bounce [animation-delay:0.4s]"></div>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
 
-          {/* Input */}
-          <form 
-            onSubmit={handleSendMessage}
-            className="p-4 border-t border-white/10 bg-white/5 backdrop-blur-2xl"
-          >
-            <div className="relative group">
-              <input
-                type="text"
-                placeholder="Ask..."
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-[16px] py-2.5 md:py-2 pl-4 pr-10 text-[14px] md:text-[12px] text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-purple-500/40 transition-all duration-500"
-              />
-              <button 
-                type="submit"
-                disabled={isLoading || !inputValue.trim()}
-                className="absolute right-1 top-1/2 -translate-y-1/2 p-2 md:p-1.5 bg-purple-600/80 text-white rounded-[10px] disabled:opacity-30 transition-all hover:scale-105 active:scale-90"
-              >
-                <ArrowRight className="w-4 h-4 md:w-3.5 md:h-3.5" />
-              </button>
-            </div>
-          </form>
+          <div className="p-3 border-t border-white/5 bg-white/5 text-center">
+            <p className="text-[8px] text-white/10 uppercase tracking-widest font-black">ZenGuard Intelligence</p>
+          </div>
         </div>
       )}
 
@@ -296,7 +239,6 @@ export default function SiaAssistant({ activeView, onNavigate, onNavigateTab, on
       <button
         onClick={() => {
           setIsOpen(!isOpen);
-          setHasNewMessage(false);
         }}
         className={`relative group p-0 w-24 md:w-20 h-24 md:h-20 transition-all duration-700 hover:scale-110 active:scale-95 flex items-center justify-center pointer-events-auto ${
           isOpen ? 'opacity-0 scale-50 pointer-events-none' : 'opacity-100'
@@ -308,11 +250,10 @@ export default function SiaAssistant({ activeView, onNavigate, onNavigateTab, on
             alt="Sia" 
             className="w-full h-full object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.5)]" 
           />
-          {/* Notification Dots removed for cleaner UI */}
         </div>
       </button>
 
-      {/* Premium Pop-up Hint - Sync with Sia's Peek */}
+      {/* Premium Pop-up Hint */}
       {!isOpen && (
         <div className={`absolute bottom-20 right-0 mb-6 p-5 bg-white/5 backdrop-blur-[40px] border border-white/20 rounded-[28px] shadow-elite w-72 pointer-events-none border-l-[6px] border-l-purple-500 transition-all duration-700 ${
           isPeekingActive 
@@ -320,10 +261,10 @@ export default function SiaAssistant({ activeView, onNavigate, onNavigateTab, on
             : 'opacity-0 translate-x-20 translate-y-4 scale-90'
         }`}>
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Personal Guide</span>
+            <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Navigator</span>
           </div>
           <p className="text-[13px] text-white/80 leading-relaxed font-semibold">
-            I've noticed your journey is expanding. I have new tools ready for you. Shall we explore?
+            {greeting}
           </p>
         </div>
       )}

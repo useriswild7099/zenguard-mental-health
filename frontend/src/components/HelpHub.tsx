@@ -33,10 +33,10 @@ export default function HelpHub({ onBack }: HelpHubProps) {
             <ShieldAlert className="w-5 h-5" />
             <span className="text-xs font-bold uppercase tracking-[0.3em]">Support & Care Pathways</span>
           </div>
-          <h2 className="text-4xl font-bold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+          <h2 className="text-4xl font-bold dark:text-white text-zinc-900" style={{ fontFamily: 'var(--font-heading)' }}>
             Professional Help Hub
           </h2>
-          <p className="text-zinc-400 text-lg">
+          <p className="dark:text-zinc-400 text-zinc-600 text-lg">
             Reliable resources for when you need more than a conversation.
           </p>
         </div>
@@ -50,8 +50,8 @@ export default function HelpHub({ onBack }: HelpHubProps) {
                 onClick={() => setSelectedRegion(region)}
                 className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all border ${
                   selectedRegion === region 
-                    ? 'bg-red-500/20 border-red-500/50 text-white' 
-                    : 'bg-white/5 border-white/10 text-zinc-500 hover:text-white hover:bg-white/10'
+                    ? 'bg-red-500/20 border-red-500/50 dark:text-white text-red-600' 
+                    : 'dark:bg-white/5 dark:border-white/10 dark:text-zinc-500 dark:hover:text-white dark:hover:bg-white/10 bg-zinc-100 border-zinc-200 text-zinc-600 hover:bg-zinc-200'
                 }`}
               >
                 {region}
@@ -69,17 +69,17 @@ export default function HelpHub({ onBack }: HelpHubProps) {
               <Phone className="w-5 h-5 text-red-500" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">Immediate Support</h3>
-              <p className="text-zinc-500 text-sm">Tier-1 First Response (Audio/Chat)</p>
+              <h3 className="text-xl font-bold dark:text-white text-zinc-900">Immediate Support</h3>
+              <p className="dark:text-zinc-500 text-zinc-600 text-sm">Tier-1 First Response (Audio/Chat)</p>
             </div>
           </div>
 
           <div className="space-y-4">
             {tier1Crisis.map((resource, i) => (
-              <div key={i} className="glass-card p-6 border-l-4 border-l-red-500 hover:bg-white/10 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div key={i} className="glass-card p-6 border-l-4 border-l-red-500 dark:hover:bg-white/10 hover:bg-zinc-100 transition-all flex flex-col md:flex-row md:items-center justify-between gap-6 dark:bg-white/5 bg-zinc-50 dark:border-white/10 border-zinc-200">
                 <div className="flex-1">
-                  <h4 className="text-lg font-bold text-white mb-1">{resource.name}</h4>
-                  <p className="text-zinc-400 text-sm leading-relaxed">{resource.description}</p>
+                  <h4 className="text-lg font-bold dark:text-white text-zinc-900 mb-1">{resource.name}</h4>
+                  <p className="dark:text-zinc-400 text-zinc-600 text-sm leading-relaxed">{resource.description}</p>
                 </div>
                 <div className="flex flex-col gap-2 shrink-0">
                   {resource.phone && (
@@ -89,7 +89,7 @@ export default function HelpHub({ onBack }: HelpHubProps) {
                     </a>
                   )}
                   {resource.text && (
-                    <div className="flex items-center gap-2 bg-white/10 text-white px-5 py-2 rounded-xl text-sm font-bold border border-white/10">
+                    <div className="flex items-center gap-2 dark:bg-white/10 dark:text-white bg-zinc-100 text-zinc-900 px-5 py-2 rounded-xl text-sm font-bold border dark:border-white/10 border-zinc-200">
                       <MessageSquare className="w-4 h-4" />
                       Text: {resource.text}
                     </div>
@@ -107,26 +107,26 @@ export default function HelpHub({ onBack }: HelpHubProps) {
               <Stethoscope className="w-5 h-5 text-blue-500" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-white">Professional Guidance</h3>
-              <p className="text-zinc-500 text-sm">Tier-1/2 Assessments & Referrals</p>
+              <h3 className="text-xl font-bold dark:text-white text-zinc-900">Professional Guidance</h3>
+              <p className="dark:text-zinc-500 text-zinc-600 text-sm">Tier-1/2 Assessments & Referrals</p>
             </div>
           </div>
 
           <div className="space-y-4">
             {professionalCare.map((resource, i) => (
-              <div key={i} className="glass-card p-6 border-l-4 border-l-blue-500 hover:bg-white/10 transition-all">
+              <div key={i} className="glass-card p-6 border-l-4 border-l-blue-500 dark:hover:bg-white/10 hover:bg-zinc-100 transition-all dark:bg-white/5 bg-zinc-50 dark:border-white/10 border-zinc-200">
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-lg font-bold text-white">{resource.name}</h4>
+                      <h4 className="text-lg font-bold dark:text-white text-zinc-900">{resource.name}</h4>
                       {resource.isTier2 && (
                         <span className="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-0.5 rounded border border-blue-500/30 uppercase font-black">Specilaist</span>
                       )}
                     </div>
-                    <p className="text-zinc-400 text-sm leading-relaxed">{resource.description}</p>
+                    <p className="dark:text-zinc-400 text-zinc-600 text-sm leading-relaxed">{resource.description}</p>
                   </div>
-                  <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center shrink-0 border border-white/10">
-                    <Video className="w-5 h-5 text-zinc-400" />
+                  <div className="w-10 h-10 dark:bg-white/5 bg-zinc-200 rounded-xl flex items-center justify-center shrink-0 border dark:border-white/10 border-zinc-300">
+                    <Video className="w-5 h-5 dark:text-zinc-400 text-zinc-600" />
                   </div>
                 </div>
                 
@@ -138,7 +138,7 @@ export default function HelpHub({ onBack }: HelpHubProps) {
                     </a>
                   )}
                   {resource.website && (
-                    <a href={resource.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors font-medium">
+                    <a href={resource.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm dark:text-zinc-400 text-zinc-600 dark:hover:text-white hover:text-zinc-900 transition-colors font-medium">
                       <ExternalLink className="w-4 h-4" />
                       Visit Website
                     </a>
@@ -170,31 +170,31 @@ export default function HelpHub({ onBack }: HelpHubProps) {
         <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-3">
-            <h5 className="font-bold text-white flex items-center gap-2">
+            <h5 className="font-bold dark:text-white text-zinc-900 flex items-center gap-2">
               <Zap className="w-4 h-4 text-purple-400" /> 
               Early Intervention
             </h5>
-            <p className="text-zinc-500 text-sm">Identifying challenges early prevents escalation into severe distress.</p>
+            <p className="dark:text-zinc-500 text-zinc-600 text-sm">Identifying challenges early prevents escalation into severe distress.</p>
           </div>
           <div className="space-y-3">
-            <h5 className="font-bold text-white flex items-center gap-2">
+            <h5 className="font-bold dark:text-white text-zinc-900 flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-red-400" />
               Safety First
             </h5>
-            <p className="text-zinc-500 text-sm">If you feel at immediate risk, please bypass digital tools and call emergency services.</p>
+            <p className="dark:text-zinc-500 text-zinc-600 text-sm">If you feel at immediate risk, please bypass digital tools and call emergency services.</p>
           </div>
           <div className="space-y-3">
-            <h5 className="font-bold text-white flex items-center gap-2">
+            <h5 className="font-bold dark:text-white text-zinc-900 flex items-center gap-2">
               <Globe className="w-4 h-4 text-blue-400" />
               Global Reach
             </h5>
-            <p className="text-zinc-500 text-sm">We provide pathways for learners across all major regions and global fallback systems.</p>
+            <p className="dark:text-zinc-500 text-zinc-600 text-sm">We provide pathways for learners across all major regions and global fallback systems.</p>
           </div>
         </div>
       </div>
 
       <div className="flex justify-center">
-        <Button onClick={onBack} variant="outline" className="border-white/10 hover:bg-white/10 text-white gap-2 px-8 h-12 rounded-2xl">
+        <Button onClick={onBack} variant="outline" className="dark:border-white/10 dark:hover:bg-white/10 dark:text-white border-zinc-200 text-zinc-900 hover:bg-zinc-100 gap-2 px-8 h-12 rounded-2xl transition-all">
           <ArrowLeft className="w-4 h-4" />
           Back to Dashboard
         </Button>

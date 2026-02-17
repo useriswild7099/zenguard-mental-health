@@ -15,9 +15,10 @@ interface KnowledgeHubProps {
   onNavigateToHelp?: () => void;
   initialArticle?: KnowledgeArticle | null;
   sessionLanguage?: string;
+  theme?: 'nature' | 'light' | 'dark';
 }
 
-export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle, sessionLanguage = 'English' }: KnowledgeHubProps) {
+export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle, sessionLanguage = 'English', theme = 'nature' }: KnowledgeHubProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<KnowledgeCategory | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<KnowledgeArticle | null>(null);
@@ -44,6 +45,8 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
       setTranslatedContent(null);
     }
   }, [initialArticle]);
+
+  const isLight = theme === 'light';
 
   const handleTranslate = async (lang: string) => {
     if (!selectedArticle || lang === 'English') {
@@ -98,7 +101,7 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
   const crisisArticles = useMemo(() => KNOWLEDGE_ARTICLES.filter(a => a.isCrisis), []);
   const capsules = useMemo(() => KNOWLEDGE_ARTICLES.filter(a => a.category === 'Micro-Learning'), []);
   const mainCategories: KnowledgeCategory[] = [
-    'Foundation', 'Daily Practices', 'Regulation', 
+    'Foundation', 'Daily Practices', 'Performance', 'Regulation', 
     'Recognition', 'Condition Base', 'Life Problems'
   ];
 
@@ -139,7 +142,7 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
                 </div>
               </div>
               <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                <h1 className="text-3xl md:text-5xl font-bold dark:text-white text-zinc-900 leading-tight">
                   {selectedArticle.title}
                 </h1>
                 
@@ -151,7 +154,7 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
                     ) : (
                       <Languages className="w-4 h-4 text-purple-400" />
                     )}
-                    <span className="text-sm font-medium text-white">{targetLanguage}</span>
+                    <span className="text-sm font-medium dark:text-white text-zinc-800">{targetLanguage}</span>
                   </div>
                   <div className="absolute right-0 top-full mt-2 w-48 bg-black/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible group-hover/lang:opacity-100 group-hover/lang:visible transition-all z-50 overflow-hidden">
                     <div className="max-h-64 overflow-y-auto no-scrollbar py-2">
@@ -174,14 +177,14 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
           </div>
 
           {/* Article Content */}
-          <div className="p-6 md:p-12 bg-white/5 backdrop-blur-2xl">
+          <div className="p-6 md:p-12 dark:bg-white/5 bg-zinc-50 backdrop-blur-2xl">
             <div className="prose prose-invert max-w-none">
-              <div className="text-zinc-200 leading-relaxed space-y-6 text-lg">
+              <div className="dark:text-zinc-200 text-zinc-700 leading-relaxed space-y-6 text-lg">
                 {(translatedContent || selectedArticle.content).split('\n\n').map((paragraph, i) => {
                   const p = paragraph.trim();
                   if (p.startsWith('###')) {
                     return (
-                      <h3 key={i} className={`text-2xl font-bold text-white mt-8 mb-4 border-l-4 pl-4 ${
+                      <h3 key={i} className={`text-2xl font-bold dark:text-white text-zinc-900 mt-8 mb-4 border-l-4 pl-4 ${
                         selectedArticle.isCrisis ? 'border-red-500' : 'border-purple-500'
                       }`}>
                         {p.replace(/###/g, '').trim()}
@@ -190,20 +193,20 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
                   }
                   if (p.startsWith('**Fact**:') || p.startsWith('**Breathe**:')) {
                     return (
-                      <div key={i} className="bg-white/5 p-4 rounded-xl border border-white/10 my-4">
-                        <p className="opacity-100 font-medium">{p}</p>
+                      <div key={i} className="dark:bg-white/5 bg-zinc-100 p-4 rounded-xl border dark:border-white/10 border-zinc-200 my-4">
+                        <p className="opacity-100 font-medium dark:text-white text-zinc-800">{p}</p>
                       </div>
                     );
                   }
                   return (
-                    <p key={i} className="opacity-90">
+                    <p key={i} className="opacity-90 dark:text-zinc-100 text-zinc-600">
                       {p.split('\n').map((line, j) => {
                         const trimmedLine = line.trim();
                         if (trimmedLine.startsWith('-') || /^\d+\./.test(trimmedLine)) {
                           return (
                             <span key={j} className="block pl-4 py-1 flex items-start gap-3">
                               <span className={`${selectedArticle.isCrisis ? 'text-red-400' : 'text-purple-400'} mt-1`}>•</span>
-                              <span>{trimmedLine.replace(/^[-*]|\d+\.\s+/, '').trim()}</span>
+                              <span className="dark:text-zinc-200 text-zinc-700">{trimmedLine.replace(/^[-*]|\d+\.\s+/, '').trim()}</span>
                             </span>
                           );
                         }
@@ -246,7 +249,7 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
                 <Button 
                   onClick={() => setSelectedArticle(null)}
                   variant="outline"
-                  className="w-full md:w-auto border-white/10 hover:bg-white/10 text-white gap-2"
+                  className="w-full md:w-auto dark:border-white/10 dark:hover:bg-white/10 border-zinc-200 dark:text-white text-zinc-900 gap-2"
                 >
                   Finished Reading
                 </Button>
@@ -261,21 +264,21 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
   return (
     <div className="w-full max-w-7xl mx-auto space-y-12 animate-fade-in pb-20">
       {/* Header & Dashboard-like Top Bar */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b dark:border-white/10 border-zinc-200 pb-8">
         <div className="space-y-2">
           <div className="flex items-center gap-3 text-purple-400 mb-2">
             <Compass className="w-5 h-5 animate-spin-slow" />
             <span className="text-xs font-bold uppercase tracking-[0.3em]">Wellness Navigator</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white" style={{ fontFamily: 'var(--font-heading)' }}>
+          <h2 className="text-4xl md:text-5xl font-bold dark:text-white text-zinc-900" style={{ fontFamily: 'var(--font-heading)' }}>
             MindSpace Library
           </h2>
-          <p className="text-zinc-400 text-lg max-w-2xl">
-            A comprehensive, scientifically-backed knowledge system for student mental health and resilience.
+          <p className="dark:text-zinc-400 text-zinc-600 text-lg max-w-2xl">
+            A comprehensive, scientifically-backed knowledge system for mental resilience, corporate wellness, and high-performance mastery.
           </p>
         </div>
         <div className="flex gap-3">
-          <Button onClick={onBack} variant="outline" className="border-white/10 hover:bg-white/10 text-white gap-2 h-12">
+          <Button onClick={onBack} variant="outline" className="dark:border-white/10 border-zinc-200 dark:hover:bg-white/10 dark:text-white text-zinc-900 gap-2 h-12">
             <ArrowLeft className="w-4 h-4" />
             Hub
           </Button>
@@ -289,7 +292,7 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
             <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center border border-red-500/30">
               <AlertTriangle className="w-4 h-4 text-red-500" />
             </div>
-            <h3 className="text-xl font-bold text-white">Immediate Support</h3>
+            <h3 className="text-xl font-bold dark:text-white text-zinc-900">Immediate Support</h3>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {crisisArticles.map(article => {
@@ -346,11 +349,11 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
           {mainCategories.map(cat => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
               className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap border ${
                 selectedCategory === cat 
                   ? 'bg-purple-600 border-purple-400 text-white shadow-xl shadow-purple-500/30' 
-                  : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10'
+                  : 'dark:bg-white/5 dark:border-white/10 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/10 bg-zinc-100 border-zinc-200 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900'
               }`}
             >
               {cat}
@@ -368,10 +371,10 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
               <div 
                 key={article.id}
                 onClick={() => setSelectedArticle(article)}
-                className="group glass-card p-8 cursor-pointer hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col"
+                className="group glass-card p-8 cursor-pointer dark:hover:bg-white/10 hover:bg-zinc-100 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden flex flex-col border dark:border-white/10 border-zinc-200 dark:bg-transparent bg-white shadow-lg"
               >
                 <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-30 transition-all -rotate-12 group-hover:rotate-0">
-                  <Icon className="w-16 h-16 text-white" />
+                  <Icon className={`w-16 h-16 ${isLight ? 'text-zinc-900' : 'text-white'}`} />
                 </div>
                 <div className="flex items-center gap-3 mb-6 relative z-10">
                 <span className="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-lg text-[10px] uppercase font-bold tracking-widest border border-purple-500/30">
@@ -381,12 +384,12 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
                   <Clock className="w-3.5 h-3.5" /> {article.readTime}
                 </span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-purple-300 transition-colors relative z-10 leading-snug">
-                {article.title}
-              </h3>
-              <p className="text-base text-zinc-400 line-clamp-3 leading-relaxed mb-8 flex-1 relative z-10 font-light">
-                {article.summary}
-              </p>
+                <h3 className="text-2xl font-bold dark:text-white text-zinc-900 mb-4 group-hover:text-purple-300 transition-colors relative z-10 leading-snug">
+                  {article.title}
+                </h3>
+                <p className="text-base dark:text-zinc-400 text-zinc-600 line-clamp-3 leading-relaxed mb-8 flex-1 relative z-10 font-light">
+                  {article.summary}
+                </p>
               <div className="flex items-center justify-between text-purple-400 text-sm font-bold mt-auto relative z-10">
                 <div className="flex items-center gap-2">
                    <span>Explore</span>
@@ -401,15 +404,15 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
         })
         ) : (
           <div className="col-span-full py-24 text-center">
-            <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/10 shadow-inner">
-              <Filter className="w-8 h-8 text-zinc-600" />
+            <div className="w-20 h-20 dark:bg-white/5 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6 border dark:border-white/10 border-zinc-200 shadow-inner">
+              <Filter className="w-8 h-8 dark:text-zinc-600 text-zinc-400" />
             </div>
-            <h3 className="text-2xl font-bold text-white mb-2">Finding your answers...</h3>
-            <p className="text-zinc-500 mb-8 max-w-md mx-auto">No articles match your search. Try different keywords or browse a category.</p>
+            <h3 className="text-2xl font-bold dark:text-white text-zinc-900 mb-2">Finding your answers...</h3>
+            <p className="dark:text-zinc-500 text-zinc-600 mb-8 max-w-md mx-auto">No articles match your search. Try different keywords or browse a category.</p>
             <Button 
               onClick={() => { setSearchQuery(''); setSelectedCategory(null); }}
               variant="outline"
-              className="border-white/10 hover:bg-white/10 text-white"
+              className="dark:border-white/10 dark:hover:bg-white/10 border-zinc-200 dark:text-white text-zinc-900"
             >
               Reset Search
             </Button>
@@ -425,9 +428,9 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
               <div className="w-8 h-8 rounded-lg bg-yellow-500/20 flex items-center justify-center border border-yellow-500/30">
                 <Zap className="w-4 h-4 text-yellow-500" />
               </div>
-              <h3 className="text-2xl font-bold text-white">Micro-Learning</h3>
+              <h3 className="text-2xl font-bold dark:text-white text-zinc-900">Micro-Learning</h3>
             </div>
-            <div className="text-xs text-zinc-500 uppercase tracking-widest">30s quick takes</div>
+            <div className="text-xs dark:text-zinc-500 text-zinc-400 uppercase tracking-widest">30s quick takes</div>
           </div>
           <div className="flex gap-6 overflow-x-auto pb-8 no-scrollbar">
             {capsules.map(capsule => {
@@ -436,13 +439,13 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
                 <div 
                   key={capsule.id}
                   onClick={() => setSelectedArticle(capsule)}
-                  className="w-80 shrink-0 glass-card p-6 border-l-4 border-l-yellow-500 hover:bg-white/10 transition-all cursor-pointer flex flex-col group shadow-xl"
+                  className="w-80 shrink-0 glass-card p-6 border-l-4 border-l-yellow-500 dark:hover:bg-white/10 hover:bg-zinc-100 transition-all cursor-pointer flex flex-col group shadow-xl dark:bg-transparent bg-white border dark:border-white/10 border-zinc-200"
                 >
                   <div className="mb-4 group-hover:scale-110 transition-transform origin-left">
                     <Icon className="w-8 h-8 text-yellow-500" />
                   </div>
-                  <h4 className="text-lg font-bold text-white mb-3 leading-tight">{capsule.title}</h4>
-                  <p className="text-zinc-400 text-sm line-clamp-3 mb-6 leading-relaxed italic">
+                  <h4 className="text-lg font-bold dark:text-white text-zinc-900 mb-3 leading-tight">{capsule.title}</h4>
+                  <p className="dark:text-zinc-400 text-zinc-600 text-sm line-clamp-3 mb-6 leading-relaxed italic">
                     &quot;{capsule.summary}&quot;
                   </p>
                 <div className="mt-auto flex items-center gap-2 text-[10px] font-bold text-yellow-500/80 uppercase">

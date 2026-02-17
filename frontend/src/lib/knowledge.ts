@@ -19,6 +19,7 @@ export type KnowledgeCategory =
   | 'Recognition' 
   | 'Condition Base' 
   | 'Life Problems' 
+  | 'Performance'
   | 'Crisis Support'
   | 'Micro-Learning';
 
@@ -1297,6 +1298,153 @@ export const KNOWLEDGE_ARTICLES: KnowledgeArticle[] = [
       ### The "Three Good Things" Exercise:
       Every night, write down 3 things that went well and *why*.
       After 21 days, your brain starts scanning the world for positives instead of threats. It's biological reprogramming.
+    `
+  },
+
+  // 10. PERFORMANCE & MASTERY
+  {
+    id: 'performance-burnout-prevention',
+    title: 'Executive Burnout Prevention',
+    category: 'Performance',
+    subcategory: 'Executive Wellness',
+    summary: 'High-stakes stress management for corporate leaders.',
+    readTime: '6 min',
+    icon: Briefcase,
+    content: `
+      In high-pressure corporate environments, stress is often wear like a badge of honor. But chronic stress is the enemy of high performance.
+
+      ### The High-Performance Recovery:
+      Elite athletes don't train 24/7; they train hard and recover harder. Corporate athletes must do the same.
+      - **Oscillation**: Work in 90-minute blocks followed by 10 minutes of complete disconnection.
+      - **Strategic Boringness**: Reduce decision fatigue by automating low-stakes choices.
+
+      ### Emotional Regulation for Leaders:
+      "The mood of the leader is the mood of the team." If you are caffeinated and anxious, your team will be too. Practice calm as a skill.
+    `
+  },
+  {
+    id: 'performance-stoicism',
+    title: 'Modern Stoicism for Men',
+    category: 'Performance',
+    subcategory: 'Modern Stoicism',
+    summary: 'Building an unshakeable mind in a chaotic world.',
+    readTime: '7 min',
+    icon: Target,
+    content: `
+      Stoicism isn't about suppressing emotion; it's about the "Dichotomy of Control."
+
+      ### The Dichotomy of Control:
+      - **Internal**: Your thoughts, your actions, your intentions. (Focus 100% here).
+      - **External**: The economy, other people's opinions, the weather. (Accept these as they are).
+
+      ### The Pre-Mortem:
+      Visualizing everything that could go wrong before it happens. This isn't pessimism; it's preparation. When you've already visualized the failure, the actual event loses its power to panic you.
+    `
+  },
+  {
+    id: 'performance-discipline-habit',
+    title: 'The Discipline Architecture',
+    category: 'Performance',
+    subcategory: 'High Performance',
+    summary: 'Moving beyond motivation to reliable systems.',
+    readTime: '5 min',
+    icon: Anchor,
+    content: `
+      Motivation is a feeling. Discipline is a structure. Feelings are unreliable; structures are not.
+
+      ### The Consistency Chain:
+      Don't aim for 100% intensity once a week. Aim for 80% intensity every single day.
+      - **Identity-Based Habits**: Don't say "I'm trying to work out." Say "I am an athlete." Your brain works hard to align your actions with your identity.
+      - **The 2-Minute Rule**: If a habit is too hard to start, make the first 2 minutes incredibly easy.
+    `
+  },
+  {
+    id: 'performance-deep-work',
+    title: 'Deep Work Mastery',
+    category: 'Performance',
+    subcategory: 'Productivity',
+    summary: 'Reclaiming cognitive power in a distracted age.',
+    readTime: '6 min',
+    icon: BrainCircuit,
+    content: `
+      Deep work is the ability to focus without distraction on a cognitively demanding task. It’s a superpower in the 21st century.
+
+      ### The Deep Work Protocol:
+      1. **Physical Environment**: No phone in the room. No open social media tabs.
+      2. **Pre-defined Duration**: Know EXACTLY when you will end before you start.
+      3. **Shutdown Ritual**: At the end of the day, explicitly say "Work is done." This stops the "Zeigarnik Effect" from causing evening anxiety.
+    `
+  },
+  {
+    id: 'performance-longevity-health',
+    title: 'The Longevity Mindset',
+    category: 'Daily Practices',
+    subcategory: 'Bio-Optimization',
+    summary: 'Biological foundations for long-term high performance.',
+    readTime: '6 min',
+    icon: Activity,
+    content: `
+      High-value men view their health as their primary asset. Without the body, the mind has no platform to perform.
+
+      ### Key Levers:
+      - **Blood Glucose Stability**: Spikes and crashes lead to brain fog. Focus on protein and complex fats.
+      - **Sleep as Performance**: 7-9 hours is non-negotiable for cognitive cleanup.
+      - **Strength Training**: Essential for hormonal balance and metabolic health.
+
+      Health is not a destination; it's a constant optimization process.
+    `
+  },
+  {
+    id: 'performance-masculine-growth',
+    title: 'The Path of Mastery',
+    category: 'Performance',
+    subcategory: 'Personal Growth',
+    summary: 'Building value, purpose, and character.',
+    readTime: '7 min',
+    icon: Mountain,
+    content: `
+      Growth is painful. Comfort is the enemy of character.
+
+      ### The Three Pillars of Value:
+      1. **Competence**: Becoming undeniable at what you do.
+      2. **Accountability**: Taking 100% responsibility for your successes and failures.
+      3. **Purpose**: Aligning your work with a cause larger than your own comfort.
+
+      True value is built in the "dark intervals" where no one is watching.
+    `
+  },
+  {
+    id: 'performance-negotiation-stress',
+    title: 'High-Stakes Negotiation Calm',
+    category: 'Performance',
+    subcategory: 'Professional Skills',
+    summary: 'Maintaining emotional control during critical meetings.',
+    readTime: '5 min',
+    icon: Users,
+    content: `
+      In a negotiation, the person who cares less (or appears to) has the power.
+
+      ### Tactical Empathy:
+      Listen more than you speak. Use "Mirrors" and "Labels" to understand the other side's fear. Once the fear is named, it loses its power.
+
+      ### The Physiological Anchor:
+      If you feel your heart rate spiking, press your tongue to the roof of your mouth. This subtly engages the parasympathetic nervous system to keep you appearing calm.
+    `
+  },
+  {
+    id: 'performance-fatherhood-leadership',
+    title: 'The Leadership of the Home',
+    category: 'Life Problems',
+    subcategory: 'Family Dynamics',
+    summary: 'Balancing corporate ambition with family presence.',
+    readTime: '6 min',
+    icon: Home,
+    content: `
+      Many high-achieving men succeed at the office but feel like they are failing at home. Presence is the highest form of leadership.
+
+      ### The "Transition Zone":
+      Don't walk through the front door still ruminating on a spreadsheet. Sit in your car for 2 minutes. Breathe. Explicitly decide to be a father and a partner.
+      Your family needs your attention more than they need your provision.
     `
   }
 ];
