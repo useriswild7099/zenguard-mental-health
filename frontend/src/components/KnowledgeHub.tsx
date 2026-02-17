@@ -67,7 +67,8 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
 
     setIsTranslating(true);
     try {
-      const response = await fetch('http://localhost:8000/api/translate', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${apiUrl}/api/translate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
