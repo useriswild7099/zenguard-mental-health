@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import Image from 'next/image';
 import { chatClient, ChatMode, ChatMessage } from '@/lib/api';
 import { prepareText } from '@/lib/privacy';
 import VoiceInput from './VoiceInput';
 
-// Helper component for personality avatar
-function PersonalityAvatar({ mode, size = 48, className = '' }: { mode: ChatMode; size?: number; className?: string }) {
+// Memoized helper component for personality avatar
+const PersonalityAvatar = memo(({ mode, size = 48, className = '' }: { mode: ChatMode; size?: number; className?: string }) => {
   const [imgError, setImgError] = useState(false);
   
   if (!mode.image || imgError) {
@@ -24,7 +24,10 @@ function PersonalityAvatar({ mode, size = 48, className = '' }: { mode: ChatMode
       onError={() => setImgError(true)}
     />
   );
-}
+});
+
+PersonalityAvatar.displayName = 'PersonalityAvatar';
+
 
 interface ChatInterfaceProps {
   onBack: () => void;
@@ -67,19 +70,19 @@ export default function ChatInterface({ onBack }: ChatInterfaceProps) {
   // Scroll to bottom when new messages arrive
   useEffect(() => {
     if (messages.length > 0) {
-      // Use direct scrollTop manipulation to avoid window-level scrolling that scrollIntoView can trigger
       const container = messagesEndRef.current?.parentElement;
       if (container) {
-        // Use a small timeout to ensure the DOM has updated with the new message
-        setTimeout(() => {
+        // Use requestAnimationFrame for smoother scrolling synced with browser paint
+        requestAnimationFrame(() => {
           container.scrollTo({
             top: container.scrollHeight,
             behavior: 'smooth'
           });
-        }, 100);
+        });
       }
     }
   }, [messages]);
+
 
   // Focus input when mode is selected
   useEffect(() => {

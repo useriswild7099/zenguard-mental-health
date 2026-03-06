@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import { sentimentClient } from '@/lib/api';
 import ChatInterface from '@/components/ChatInterface';
@@ -39,6 +39,42 @@ import { MoodChart } from '@/components/journal/MoodChart';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Toaster } from '@/components/ui/sonner';
+import React, { memo } from 'react';
+
+// Memoized background component to prevent re-renders when parent state changes
+const VideoBackground = memo(({ activeView, isLight }: { activeView: string; isLight: boolean }) => {
+  return (
+    <div className={`fixed inset-0 overflow-hidden -z-10 transition-opacity duration-1000 ${isLight ? 'opacity-0' : 'opacity-100'}`}>
+      {activeView === 'landing' || activeView === 'journal' ? (
+        <video
+          autoPlay loop muted playsInline preload="metadata"
+          className="absolute w-full h-full object-cover"
+          style={{ filter: activeView === 'landing' ? 'brightness(0.7)' : 'brightness(0.5)' }}
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
+      ) : (
+        <video
+          autoPlay loop muted playsInline preload="metadata"
+          className="absolute w-full h-full object-cover"
+          style={{ filter: activeView === 'help' ? 'brightness(0.2)' : activeView === 'knowledge' ? 'brightness(0.4)' : 'brightness(0.6)' }}
+        >
+          <source src="/chat-bg.mp4" type="video/mp4" />
+        </video>
+      )}
+      <div className={`absolute inset-0 ${
+        activeView === 'help' ? 'bg-black/80 backdrop-blur-[6px]' :
+        activeView === 'knowledge' ? 'bg-black/60 backdrop-blur-[4px]' :
+        activeView === 'chat' ? 'bg-black/40 backdrop-blur-[2px]' :
+        activeView === 'landing' ? 'bg-gradient-to-b from-black/30 via-black/20 to-black/40' :
+        'bg-black/50 backdrop-blur-[1px]'
+      }`}></div>
+    </div>
+  );
+});
+
+VideoBackground.displayName = 'VideoBackground';
+
 
 export default function Home() {
   const [apiConnected, setApiConnected] = useState(false);
@@ -80,15 +116,16 @@ export default function Home() {
   const insights = generateInsights(entries);
   const streak = journalStorage.getStreak();
 
-  // Scroll to top when view changes
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    // Add a small delay to ensure the DOM content has swapped and any browser scroll-behavior is bypassed
+  // Scroll to top when view changes synchronously before DOM paint
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
+    // Fallback for some browsers that might need a tick
     const timer = setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-    }, 50);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
+    }, 10);
     return () => clearTimeout(timer);
   }, [activeView]);
+
 
   const isLight = theme === 'light';
   const textPrimary = isLight ? 'text-zinc-900' : 'text-white';
@@ -103,33 +140,7 @@ export default function Home() {
     }`}>
       <BackgroundMusic isMuted={isMuted} />
 
-      {/* Unified Background System */}
-      <div className={`fixed inset-0 overflow-hidden -z-10 transition-opacity duration-1000 ${isLight ? 'opacity-0' : 'opacity-100'}`}>
-        {activeView === 'landing' || activeView === 'journal' ? (
-          <video
-            autoPlay loop muted playsInline preload="metadata"
-            className="absolute w-full h-full object-cover"
-            style={{ filter: activeView === 'landing' ? 'brightness(0.7)' : 'brightness(0.5)' }}
-          >
-            <source src="/hero-video.mp4" type="video/mp4" />
-          </video>
-        ) : (
-          <video
-            autoPlay loop muted playsInline preload="metadata"
-            className="absolute w-full h-full object-cover"
-            style={{ filter: activeView === 'help' ? 'brightness(0.2)' : activeView === 'knowledge' ? 'brightness(0.4)' : 'brightness(0.6)' }}
-          >
-            <source src="/chat-bg.mp4" type="video/mp4" />
-          </video>
-        )}
-        <div className={`absolute inset-0 ${
-          activeView === 'help' ? 'bg-black/80 backdrop-blur-[6px]' :
-          activeView === 'knowledge' ? 'bg-black/60 backdrop-blur-[4px]' :
-          activeView === 'chat' || isCreatingEntry ? 'bg-black/40 backdrop-blur-[2px]' :
-          activeView === 'landing' ? 'bg-gradient-to-b from-black/30 via-black/20 to-black/40' :
-          'bg-black/50 backdrop-blur-[1px]'
-        }`}></div>
-      </div>
+      <VideoBackground activeView={activeView} isLight={isLight} />
 
       {/* View Content Hub */}
       {activeView === 'landing' && (

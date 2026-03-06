@@ -209,11 +209,11 @@ body {
 /* Animations */
 @keyframes breathe {
   0%, 100% {
-    transform: scale(1);
+    transform: scale(1) translate3d(0, 0, 0);
     opacity: 0.8;
   }
   50% {
-    transform: scale(1.15);
+    transform: scale(1.15) translate3d(0, 0, 0);
     opacity: 1;
   }
 }
@@ -221,18 +221,20 @@ body {
 @keyframes gentle-pulse {
   0%, 100% {
     opacity: 0.6;
+    transform: translate3d(0, 0, 0);
   }
   50% {
     opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes float {
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(0) translate3d(0, 0, 0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translateY(-10px) translate3d(0, 0, 0);
   }
 }
 
@@ -273,18 +275,25 @@ body {
 /* Animation classes */
 .animate-breathe {
   animation: breathe var(--duration-breathing) var(--ease-gentle) infinite;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .animate-float {
   animation: float 4s var(--ease-gentle) infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .animate-gentle-pulse {
   animation: gentle-pulse 3s var(--ease-gentle) infinite;
+  will-change: opacity;
+  backface-visibility: hidden;
 }
 
 .animate-seed-grow {
   animation: seed-grow 0.6s var(--ease-gentle) forwards;
+  will-change: transform, opacity;
 }
 
 /* Glassmorphism */

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useLayoutEffect } from 'react';
 import { KNOWLEDGE_ARTICLES, KnowledgeArticle, KnowledgeCategory, BookRecommendation } from '@/lib/knowledge';
 import { MASTER_LIBRARY } from '@/lib/books_data';
 import { 
@@ -47,6 +47,12 @@ export default function KnowledgeHub({ onBack, onNavigateToHelp, initialArticle,
       setTranslatedContent(null);
     }
   }, [initialArticle]);
+
+  // Scroll to top when article changes to prevent sticking to the bottom
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as any });
+  }, [selectedArticle]);
+
 
   const isLight = theme === 'light';
 
